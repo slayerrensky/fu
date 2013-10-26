@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +19,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
+
 /**
  * Servlet implementation class Crawler
  */
@@ -25,12 +46,22 @@ public class Crawler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private int depth = 2;
 	ArrayList<URL> urlList = new ArrayList<URL>();
+	StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
+	Directory index = new RAMDirectory();
+	IndexWriterConfig config = null;
+	IndexWriter w = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public Crawler() {
 		super();
+		config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+		try {
+			w = new IndexWriter(index, config);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -58,15 +89,35 @@ public class Crawler extends HttpServlet {
 				+ "<p>URL:<br><input name=\"url\" type=\"text\" size=\"100\" maxlength=\"200\" value=\"http://www.udacity.com/cs101x/index.html\">"
 				+ "<input type=\"submit\" value=\" Indezieren \">"
 				+ "</p></form>");
-		
-		for (int i = 0;i<urlList.size();i++){
+
+		for (int i = 0; i < urlList.size(); i++) {
 			writer.println(urlList.get(i).toString() + "<br>");
 		}
-		
+
 		writer.println("<body>");
 		writer.println("</html>");
 		writer.close();
 
+//		// Test
+//		Query q = null;
+//		try {
+//			q = new QueryParser(Version.LUCENE_40, "content", analyzer)
+//					.parse("Kick");
+//			
+//			IndexReader reader = IndexReader.open(index);
+//			IndexSearcher searcher = new IndexSearcher(reader);
+//			TopScoreDocCollector collector = TopScoreDocCollector.create(10,
+//					true);
+//			searcher.search(q, collector);
+//			collector.topDocs().scoreDoc
+//			ScoreDoc[] hits = collector.topDocs().scoreDocs;
+//			int docId = hits[0].doc;
+//			Document d = searcher.doc(docId);
+//			String fields = d.get("content");
+//			System.out.println(fields);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	/**
@@ -88,6 +139,27 @@ public class Crawler extends HttpServlet {
 			while ((inputLine = in.readLine()) != null)
 				webpage.append(inputLine);
 
+			// Wortreduzierung
+			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
+					.replaceAll("[!.,-_\"]", "");
+
+			// Duplicate entfernen und indezieren
+			Scanner scanner = new Scanner(replaceAll);
+			HashSet<String> setList = new HashSet<String>();
+			Document addDoc = new Document();
+			while (scanner.hasNext()) {
+				String next = scanner.next();
+				if (setList.add(next))
+					addDoc.add(new TextField("content", next, Field.Store.YES));
+			}
+			w.addDocument(addDoc);
+			
+			//Kontrollausgabe
+			IndexableField[] fields = addDoc.getFields("content");
+			for (int i = 0; i < fields.length; i++) {
+				System.out.println(fields[i].stringValue());
+			}
+			
 			if (this.depth > 0) {
 				this.depth--;
 				getLinks(webpage.toString());
@@ -98,7 +170,6 @@ public class Crawler extends HttpServlet {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
 
 	private void getLinks(String webpage) {
@@ -113,8 +184,14 @@ public class Crawler extends HttpServlet {
 				continue;
 
 			String spezURL = urlParts[1];
-			if (!spezURL.endsWith(".html"))
+
+			// Normalisiere Link
+			spezURL = normalizeLinks(spezURL);
+
+			// PrŸfe auf korrekten Typen
+			if (!isCorrectTypeOfLink(spezURL))
 				continue;
+
 			URL url = null;
 			try {
 				url = new URL(spezURL);
@@ -134,5 +211,25 @@ public class Crawler extends HttpServlet {
 			urlList.add(url);
 			crawl(url);
 		}
+	}
+
+	private String normalizeLinks(String spezURL) {
+		return spezURL;
+		// TODO:
+		/*
+		 * HTTP://www.UIOWA.edu -> http://www.uiowa.edu.
+		 * http://myspiders.biz.uiowa.edu/faq.html# ->
+		 * http://myspiders.biz.uiowa.edu/faq.html
+		 * http://dollar.biz.uiowa.edu/%7Epant/ ->
+		 */
+	}
+
+	private boolean isCorrectTypeOfLink(String spezURL) {
+		if (spezURL.endsWith(".html"))
+			return true;
+		return false;
+		/*
+		 * media (jpg, pdf ...)
+		 */
 	}
 }
