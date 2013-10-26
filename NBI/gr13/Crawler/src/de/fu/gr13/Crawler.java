@@ -65,7 +65,6 @@ public class Crawler extends HttpServlet {
 		
 		writer.println("<body>");
 		writer.println("</html>");
-
 		writer.close();
 
 	}
