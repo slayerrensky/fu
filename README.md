@@ -1,7 +1,7 @@
 fu
 ==
 
-All Stuff  stuff
+All stuff from Frei Universität Berlin
 
 
 fu      // FU-Berlin
