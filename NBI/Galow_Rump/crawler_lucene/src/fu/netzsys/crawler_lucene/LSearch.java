@@ -43,12 +43,12 @@ public class LSearch {
 		analyzer = new StandardAnalyzer(Version.LUCENE_45);
 	}
 	
-	public LinkedList<String> SearchForContent(String querystr)
+	public LinkedList<URLInformation> SearchForContent(String querystr)
 	{
 		return SearchFor(querystr,"content");
 	}
 	
-	public LinkedList<String> SearchFor(String querystr, String searchField)
+	public LinkedList<URLInformation> SearchFor(String querystr, String searchField)
 	{
 		ScoreDoc[] hits = null;
 		IndexSearcher searcher = null;
@@ -74,14 +74,16 @@ public class LSearch {
 		{
 			System.out.println("Found " + hits.length + " hits.");
 			
-			LinkedList<String> founds = new LinkedList<String>();
-			
+			LinkedList<URLInformation> founds = new  LinkedList<URLInformation>();
 			for(int i=0;i<hits.length;++i) {
 		       int docId = hits[i].doc;
 		       Document d;
 		       try {
 		    	   d = searcher.doc(docId);
-		    	   founds.add(d.get("url"));
+		    	   URLInformation ul = new URLInformation();
+		    	   ul.setURL(d.get("url"));
+		    	   ul.setTitle(d.get("title"));
+		    	   founds.add(ul);
 		    	   System.out.println((i + 1) + ". " + d.get("url"));
 		    	   
 		       } catch (IOException e) {

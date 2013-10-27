@@ -9,6 +9,7 @@ public class Normalizer {
 	
 	public URLInformation normalize(String str){
 		URLInformation siteInfo = new URLInformation();
+		str = getTitle(str, siteInfo);
 		str = extract_ALT_Attributs(str, siteInfo);
 		str = extractMetaTags(str, siteInfo);
 		str = removePunctuation(str, siteInfo);
@@ -58,4 +59,12 @@ public class Normalizer {
 	private String removePunctuation(String str, URLInformation siteInfo){
 		return str;
 	}
+	
+	private String getTitle(String str, URLInformation siteInfo){
+		String line = new String();
+		String title = str.replaceAll("<title>[^>]*>", "");
+		siteInfo.setTitle(title);
+		return str;
+	}
+	
 }
