@@ -1,54 +1,11 @@
-package fu.netzsys.crawler;
+package fu.netzsys.crawler_lucene;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-import org.eclipse.jdt.internal.compiler.ast.ForeachStatement;
-
-
 public class Crawler {
-	
-	//private ArrayList<String> getSiteContent(String urlStr){
-	private String getSiteContent(String urlStr){
-		URL url;
-	    InputStream is = null;
-	    BufferedReader br;
-	    String line;
-	    //ArrayList<String> linesOfContent = new ArrayList<String>();
-	    String linesOfContent = "";
-
-	    try {
-	        url = new URL(urlStr);
-	        is = url.openStream();  // throws an IOException
-	        br = new BufferedReader(new InputStreamReader(is));
-
-	        while ((line = br.readLine()) != null) {
-	        	//linesOfContent.add(line.toLowerCase());
-	            linesOfContent += line.toLowerCase();
-	        }
-	    } catch (MalformedURLException mue) {
-	         mue.printStackTrace();
-	    } catch (IOException ioe) {
-	         ioe.printStackTrace();
-	    } finally {
-	        try {
-	            if (is != null) is.close();
-	        } catch (IOException ioe) {
-	            // nothing to see here
-	        }
-	    }
-		return linesOfContent;//.replaceAll("\\s+","");
-	}
-	
 	//private ArrayList<String> extractTAGs(ArrayList<String> content){
 	private ArrayList<String> extractTAGs(String content){
 		ArrayList<String> list = new ArrayList<String>();
@@ -82,9 +39,13 @@ public class Crawler {
 	
 	public ArrayList<String> crawl(String urlStr){
 		ArrayList<String> list = new ArrayList<String>();
-		String linesOfContent = getSiteContent(urlStr);
-		list = extractTAGs(linesOfContent);
-		return list;
+		String linesOfContent = ContentByURL.getSiteContent(urlStr);
+		if(linesOfContent.isEmpty()){
+			return new ArrayList<String>();
+		}else{
+			list = extractTAGs(linesOfContent);
+			return list;
+		}
 	}
 	
 	public ArrayList<String> crawlAll(String urlStr){

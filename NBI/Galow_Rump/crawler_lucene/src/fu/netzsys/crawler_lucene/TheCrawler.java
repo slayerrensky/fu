@@ -1,7 +1,8 @@
-package fu.netzsys.crawler;
+package fu.netzsys.crawler_lucene;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 		})
 public class TheCrawler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public Indexer indexer;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -30,6 +32,7 @@ public class TheCrawler extends HttpServlet {
     public TheCrawler() {
         super();
         // TODO Auto-generated constructor stub
+        indexer = new Indexer();
     }
 
 	/**
@@ -52,12 +55,20 @@ public class TheCrawler extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Crawler c = new Crawler();
-		System.out.println("GET!!!!!!!!!!!!!!!!!!");
 		String destSite = "leer";
 		Map parameters = request.getParameterMap();
 	    if (parameters.containsKey("toCrawl")){
 	    	destSite = request.getParameter("toCrawl");
 	    	request.setAttribute("desti",request.getParameter("toCrawl"));
+	    	
+	    	ArrayList<String> linkList = c.crawlAll(destSite);
+	    	Normalizer n = new Normalizer();
+	    	System.out.println("normal");
+	    	for (String link : linkList) {
+				URLInformation siteInfo = n.normalize(ContentByURL.getSiteContent(link));
+				siteInfo.setURL(link);
+				indexer.addToIndex(siteInfo);
+			}
 	    	request.setAttribute("destination",c.crawlAll(destSite));
 	    }
 	    RequestDispatcher view = request.getRequestDispatcher("/showInfo.jsp");
