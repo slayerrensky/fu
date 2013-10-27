@@ -8,8 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,23 +20,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.sandbox.queries.regex.JakartaRegexpCapabilities;
-import org.apache.lucene.sandbox.queries.regex.JavaUtilRegexCapabilities;
-import org.apache.lucene.sandbox.queries.regex.RegexCapabilities;
-import org.apache.lucene.sandbox.queries.regex.RegexCapabilities.RegexMatcher;
+import org.apache.lucene.sandbox.queries.regex.RegexQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.RegexpQuery;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
@@ -60,7 +52,7 @@ public class Crawler extends HttpServlet {
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public Crawler() {
-		super();
+		
 		config = new IndexWriterConfig(Version.LUCENE_45, analyzer);
 		try {
 			w = new IndexWriter(index, config);
@@ -104,34 +96,10 @@ public class Crawler extends HttpServlet {
 		writer.close();
 
 		w.commit();
-		
+
 		// Test
-
-		System.out.println("Searching for '" + "" + "'");
-		Directory directory = w.getDirectory();
-		IndexReader indexReader = IndexReader.open(directory);
-		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-
-		QueryParser queryParser = new QueryParser(Version.LUCENE_45, "content", analyzer);
-		RegexpQuery query = null;
-		try {
-			query = new RegexpQuery(new Term("content","kick"));
-//			query = queryParser.parse(".*kick.*");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		TopDocs hits = indexSearcher.search(query,10);
-		System.out.println("Number of hits: " + hits.scoreDocs.length);
-		
-		 ScoreDoc[] scoreDocs = hits.scoreDocs;
-		 IndexReader reader = IndexReader.open(index);
-		
-		 IndexSearcher searcher = new IndexSearcher(reader);
-		 for(int i=0;i<scoreDocs.length;++i) {
-			    int docId = scoreDocs[i].doc;
-			    Document d = searcher.doc(docId);
-			    System.out.println((i + 1) + ". " + d.get("content"));
-			}
+		search("ick", "content");
+		search("ick", "title");
 	}
 
 	/**
@@ -153,27 +121,16 @@ public class Crawler extends HttpServlet {
 			while ((inputLine = in.readLine()) != null)
 				webpage.append(inputLine);
 
-			// Wortreduzierung
+			String title = webpage.toString().replaceAll("<title>[^>]*>", "").replaceAll("[!.,\\u002D_\"]", "");
 			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
-					.replaceAll("[!.,-_\"]", "");
+					.replaceAll("[!.,\\u002D_\"]", "");
 
-			// Duplicate entfernen und indezieren
-			Scanner scanner = new Scanner(replaceAll);
-			HashSet<String> setList = new HashSet<String>();
 			Document addDoc = new Document();
-			while (scanner.hasNext()) {
-				String next = scanner.next();
-				if (setList.add(next))
-					addDoc.add(new TextField("content", next, Field.Store.YES));
-			}
+			addDoc.add(new StringField("url", url.toString(), Field.Store.YES));
+			addDoc.add(new TextField("content", replaceAll, Field.Store.YES));
+			addDoc.add(new TextField("title", title, Field.Store.YES));
 			w.addDocument(addDoc);
-			
-			//Kontrollausgabe
-			IndexableField[] fields = addDoc.getFields("content");
-			for (int i = 0; i < fields.length; i++) {
-				System.out.println(fields[i].stringValue());
-			}
-			
+
 			if (this.depth > 0) {
 				this.depth--;
 				getLinks(webpage.toString());
@@ -225,6 +182,35 @@ public class Crawler extends HttpServlet {
 			urlList.add(url);
 			crawl(url);
 		}
+	}
+
+	private void search(String string, String field) {
+		String querystr = "raw";
+
+		try {
+			// regex
+			RegexQuery q = new RegexQuery(new Term(field, ".*" + querystr
+					+ ".*"));
+
+			int hitsPerPage = 10;
+			IndexReader reader = DirectoryReader.open(index);
+			IndexSearcher searcher = new IndexSearcher(reader);
+			TopScoreDocCollector collector = TopScoreDocCollector.create(
+					hitsPerPage, true);
+			searcher.search(q, collector);
+			ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+			System.out.println("Found " + hits.length + " hits.");
+			for (int i = 0; i < hits.length; ++i) {
+				int docId = hits[i].doc;
+				Document d = searcher.doc(docId);
+				System.out.println((i + 1) + ". " + d.get("url") + "\t"
+						+ d.get("content"));
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	private String normalizeLinks(String spezURL) {
