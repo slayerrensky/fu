@@ -18,5 +18,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-queries-4.5.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-demo-4.5.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-queryparser-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-sandbox-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jakarta-regexp-1.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

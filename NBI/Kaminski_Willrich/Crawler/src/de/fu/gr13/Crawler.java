@@ -22,18 +22,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.sandbox.queries.regex.JakartaRegexpCapabilities;
+import org.apache.lucene.sandbox.queries.regex.JavaUtilRegexCapabilities;
+import org.apache.lucene.sandbox.queries.regex.RegexCapabilities;
+import org.apache.lucene.sandbox.queries.regex.RegexCapabilities.RegexMatcher;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.RegexpQuery;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
@@ -56,7 +61,7 @@ public class Crawler extends HttpServlet {
 	 */
 	public Crawler() {
 		super();
-		config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+		config = new IndexWriterConfig(Version.LUCENE_45, analyzer);
 		try {
 			w = new IndexWriter(index, config);
 		} catch (IOException e) {
@@ -98,26 +103,35 @@ public class Crawler extends HttpServlet {
 		writer.println("</html>");
 		writer.close();
 
-//		// Test
-//		Query q = null;
-//		try {
-//			q = new QueryParser(Version.LUCENE_40, "content", analyzer)
-//					.parse("Kick");
-//			
-//			IndexReader reader = IndexReader.open(index);
-//			IndexSearcher searcher = new IndexSearcher(reader);
-//			TopScoreDocCollector collector = TopScoreDocCollector.create(10,
-//					true);
-//			searcher.search(q, collector);
-//			collector.topDocs().scoreDoc
-//			ScoreDoc[] hits = collector.topDocs().scoreDocs;
-//			int docId = hits[0].doc;
-//			Document d = searcher.doc(docId);
-//			String fields = d.get("content");
-//			System.out.println(fields);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
+		w.commit();
+		
+		// Test
+
+		System.out.println("Searching for '" + "" + "'");
+		Directory directory = w.getDirectory();
+		IndexReader indexReader = IndexReader.open(directory);
+		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+
+		QueryParser queryParser = new QueryParser(Version.LUCENE_45, "content", analyzer);
+		RegexpQuery query = null;
+		try {
+			query = new RegexpQuery(new Term("content","kick"));
+//			query = queryParser.parse(".*kick.*");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		TopDocs hits = indexSearcher.search(query,10);
+		System.out.println("Number of hits: " + hits.scoreDocs.length);
+		
+		 ScoreDoc[] scoreDocs = hits.scoreDocs;
+		 IndexReader reader = IndexReader.open(index);
+		
+		 IndexSearcher searcher = new IndexSearcher(reader);
+		 for(int i=0;i<scoreDocs.length;++i) {
+			    int docId = scoreDocs[i].doc;
+			    Document d = searcher.doc(docId);
+			    System.out.println((i + 1) + ". " + d.get("content"));
+			}
 	}
 
 	/**
