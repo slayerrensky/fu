@@ -80,7 +80,12 @@ public class TheCrawler extends HttpServlet {
 	    	LSearch search = new LSearch();
 	    	String query = request.getParameter("query");
 	    	LinkedList<String> founds = search.SearchForContent(query);
-	    	request.setAttribute("destination",founds);
+	    	String ul = "<ul>\n";
+	    	for (String s : founds) {
+				ul += "<li><a href=\"" + s + "\">" + s + "</a></li>"+"\n";
+			}
+	    	ul +="</ul>"+"\n";
+	    	request.setAttribute("linkliste",ul);
 	    }
 	    	
 	    RequestDispatcher view = request.getRequestDispatcher("/showInfo.jsp");

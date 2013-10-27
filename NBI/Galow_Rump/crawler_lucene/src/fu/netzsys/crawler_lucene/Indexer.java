@@ -40,6 +40,7 @@ public class Indexer {
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_45, analyzer);
 		iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		
+		
 		try {
 			writer = new IndexWriter(indexDir, iwc);
 			Document doc = new Document();

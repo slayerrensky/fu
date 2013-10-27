@@ -9,6 +9,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.util.Version;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -18,6 +19,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.RegexpQuery;
+import org.apache.lucene.sandbox.queries.regex.RegexQuery;
 
 public class LSearch {
 
@@ -51,17 +54,18 @@ public class LSearch {
 		IndexSearcher searcher = null;
 		int hitsPerPage = 10;
 	    IndexReader reader;
+	    
 		try {
-			Query q = new QueryParser(Version.LUCENE_45, "content", analyzer).parse(querystr);
+			//Query q = new QueryParser(Version.LUCENE_45, "content", analyzer).parse(querystr);
+			
+			RegexQuery rq = new RegexQuery(new Term(searchField, ".*" + querystr + ".*"));
+			
 			reader = DirectoryReader.open(indexDir);
-			 searcher = new IndexSearcher(reader);
+			searcher = new IndexSearcher(reader);
 		    TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
-		    searcher.search(q, collector);
+		    searcher.search(rq, collector);
 		    hits= collector.topDocs().scoreDocs;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

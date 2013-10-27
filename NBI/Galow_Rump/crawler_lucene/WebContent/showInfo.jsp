@@ -18,6 +18,7 @@
 <p>Parameter: ${desti}</p>
 <p>Link list: ${destination}</p>
 
+${linkliste}
 
 </body>
 </html>
