@@ -121,8 +121,6 @@ public class Crawler extends HttpServlet {
 			while ((inputLine = in.readLine()) != null)
 				webpage.append(inputLine);
 
-			// Wortreduzierung
-
 			String title = webpage.toString().replaceAll("<title>[^>]*>", "").replaceAll("[!.,\\u002D_\"]", "");
 			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
 					.replaceAll("[!.,\\u002D_\"]", "");
