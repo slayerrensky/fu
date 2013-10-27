@@ -22,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -39,6 +41,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.RegexpQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
@@ -61,7 +64,14 @@ public class Crawler extends HttpServlet {
 	 */
 	public Crawler() {
 		super();
-		config = new IndexWriterConfig(Version.LUCENE_45, analyzer);
+		
+//		try {
+//			blabla.main(null);
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+		
+		config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
 		try {
 			w = new IndexWriter(index, config);
 		} catch (IOException e) {
@@ -107,31 +117,31 @@ public class Crawler extends HttpServlet {
 		
 		// Test
 
-		System.out.println("Searching for '" + "" + "'");
-		Directory directory = w.getDirectory();
-		IndexReader indexReader = IndexReader.open(directory);
-		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-
-		QueryParser queryParser = new QueryParser(Version.LUCENE_45, "content", analyzer);
-		RegexpQuery query = null;
+		String querystr = "kick";
+		System.out.println("Searching for '" + querystr + "'");
+		
+		//Suche
+		
+		Query q = null;
 		try {
-			query = new RegexpQuery(new Term("content","kick"));
-//			query = queryParser.parse(".*kick.*");
-		} catch (Exception e) {
+			q = new QueryParser(Version.LUCENE_40, "content", analyzer).parse(querystr);
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		TopDocs hits = indexSearcher.search(query,10);
-		System.out.println("Number of hits: " + hits.scoreDocs.length);
 		
-		 ScoreDoc[] scoreDocs = hits.scoreDocs;
-		 IndexReader reader = IndexReader.open(index);
-		
-		 IndexSearcher searcher = new IndexSearcher(reader);
-		 for(int i=0;i<scoreDocs.length;++i) {
-			    int docId = scoreDocs[i].doc;
-			    Document d = searcher.doc(docId);
-			    System.out.println((i + 1) + ". " + d.get("content"));
-			}
+	    int hitsPerPage = 10;
+	    IndexReader reader = DirectoryReader.open(index);
+	    IndexSearcher searcher = new IndexSearcher(reader);
+	    TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+	    searcher.search(q, collector);
+	    ScoreDoc[] hits = collector.topDocs().scoreDocs;
+	    
+	    System.out.println("Found " + hits.length + " hits.");
+	    for(int i=0;i<hits.length;++i) {
+	      int docId = hits[i].doc;
+	      Document d = searcher.doc(docId);
+	      System.out.println((i + 1) + ". " + d.get("url") + "\t" + d.get("content"));
+	    }
 	}
 
 	/**
@@ -154,24 +164,25 @@ public class Crawler extends HttpServlet {
 				webpage.append(inputLine);
 
 			// Wortreduzierung
-			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
-					.replaceAll("[!.,-_\"]", "");
-
+			
+			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "").replaceAll("[!.,\\u002D_\"]", "");
+			
 			// Duplicate entfernen und indezieren
 			Scanner scanner = new Scanner(replaceAll);
 			HashSet<String> setList = new HashSet<String>();
 			Document addDoc = new Document();
-			while (scanner.hasNext()) {
-				String next = scanner.next();
-				if (setList.add(next))
-					addDoc.add(new TextField("content", next, Field.Store.YES));
-			}
+//			while (scanner.hasNext()) {
+//				String next = scanner.next();
+//				if (setList.add(next))
+					addDoc.add(new StringField("url", url.toString(), Field.Store.YES));
+					addDoc.add(new TextField("content", replaceAll, Field.Store.YES));
+//			}
 			w.addDocument(addDoc);
 			
 			//Kontrollausgabe
 			IndexableField[] fields = addDoc.getFields("content");
 			for (int i = 0; i < fields.length; i++) {
-				System.out.println(fields[i].stringValue());
+//				System.out.println(fields[i].stringValue());
 			}
 			
 			if (this.depth > 0) {
