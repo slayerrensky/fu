@@ -8,9 +8,16 @@
 </head>
 <body>
 
+<ul>
+	<li><a href="http://localhost:8080/fu.netzsys.crawler_lucene/TheCrawler?toCrawl=http://www.udacity.com/cs101x/index.html">Crawl Page: http://www.udacity.com/cs101x/index.html</a> </li>
+	<li><a href="http://localhost:8080/fu.netzsys.crawler_lucene/TheCrawler?query=page">Search for "page"</a></li>
+	<li><a href="http://localhost:8080/fu.netzsys.crawler_lucene/TheCrawler?query=crawl">Search for "crawl"</a></li>
+</ul>
+
 <h1>Crawler Status</h1>
 <p>Parameter: ${desti}</p>
 <p>Link list: ${destination}</p>
+
 
 </body>
 </html>

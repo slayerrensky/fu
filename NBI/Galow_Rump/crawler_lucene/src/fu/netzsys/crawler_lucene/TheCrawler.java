@@ -3,6 +3,7 @@ package fu.netzsys.crawler_lucene;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -58,7 +59,9 @@ public class TheCrawler extends HttpServlet {
 		String destSite = "leer";
 		Map parameters = request.getParameterMap();
 	    if (parameters.containsKey("toCrawl")){
+	    	
 	    	destSite = request.getParameter("toCrawl");
+	    	System.out.println("Begin to crawl: " + destSite);
 	    	request.setAttribute("desti",request.getParameter("toCrawl"));
 	    	
 	    	ArrayList<String> linkList = c.crawlAll(destSite);
@@ -69,8 +72,17 @@ public class TheCrawler extends HttpServlet {
 				siteInfo.setURL(link);
 				indexer.addToIndex(siteInfo);
 			}
+	    	
 	    	request.setAttribute("destination",c.crawlAll(destSite));
 	    }
+	    if(parameters.containsKey("query"))
+	    {
+	    	LSearch search = new LSearch();
+	    	String query = request.getParameter("query");
+	    	LinkedList<String> founds = search.SearchForContent(query);
+	    	request.setAttribute("destination",founds);
+	    }
+	    	
 	    RequestDispatcher view = request.getRequestDispatcher("/showInfo.jsp");
 	    view.forward(request, response);
 	}
