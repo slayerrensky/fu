@@ -16,7 +16,7 @@ public class URLInformation {
 		content = "";
 		altInfo ="";
 		meta ="";
-		images = new ArrayList<>();
+		images = new ArrayList<ImgInfo>();
 	}
 	
 	public String getURL() {
