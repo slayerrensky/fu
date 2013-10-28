@@ -47,7 +47,7 @@ public class Crawler extends HttpServlet {
 	private int depth = 2;
 	ArrayList<URL> urlList = new ArrayList<URL>();
 	StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_45);
-	Directory index; 
+	Directory index;
 	IndexWriterConfig config = null;
 	IndexWriter w = null;
 	String indexFile = "/Users/larswillrich/Entwicklung/Projekte/FU_renskyGithub/fu/NBI/Kaminski_Willrich/Crawler/index";
@@ -64,8 +64,9 @@ public class Crawler extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		config = new IndexWriterConfig(Version.LUCENE_45, analyzer).setOpenMode(OpenMode.CREATE);
+
+		config = new IndexWriterConfig(Version.LUCENE_45, analyzer)
+				.setOpenMode(OpenMode.CREATE);
 		urlList = new ArrayList<URL>();
 		try {
 			index = FSDirectory.open(new File(indexFile));
@@ -87,7 +88,7 @@ public class Crawler extends HttpServlet {
 			URL url = new URL(url_str);
 			crawl(url);
 		}
-		
+
 		writer.println("<html>");
 		writer.println("<head><title>Hello World Servlet</title></head>");
 		writer.println("<body>");
@@ -108,8 +109,8 @@ public class Crawler extends HttpServlet {
 
 		w.commit();
 		w.close();
-		// Test
-		search("kick", "content");
+		
+		search("Computerprogrammen", "content");
 	}
 
 	/**
@@ -131,23 +132,7 @@ public class Crawler extends HttpServlet {
 			while ((inputLine = in.readLine()) != null)
 				webpage.append(inputLine);
 
-			
-			Document addDoc = new Document();
-			if (webpage.toString().contains("<title>")){
-				
-				String title = webpage.toString().replaceAll("<title>[^>]*>", "").replaceAll("[!.,\\u002D_\"]", "");
-				w.deleteDocuments(new Term("title", indexFile));
-				addDoc.add(new TextField("title", title, Field.Store.YES));
-			}
-			
-			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
-					.replaceAll("[!.,\\u002D_\"]", "");
-
-			w.deleteDocuments(new Term("url", indexFile));
-			addDoc.add(new StringField("url", url.toString(), Field.Store.YES));
-			w.deleteDocuments(new Term("content", indexFile));
-			addDoc.add(new TextField("content", replaceAll, Field.Store.YES));
-			w.addDocument(addDoc);
+			indicatePage(url, webpage);
 
 			if (this.depth > 0) {
 				this.depth--;
@@ -158,6 +143,34 @@ public class Crawler extends HttpServlet {
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+		}
+	}
+
+	private void indicatePage(URL url, StringBuilder webpage) {
+		try {
+			Document addDoc = new Document();
+			if (webpage.toString().contains("<title>")) {
+
+				String titleTag = "<title[^>]*>(.*)</title>";
+				Pattern pattern = Pattern.compile(titleTag);
+				Matcher matcher = pattern.matcher(webpage);
+				String title = null;
+				if (matcher.find()){
+					title = matcher.group();
+					title = title.replaceAll("<title>", "").replaceAll("</title>", "");
+				}
+					
+				
+				addDoc.add(new TextField("title", title, Field.Store.YES));
+			}
+			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
+					.replaceAll("[!.,\\u002D_\"]", "");
+
+			addDoc.add(new StringField("url", url.toString(), Field.Store.YES));
+			addDoc.add(new TextField("content", replaceAll, Field.Store.YES));
+			w.addDocument(addDoc);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -198,6 +211,7 @@ public class Crawler extends HttpServlet {
 			if (visited)
 				continue;
 			urlList.add(url);
+			System.out.println(url);
 			crawl(url);
 		}
 	}
@@ -244,6 +258,8 @@ public class Crawler extends HttpServlet {
 
 	private boolean isCorrectTypeOfLink(String spezURL) {
 		if (spezURL.endsWith(".html"))
+			return true;
+		if (spezURL.endsWith(".php"))
 			return true;
 		return false;
 		/*
