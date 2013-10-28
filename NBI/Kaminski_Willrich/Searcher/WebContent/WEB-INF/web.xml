@@ -1,0 +1,10 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+    <servlet>
+        <servlet-name>Searcher</servlet-name>
+        <servlet-class>de.fu.gr13.Searcher</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Searcher</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+</web-app>
