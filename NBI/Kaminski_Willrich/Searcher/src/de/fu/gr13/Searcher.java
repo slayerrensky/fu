@@ -41,7 +41,7 @@ public class Searcher extends HttpServlet {
 	Directory index; 
 	IndexWriterConfig config = null;
 	IndexWriter w = null;
-	String indexFile = "path/Library/Tomcat/webapps/[WBI-1314]-exercise21-group13/index";
+	String indexFile = "/Library/Tomcat/webapps/[WBI-1314]-exercise21-group13/index";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
