@@ -22,7 +22,7 @@
       <td align="right">Suche:</td>
       <td><input name="query" type="text" size="120" maxlength="10000"></td>
     </tr>
-    <input type="radio" name="searchtype" value="html"> HTML<br>
+    <input type="radio" name="searchtype" value="html" checked="checked"> HTML<br>
     <input type="radio" name="searchtype" value="img"> Img<br>
   	<input type="submit" name="search" value="search">
   	<input type="submit" name="search" value="crawl">

@@ -80,7 +80,17 @@ public class TheCrawler extends HttpServlet {
 	    		LSearch search = new LSearch();
 	    		System.out.println("Begin to search");
 		    	String query = request.getParameter("query");
-		    	LinkedList<URLInformation> founds = search.SearchForContent(query);
+		    	String searchtype = "";
+		    	if(parameters.containsKey("searchtype")){
+		    		searchtype = request.getParameter("searchtype");
+		    		if( ! (searchtype.equals("url") || searchtype.equals("img"))){
+		    			searchtype = "url";
+		    		}
+		    	}else{
+		    		searchtype = "url";
+		    	}
+		    	//LinkedList<URLInformation> founds = search.SearchForContent(query);
+		    	LinkedList<URLInformation> founds = search.SearchForType(query, searchtype);
 		    	String ul = "<ul>\n";
 		    	for (URLInformation ulist : founds) {
 					ul += "<li><a href=\"" + ulist.getURL() + "\">" + ulist.getURL() + "</a>" + 

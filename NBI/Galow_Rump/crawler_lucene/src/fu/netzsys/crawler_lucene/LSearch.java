@@ -97,7 +97,7 @@ public class LSearch {
 		 return null;  
 	}
 	
-	public LinkedList<URLInformation> SearchFor(String querystr, String searchField, String type)
+	public LinkedList<URLInformation> SearchForType(String querystr, String type)
 	{
 		ScoreDoc[] hits = null;
 		IndexSearcher searcher = null;
@@ -117,9 +117,6 @@ public class LSearch {
 			booleanQuery.add(query4, Occur.SHOULD);
 			// Use BooleanClause.Occur.MUST instead of BooleanClause.Occur.SHOULD
 			// for AND queries
-			
-			
-			RegexQuery rq = new RegexQuery(new Term(searchField, ".*" + querystr + ".*"));
 			
 			reader = DirectoryReader.open(indexDir);
 			searcher = new IndexSearcher(reader);
