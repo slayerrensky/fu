@@ -94,7 +94,7 @@ public class Crawler extends HttpServlet {
 		writer.println("<body>");
 		writer.println("<h1>Crawler by Lars Willrich, Peter Kaminski</h1>");
 		writer.println("<p> request " + url_str + "</p>");
-		writer.println("<form action=\"Crawler\">"
+		writer.println("<form action=\"\">" 
 				+ "<p>URL:<br><input name=\"url\" type=\"text\" size=\"100\" maxlength=\"200\" value=\"http://www.udacity.com/cs101x/index.html\">"
 				+ "<input type=\"submit\" value=\" Indezieren \">"
 				+ "</p></form>");
@@ -190,7 +190,7 @@ public class Crawler extends HttpServlet {
 			// Normalisiere Link
 			spezURL = normalizeLinks(spezURL);
 
-			// PrŸfe auf korrekten Typen
+			// Prï¿½fe auf korrekten Typen
 			if (!isCorrectTypeOfLink(spezURL))
 				continue;
 

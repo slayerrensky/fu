@@ -41,7 +41,7 @@ public class Searcher extends HttpServlet {
 	Directory index; 
 	IndexWriterConfig config = null;
 	IndexWriter w = null;
-	String indexFile = "/Users/larswillrich/Entwicklung/Projekte/FU_renskyGithub/fu/NBI/Kaminski_Willrich/Crawler/index";
+	String indexFile = "./[WBI-1314]-exercise21-group13/index";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -82,14 +82,16 @@ public class Searcher extends HttpServlet {
 		writer.println("<body>");
 		writer.println("<h1>Searcher by Lars Willrich, Peter Kaminski</h1>");
 		writer.println("<p> request " + searchString + "</p>");
-		writer.println("<form action=\"Searcher\">"
+		writer.println("<form action=\"\">"
 				+ "<p>URL:<br><input name=\"search\" type=\"text\" size=\"100\" maxlength=\"200\" value=\"kick\">"
 				+ "<input type=\"submit\" value=\" Indezieren \">"
 				+ "</p></form>");
 
 		System.out.println("Search for " + searchString);
+		writer.println("path" + new File("").getAbsolutePath());
+		new File("");
 		ArrayList<Document> search = search(searchString, "content");
-		
+		if (search != null)
 		for (int i = 0; i<search.size();i++) {
 			Document d = (Document) search.get(i);
 			
