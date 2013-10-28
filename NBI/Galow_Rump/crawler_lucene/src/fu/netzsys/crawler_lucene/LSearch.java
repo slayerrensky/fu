@@ -50,7 +50,7 @@ public class LSearch {
 	{
 		ScoreDoc[] hits = null;
 		IndexSearcher searcher = null;
-		int hitsPerPage = 10;
+		int hitsPerPage = 50;
 	    IndexReader reader;
 	    
 		try {

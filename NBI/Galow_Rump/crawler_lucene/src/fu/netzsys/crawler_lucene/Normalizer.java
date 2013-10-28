@@ -42,7 +42,7 @@ public class Normalizer {
 	
 	private String extractMetaTags(String str, URLInformation siteInfo){
 		String line = new String();
-		Pattern pattern = Pattern.compile("\\s*<meta[\\w\\s]*(?i)content\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))");
+		Pattern pattern = Pattern.compile("\\s*(?i)meta[\\w\\s]*(?i)content\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))");
 		Matcher matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			String tmp = matcher.group();
@@ -61,8 +61,16 @@ public class Normalizer {
 	}
 	
 	private String getTitle(String str, URLInformation siteInfo){
-		String title = str.replaceAll("<title>[^>]*>", "");
-		siteInfo.setTitle(title);
+		String titleTag = "<title[^>]*>(.*)</title>";
+        Pattern pattern = Pattern.compile(titleTag);
+        Matcher matcher = pattern.matcher(str);
+        String title = null;
+        if (matcher.find()){
+                title = matcher.group();
+                title = title.replaceAll("<title>", "").replaceAll("</title>", "");
+                System.out.println("title info: "+title);
+				siteInfo.setTitle(title);
+        }
 		return str;
 	}
 }

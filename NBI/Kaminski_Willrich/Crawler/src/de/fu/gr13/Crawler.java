@@ -90,9 +90,9 @@ public class Crawler extends HttpServlet {
 		}
 
 		writer.println("<html>");
-		writer.println("<head><title>Hello World Servlet</title></head>");
+		writer.println("<head><title>Crawler</title></head>");
 		writer.println("<body>");
-		writer.println("<h1>Hello World from a Servlet!</h1>");
+		writer.println("<h1>Crawler by Lars Willrich, Peter Kaminski</h1>");
 		writer.println("<p> request " + url_str + "</p>");
 		writer.println("<form action=\"Crawler\">"
 				+ "<p>URL:<br><input name=\"url\" type=\"text\" size=\"100\" maxlength=\"200\" value=\"http://www.udacity.com/cs101x/index.html\">"

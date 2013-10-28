@@ -49,7 +49,7 @@ public class Indexer {
 			Document doc = new Document();
 			doc.add(new StringField("url", toIndexContent.getURL(),
 					Field.Store.YES));
-			doc.add(new TextField("title", toIndexContent.getTitle(),
+			doc.add(new StringField("title", toIndexContent.getTitle(),
 					Field.Store.YES));
 			doc.add(new TextField("content", toIndexContent.getContent(),
 					Field.Store.YES));

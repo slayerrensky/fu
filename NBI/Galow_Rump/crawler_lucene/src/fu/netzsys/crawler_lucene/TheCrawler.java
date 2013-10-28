@@ -58,25 +58,24 @@ public class TheCrawler extends HttpServlet {
 		Crawler c = new Crawler();
 		String destSite = "leer";
 		Map parameters = request.getParameterMap();
-	    if (parameters.containsKey("toCrawl")){
+	    if (parameters.containsKey("search") && (request.getParameter("search") == "crawl") && parameters.containsKey("query")){
 	    	
-	    	destSite = request.getParameter("toCrawl");
+	    	destSite = request.getParameter("query");
 	    	System.out.println("Begin to crawl: " + destSite);
-	    	request.setAttribute("desti",request.getParameter("toCrawl"));
+	    	request.setAttribute("desti",request.getParameter("query"));
 	    	
 	    	//ArrayList<String> linkList = c.crawlAll(destSite, 2);
-	    	ArrayList<String> linkList = c.crawl(destSite, 0, 2);
+	    	ArrayList<String> linkList = c.crawl(destSite, 0, 1);
 	    	Normalizer n = new Normalizer();
-	    	System.out.println("normal");
 	    	for (String link : linkList) {
 				URLInformation siteInfo = n.normalize(ContentByURL.getSiteContent(link));
 				siteInfo.setURL(link);
 				indexer.addToIndex(siteInfo);
 			}
-	    	
+	    	System.out.println("crawler + indexer = fertig");
 	    	request.setAttribute("destination",linkList);
 	    }
-	    if(parameters.containsKey("query"))
+	    if(parameters.containsKey("search") && (request.getParameter("search") == "search") && parameters.containsKey("query"))
 	    {
 	    	LSearch search = new LSearch();
 	    	String query = request.getParameter("query");

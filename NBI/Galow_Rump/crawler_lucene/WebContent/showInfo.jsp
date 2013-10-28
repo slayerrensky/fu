@@ -16,6 +16,18 @@
 
 <h1>Crawler Status</h1>
 <p>Parameter: ${desti}</p>
+<form action="TheCrawler">
+  <table border="0" cellpadding="0" cellspacing="4">
+    <tr>
+      <td align="right">Suche:</td>
+      <td><input name="query" type="text" size="30" maxlength="30"></td>
+    </tr>
+    <input type="radio" name="searchtype" value="html"> HTML<br>
+    <input type="radio" name="searchtype" value="img"> Img<br>
+  	<input type="submit" name="search" value="search">
+  	<input type="submit" name="search" value="crawl">
+  </table>
+</form>
 <p>Link list: ${destination}</p>
 
 ${linkliste}
