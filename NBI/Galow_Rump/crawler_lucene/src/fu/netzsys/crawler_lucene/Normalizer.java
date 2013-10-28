@@ -4,6 +4,9 @@ package fu.netzsys.crawler_lucene;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.SizeRequirements;
+import javax.swing.SizeSequence;
+
 
 public class Normalizer {
 	
@@ -74,7 +77,15 @@ public class Normalizer {
 			String src = htmlValue(tmp, "src");
 			if (src.startsWith("/"))
 			{
-				src = siteInfo.getURL() + src;
+				if (siteInfo.getURL().endsWith("/"))
+				{
+					src = siteInfo.getURL().substring(0, siteInfo.getURL().length()-1) + src;
+				}
+				else
+				{
+					src = siteInfo.getURL() + src;
+				}
+				
 			}
 			System.out.println("Title: \"" + title + "\";"+"Alt: \"" + alt + "\";"+"src: \"" + src +"\"");
 			siteInfo.getImages().add(new ImgInfo(title, alt, src));
