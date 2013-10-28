@@ -50,7 +50,7 @@ public class Crawler extends HttpServlet {
 	Directory index;
 	IndexWriterConfig config = null;
 	IndexWriter w = null;
-	String indexFile = "/Users/larswillrich/Entwicklung/Projekte/FU_renskyGithub/fu/NBI/Kaminski_Willrich/Crawler/index";
+	String indexFile = "./[WBI-1314]-exercise21-group13/index";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
