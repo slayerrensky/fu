@@ -64,7 +64,8 @@ public class TheCrawler extends HttpServlet {
 	    	System.out.println("Begin to crawl: " + destSite);
 	    	request.setAttribute("desti",request.getParameter("toCrawl"));
 	    	
-	    	ArrayList<String> linkList = c.crawlAll(destSite);
+	    	//ArrayList<String> linkList = c.crawlAll(destSite, 2);
+	    	ArrayList<String> linkList = c.crawl(destSite, 0, 2);
 	    	Normalizer n = new Normalizer();
 	    	System.out.println("normal");
 	    	for (String link : linkList) {
@@ -73,7 +74,7 @@ public class TheCrawler extends HttpServlet {
 				indexer.addToIndex(siteInfo);
 			}
 	    	
-	    	request.setAttribute("destination",c.crawlAll(destSite));
+	    	request.setAttribute("destination",linkList);
 	    }
 	    if(parameters.containsKey("query"))
 	    {

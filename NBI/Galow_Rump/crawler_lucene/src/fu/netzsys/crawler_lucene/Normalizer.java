@@ -32,9 +32,9 @@ public class Normalizer {
 			String[] tmpA = tmp.split("\"");
 			if(tmpA.length>1){
 				line += tmpA[1] + ";";
-				System.out.println("alt info: "+line);
 			}
 		}
+		System.out.println("alt info: "+line);
 		siteInfo.setAltInfo(line);
 		return str;
 	}
@@ -48,9 +48,9 @@ public class Normalizer {
 			String[] tmpA = tmp.split("\"");
 			if(tmpA.length>1){
 				line += tmpA[1] + ";";
-				System.out.println("meta info: "+line);
 			}
 		}
+		System.out.println("meta info: "+line);
 		siteInfo.setMeta(line);
 		return str;
 	}
