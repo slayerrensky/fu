@@ -88,7 +88,7 @@ public class Searcher extends HttpServlet {
 				+ "</p></form>");
 
 		System.out.println("Search for " + searchString);
-		writer.println("path" + new File("").getAbsolutePath());
+		writer.println("path" + getServletContext().getRealPath ("."));
 		new File("");
 		ArrayList<Document> search = search(searchString, "content");
 		if (search != null)
