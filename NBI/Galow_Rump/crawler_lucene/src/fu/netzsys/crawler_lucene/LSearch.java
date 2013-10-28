@@ -147,10 +147,11 @@ public class LSearch {
 		    	   URLInformation ul = new URLInformation();
 		    	   if(type.equals("url")){
 		    		   ul.setURL(d.get("url"));
+		    		   ul.setTitle(d.get("title"));
 		    	   }else if(type.equals("img")){
 		    		   ul.setURL(d.get("src"));
-		    	   }
-		    	   ul.setTitle(d.get("title"));
+		    		   ul.setTitle(d.get("alt"));
+		    	   }		    	   
 		    	   founds.add(ul);
 		    	   System.out.println((i + 1) + ". " + d.get("url"));
 		    	   

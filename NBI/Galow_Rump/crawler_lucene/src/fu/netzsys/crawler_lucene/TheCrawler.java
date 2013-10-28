@@ -71,7 +71,7 @@ public class TheCrawler extends HttpServlet {
 		    	Normalizer n = new Normalizer();
 		    	for (String link : linkList) {
 					URLInformation siteInfo = n.normalize(ContentByURL.getSiteContent(link),link );
-					indexer.addToIndex(siteInfo);
+					indexer.addAllToIndex(siteInfo);
 				}
 		    	System.out.println("crawler + indexer = fertig");
 		    	request.setAttribute("destination",linkList);	    		
