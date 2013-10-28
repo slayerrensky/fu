@@ -7,8 +7,9 @@ import java.util.regex.Pattern;
 
 public class Normalizer {
 	
-	public URLInformation normalize(String str){
+	public URLInformation normalize(String str, String url){
 		URLInformation siteInfo = new URLInformation();
+		siteInfo.setURL(url);
 		str = getImg(str, siteInfo);
 		str = getTitle(str, siteInfo);
 		str = extract_ALT_Attributs(str, siteInfo);
@@ -68,11 +69,14 @@ public class Normalizer {
 		Matcher matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			String tmp = matcher.group();
-			System.out.println(tmp);
 			String title = htmlValue(tmp, "title");
 			String alt = htmlValue(tmp, "alt");
 			String src = htmlValue(tmp, "src");
-			
+			if (src.startsWith("/"))
+			{
+				src = siteInfo.getURL() + src;
+			}
+			System.out.println("Title: \"" + title + "\";"+"Alt: \"" + alt + "\";"+"src: \"" + src +"\"");
 			siteInfo.getImages().add(new ImgInfo(title, alt, src));
 		}
 				
