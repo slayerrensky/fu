@@ -72,14 +72,14 @@ public class Normalizer {
 		Matcher matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			String tmp = matcher.group();
-			String title = htmlValue(tmp, "title");
 			String alt = htmlValue(tmp, "alt");
 			String src = htmlValue(tmp, "src");
-			if (src.startsWith("/"))
+			if (src.startsWith("/") && !src.startsWith("//"))
 			{
-				if (siteInfo.getURL().endsWith("/"))
+				String url = siteInfo.getURL();
+				if (url.endsWith("/"))
 				{
-					src = siteInfo.getURL().substring(0, siteInfo.getURL().length()-1) + src;
+					src = url.substring(0, url.length()-1) + src;
 				}
 				else
 				{
@@ -87,12 +87,13 @@ public class Normalizer {
 				}
 				
 			}
-			System.out.println("Title: \"" + title + "\";"+"Alt: \"" + alt + "\";"+"src: \"" + src +"\"");
-			siteInfo.getImages().add(new ImgInfo(title, alt, src));
+			System.out.println("Alt: \"" + alt + "\"" + "src: \"" + src +"\"");
+			siteInfo.getImages().add(new ImgInfo(alt, src));
 		}
 				
 		return str;
 	}
+	
 	
 	private String htmlValue(String str,String name)
 	{
