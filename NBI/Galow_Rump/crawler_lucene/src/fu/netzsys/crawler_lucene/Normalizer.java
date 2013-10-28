@@ -83,7 +83,7 @@ public class Normalizer {
 				}
 				else
 				{
-					src = siteInfo.getURL() + src;
+					src = getHost(siteInfo.getURL()) + src;
 				}
 				
 			}
@@ -94,6 +94,21 @@ public class Normalizer {
 		return str;
 	}
 	
+	public static String getHost(String url){
+	    if(url == null || url.length() == 0)
+	        return "";
+
+	    int doubleslash = url.indexOf("//");
+	    if(doubleslash == -1)
+	        doubleslash = 0;
+	    else
+	        doubleslash += 2;
+
+	    int end = url.indexOf('/', doubleslash);
+	    end = end >= 0 ? end : url.length();
+
+	    return url.substring(doubleslash, end);
+	}
 	
 	private String htmlValue(String str,String name)
 	{
