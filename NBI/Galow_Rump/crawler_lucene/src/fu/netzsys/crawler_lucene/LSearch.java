@@ -108,15 +108,21 @@ public class LSearch {
 			//Query q = new QueryParser(Version.LUCENE_45, "content", analyzer).parse(querystr);
 			BooleanQuery booleanQuery = new BooleanQuery();
 			Query query1 = new TermQuery(new Term("type", type));
-			Query query2 = new TermQuery(new Term("title", querystr));
-			Query query3 = new TermQuery(new Term("content", querystr));
-			Query query4 = new TermQuery(new Term("meta", querystr));
 			booleanQuery.add(query1, Occur.MUST);
-			booleanQuery.add(query2, Occur.SHOULD);
-			booleanQuery.add(query3, Occur.SHOULD);
-			booleanQuery.add(query4, Occur.SHOULD);
-			// Use BooleanClause.Occur.MUST instead of BooleanClause.Occur.SHOULD
-			// for AND queries
+			if(type.equals("img")){
+				Query query2 = new TermQuery(new Term("title", querystr));
+				Query query4 = new TermQuery(new Term("alt", querystr));
+				booleanQuery.add(query2, Occur.SHOULD);
+				booleanQuery.add(query4, Occur.SHOULD);
+				
+			}else{
+				Query query2 = new TermQuery(new Term("title", querystr));
+				Query query3 = new TermQuery(new Term("content", querystr));
+				Query query4 = new TermQuery(new Term("meta", querystr));
+				booleanQuery.add(query2, Occur.SHOULD);
+				booleanQuery.add(query3, Occur.SHOULD);
+				booleanQuery.add(query4, Occur.SHOULD);
+			}
 			
 			reader = DirectoryReader.open(indexDir);
 			searcher = new IndexSearcher(reader);

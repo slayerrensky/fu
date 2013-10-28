@@ -34,6 +34,15 @@ public class Indexer {
 			e.printStackTrace();
 		}
 	}
+	
+	public void addAllToIndex(URLInformation toIndexContent) throws IOException {
+		
+		addToIndex(toIndexContent);
+		
+		for(int i=0;i<toIndexContent.getImages().size();i++){
+			this.addImgToIndex(toIndexContent.getURL(), toIndexContent.getImages().get(i));
+		}
+	}
 
 	public void addToIndex(URLInformation toIndexContent) throws IOException {
 		IndexWriter writer = null;
@@ -55,12 +64,7 @@ public class Indexer {
 					Field.Store.YES));
 			doc.add(new StringField("meta", toIndexContent.getMeta(),
 					Field.Store.YES));
-			
-			Iterator<ImgInfo> images = toIndexContent.getImages().iterator();
-			while(images.hasNext()){
-				this.addImgToIndex(toIndexContent.getURL(), images.next());
-			}
-			
+
 			writer.addDocument(doc);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -85,8 +89,6 @@ public class Indexer {
 			doc.add(new StringField("type", "img",
 					Field.Store.YES));
 			doc.add(new StringField("url", parentUrl,
-					Field.Store.YES));
-			doc.add(new StringField("title", img.getTitle(),
 					Field.Store.YES));
 			doc.add(new StringField("src", img.getSrc(),
 					Field.Store.YES));			

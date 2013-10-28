@@ -63,8 +63,8 @@ public class URLInformation {
 		images.add(img);
 	}
 	
-	public void addImage(String title, String alt, String src){
-		this.addImage(new ImgInfo(title, alt, src));
+	public void addImage(String alt, String src){
+		this.addImage(new ImgInfo(alt, src));
 	}
 	
 	public ArrayList<ImgInfo> getImages(){

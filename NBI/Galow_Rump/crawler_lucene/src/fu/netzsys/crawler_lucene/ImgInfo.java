@@ -1,22 +1,12 @@
 package fu.netzsys.crawler_lucene;
 
 public class ImgInfo {
-	private String title;
 	private String alt;
 	private String src;
 	
-	public ImgInfo(String title, String alt, String src){
-		this.title = title;
+	public ImgInfo(String alt, String src){
 		this.alt = alt;
 		this.src = src;
-	}
-	
-	public String getTitle(){
-		return title;
-	}
-	
-	public void setTitle(String title){
-		this.title = title;
 	}
 	
 	public String getAlt(){
