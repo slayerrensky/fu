@@ -12,14 +12,12 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.util.Version;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
+
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.RegexpQuery;
+
 import org.apache.lucene.sandbox.queries.regex.RegexQuery;
 
 public class LSearch {
@@ -43,12 +41,12 @@ public class LSearch {
 		analyzer = new StandardAnalyzer(Version.LUCENE_45);
 	}
 	
-	public LinkedList<String> SearchForContent(String querystr)
+	public LinkedList<URLInformation> SearchForContent(String querystr)
 	{
 		return SearchFor(querystr,"content");
 	}
 	
-	public LinkedList<String> SearchFor(String querystr, String searchField)
+	public LinkedList<URLInformation> SearchFor(String querystr, String searchField)
 	{
 		ScoreDoc[] hits = null;
 		IndexSearcher searcher = null;
@@ -74,14 +72,16 @@ public class LSearch {
 		{
 			System.out.println("Found " + hits.length + " hits.");
 			
-			LinkedList<String> founds = new LinkedList<String>();
-			
+			LinkedList<URLInformation> founds = new  LinkedList<URLInformation>();
 			for(int i=0;i<hits.length;++i) {
 		       int docId = hits[i].doc;
 		       Document d;
 		       try {
 		    	   d = searcher.doc(docId);
-		    	   founds.add(d.get("url"));
+		    	   URLInformation ul = new URLInformation();
+		    	   ul.setURL(d.get("url"));
+		    	   ul.setTitle(d.get("title"));
+		    	   founds.add(ul);
 		    	   System.out.println((i + 1) + ". " + d.get("url"));
 		    	   
 		       } catch (IOException e) {

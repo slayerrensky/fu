@@ -1,6 +1,6 @@
 package fu.netzsys.crawler_lucene;
 
-import java.util.ArrayList;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +9,7 @@ public class Normalizer {
 	
 	public URLInformation normalize(String str){
 		URLInformation siteInfo = new URLInformation();
+		str = getTitle(str, siteInfo);
 		str = extract_ALT_Attributs(str, siteInfo);
 		str = extractMetaTags(str, siteInfo);
 		str = removePunctuation(str, siteInfo);
@@ -56,6 +57,12 @@ public class Normalizer {
 	}
 	
 	private String removePunctuation(String str, URLInformation siteInfo){
+		return str;
+	}
+	
+	private String getTitle(String str, URLInformation siteInfo){
+		String title = str.replaceAll("<title>[^>]*>", "");
+		siteInfo.setTitle(title);
 		return str;
 	}
 }

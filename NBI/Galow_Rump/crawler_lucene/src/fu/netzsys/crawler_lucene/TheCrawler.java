@@ -80,10 +80,11 @@ public class TheCrawler extends HttpServlet {
 	    {
 	    	LSearch search = new LSearch();
 	    	String query = request.getParameter("query");
-	    	LinkedList<String> founds = search.SearchForContent(query);
+	    	LinkedList<URLInformation> founds = search.SearchForContent(query);
 	    	String ul = "<ul>\n";
-	    	for (String s : founds) {
-				ul += "<li><a href=\"" + s + "\">" + s + "</a></li>"+"\n";
+	    	for (URLInformation ulist : founds) {
+				ul += "<li><a href=\"" + ulist.getURL() + "\">" + ulist.getURL() + "</a>" + 
+					  "<p>" + ulist.getTitle() +"</p></li>"+"\n";
 			}
 	    	ul +="</ul>"+"\n";
 	    	request.setAttribute("linkliste",ul);
