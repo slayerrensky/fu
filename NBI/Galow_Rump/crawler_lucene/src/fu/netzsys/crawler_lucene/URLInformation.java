@@ -1,11 +1,14 @@
 package fu.netzsys.crawler_lucene;
 
+import java.util.ArrayList;
+
 public class URLInformation {
 	private String title;
 	private String URL;
 	private String content;
 	private String altInfo;
 	private String meta;
+	private ArrayList<ImgInfo> images;
 	
 	public URLInformation(){
 		title = "";
@@ -13,6 +16,7 @@ public class URLInformation {
 		content = "";
 		altInfo ="";
 		meta ="";
+		images = new ArrayList<>();
 	}
 	
 	public String getURL() {
@@ -53,5 +57,17 @@ public class URLInformation {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public void addImage(ImgInfo img){
+		images.add(img);
+	}
+	
+	public void addImage(String title, String alt, String src){
+		this.addImage(new ImgInfo(title, alt, src));
+	}
+	
+	public ArrayList<ImgInfo> getImages(){
+		return images;
 	}
 }
