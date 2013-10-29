@@ -35,7 +35,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
 /**
@@ -44,7 +43,7 @@ import org.apache.lucene.util.Version;
 @WebServlet("/Crawler")
 public class Crawler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private int depth = 2;
+	private int depth = 1;
 	ArrayList<URL> urlList = new ArrayList<URL>();
 	StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_45);
 	Directory index;
@@ -109,8 +108,6 @@ public class Crawler extends HttpServlet {
 
 		w.commit();
 		w.close();
-		
-		search("Computerprogrammen", "content");
 	}
 
 	/**
@@ -149,25 +146,34 @@ public class Crawler extends HttpServlet {
 	private void indicatePage(URL url, StringBuilder webpage) {
 		try {
 			Document addDoc = new Document();
-			if (webpage.toString().contains("<title>")) {
 
+			// Title
+			if (webpage.toString().contains("<title>")) {
 				String titleTag = "<title[^>]*>(.*)</title>";
 				Pattern pattern = Pattern.compile(titleTag);
 				Matcher matcher = pattern.matcher(webpage);
 				String title = null;
-				if (matcher.find()){
+				if (matcher.find()) {
 					title = matcher.group();
-					title = title.replaceAll("<title>", "").replaceAll("</title>", "");
+					title = title.replaceAll("<title>", "").replaceAll(
+							"</title>", "");
 				}
-					
-				
 				addDoc.add(new TextField("title", title, Field.Store.YES));
 			}
+
+			// Content
 			String replaceAll = webpage.toString().replaceAll("<[^>]*>", "")
 					.replaceAll("[!.,\\u002D_\"]", "");
 
 			addDoc.add(new StringField("url", url.toString(), Field.Store.YES));
 			addDoc.add(new TextField("content", replaceAll, Field.Store.YES));
+
+			// Images
+			String img = getImg(webpage.toString(), url.toString());
+			if (img != null) {
+				addDoc.add(new TextField("image", img, Field.Store.YES));
+			}
+
 			w.addDocument(addDoc);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -265,5 +271,23 @@ public class Crawler extends HttpServlet {
 		/*
 		 * media (jpg, pdf ...)
 		 */
+	}
+
+	private String getImg(String str, String url) {
+
+		Pattern pattern = Pattern.compile("<img[^>]*>");
+		Matcher matcher = pattern.matcher(str);
+		str = null;
+		while (matcher.find()) {
+			String group = matcher.group();
+			Pattern patternsrc = Pattern.compile("src=(\"|')[^(\"|')]*(\"|')");
+			Matcher matchersrc = patternsrc.matcher(group);
+
+			if (matchersrc.find())
+				group = matchersrc.group();
+			str = group.replaceAll("src=", "").replaceAll("'", "");
+		}
+
+		return str;
 	}
 }
