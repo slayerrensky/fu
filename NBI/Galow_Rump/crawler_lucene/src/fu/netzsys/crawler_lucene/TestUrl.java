@@ -33,7 +33,7 @@ public class TestUrl {
 
 		for(String s : list)
 		{
-			c.checkUrlIfValid(s);
+			c.checkUrlIfValid(s, "");
 		}
 		
 	}
