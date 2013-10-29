@@ -16,12 +16,60 @@ public class Crawler {
 		while (matcher.find()) {
 			String tmp = matcher.group();
 			String[] tmpA = tmp.split("\"");
+			
 			if(tmpA.length>1){
-				list.add(tmpA[1]);
-				list = (addWithoutDoubleEntrys(list, crawl(tmpA[1], aktuellDepth+1, maxDepth)));
+				String url = checkUrlIfValid(tmpA[1]);
+				if (url != null)
+				{
+					list.add(url);
+					list = (addWithoutDoubleEntrys(list, crawl(tmpA[1], aktuellDepth+1, maxDepth)));
+				}
 			}
 		}
 		return list;
+	}
+	
+	public String checkUrlIfValid(String url){
+	    // http://www.google.de/
+	    // http://google.de/
+		// https://www.google.de/
+		// https://google.de/
+		// http://a.google.de/
+	    // http://a.google.de/
+		// https://a.google.de/
+		// https://a.google.de/
+		// google.de/
+		// a.google.de/
+		
+		if (url.startsWith("/") && !url.startsWith("//"))
+		{
+			/*String url = siteInfo.getURL();
+			if (url.endsWith("/"))
+			{
+				src = url.substring(0, url.length()-1) + src;
+			}
+			else
+			{
+				src = getHost(siteInfo.getURL()) + src;
+			}*/
+			System.out.println("URL not Valid: \"" + url +"\"");
+			return null;
+			
+		}
+		if (url.startsWith("//"))
+		{
+			url = url.substring(2);
+		}
+		Pattern pattern = Pattern.compile("(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?");
+		Matcher matcher = pattern.matcher(url);
+
+		System.out.println("URL: \"" + url +"\"");
+		
+		if (matcher.find())
+			return url;
+		else
+			return null;
+			
 	}
 	
 	public ArrayList<String> addWithoutDoubleEntrys(ArrayList<String> list, ArrayList<String> listNEW){

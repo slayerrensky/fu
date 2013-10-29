@@ -68,12 +68,12 @@ public class Normalizer {
 	private String getImg(String str, URLInformation siteInfo)
 	{
 
-		Pattern pattern = Pattern.compile("<img[\\s\\w/.=\"-]*/>");
+		Pattern pattern = Pattern.compile("<img[\\s\\w/.=\"-]*>");
 		Matcher matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			String tmp = matcher.group();
-			String alt = htmlValue(tmp, "alt");
-			String src = htmlValue(tmp, "src");
+			String alt = attributValue(tmp, "alt");
+			String src = attributValue(tmp, "src");
 			if (src.startsWith("/") && !src.startsWith("//"))
 			{
 				String url = siteInfo.getURL();
@@ -87,6 +87,11 @@ public class Normalizer {
 				}
 				
 			}
+			if (src.startsWith("//"))
+			{
+				src = src.substring(2);
+			}
+			
 			System.out.println("Alt: \"" + alt + "\"" + "src: \"" + src +"\"");
 			siteInfo.getImages().add(new ImgInfo(alt, src));
 		}
@@ -110,7 +115,7 @@ public class Normalizer {
 	    return url.substring(doubleslash, end);
 	}
 	
-	private String htmlValue(String str,String name)
+	private String attributValue(String str,String name)
 	{
 		String line = new String(); 
 		Pattern pattern = Pattern.compile("\\s*(?i)"+ name +"\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))");
