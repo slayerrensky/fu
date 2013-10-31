@@ -121,12 +121,12 @@ public class RecommenderSystem {
 		int counter = 0;
 	    for(Map.Entry<Integer, Double> entry : map.entrySet()) {
 	    	ret.add(users.get(entry.getKey()));
-	    	System.out.println("add userid: "+entry.getKey());
 	    	counter++;
 	    	if(counter >=max){
 	    		break;
 	    	}
 	    }
+	    System.out.println("found: "+ret.size()+" sim users (max:"+max+")");
 		return ret;
 	}
 }
