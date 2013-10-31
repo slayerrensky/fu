@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class Crawler {
 
-	private ArrayList<String> extractTAGs(String content, int aktuellDepth, int maxDepth){
+	private ArrayList<String> extractTAGs(String urlStr, String content, int aktuellDepth, int maxDepth){
 		ArrayList<String> list = new ArrayList<String>();
 
 		//Pattern pattern = Pattern.compile("<([a-z][a-z0-9]*)\b[^>]*>.*?</\1>");
@@ -18,42 +18,27 @@ public class Crawler {
 			String[] tmpA = tmp.split("\"");
 			
 			if(tmpA.length>1){
-				String url = checkUrlIfValid(tmpA[1]);
-				if (url != null)
-				{
-					list.add(url);
-					list = (addWithoutDoubleEntrys(list, crawl(tmpA[1], aktuellDepth+1, maxDepth)));
-				}
+				String url = checkUrlIfValid(tmpA[1], urlStr);
+				list.add(url);
+				list = (addWithoutDoubleEntrys(list, crawl(tmpA[1], aktuellDepth+1, maxDepth)));
 			}
 		}
 		return list;
 	}
 	
-	public String checkUrlIfValid(String url){
-	    // http://www.google.de/
-	    // http://google.de/
-		// https://www.google.de/
-		// https://google.de/
-		// http://a.google.de/
-	    // http://a.google.de/
-		// https://a.google.de/
-		// https://a.google.de/
-		// google.de/
-		// a.google.de/
+	public String checkUrlIfValid(String url, String mainUrl){
 		
 		if (url.startsWith("/") && !url.startsWith("//"))
 		{
-			/*String url = siteInfo.getURL();
-			if (url.endsWith("/"))
+			String murl = mainUrl;
+			if (murl.endsWith("/"))
 			{
-				src = url.substring(0, url.length()-1) + src;
+				url = url.substring(0, url.length()-1) + url;
 			}
 			else
 			{
-				src = getHost(siteInfo.getURL()) + src;
-			}*/
-			System.out.println("URL not Valid: \"" + url +"\"");
-			return null;
+				url = getHost(murl) + url;
+			}
 			
 		}
 		if (url.startsWith("//"))
@@ -68,8 +53,25 @@ public class Crawler {
 		if (matcher.find())
 			return url;
 		else
+			System.out.println("URL not Valid: \"" + url +"\"");
 			return null;
 			
+	}
+	
+	public static String getHost(String url){
+	    if(url == null || url.length() == 0)
+	        return "";
+
+	    int doubleslash = url.indexOf("//");
+	    if(doubleslash == -1)
+	        doubleslash = 0;
+	    else
+	        doubleslash += 2;
+
+	    int end = url.indexOf('/', doubleslash);
+	    end = end >= 0 ? end : url.length();
+
+	    return url.substring(doubleslash, end);
 	}
 	
 	public ArrayList<String> addWithoutDoubleEntrys(ArrayList<String> list, ArrayList<String> listNEW){
@@ -96,7 +98,7 @@ public class Crawler {
 		if(linesOfContent.isEmpty()){
 			return new ArrayList<String>();
 		}else{
-			list = extractTAGs(linesOfContent, aktuellDepth, maxDepth);
+			list = extractTAGs(urlStr ,linesOfContent, aktuellDepth, maxDepth);
 			return list;
 		}
 	}
