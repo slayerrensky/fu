@@ -6,9 +6,9 @@ import java.net.URL;
 public class Main {
 
 	public static void main(String[] args) {
-		//String pathToDir = "/Users/larswillrich/DropBox/Dropbox/UniPrivat/FU/Sem1/Netzbasierte Informationssysteme/Exercise/3/ml-100k/";
 		File f = new File("data/");
 		String pathToDir = f.getAbsoluteFile() + "/";
+		f = null;
 
 		try {
 			Ugenre.fillList(pathToDir); // Keine Referenzen
