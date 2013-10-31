@@ -33,7 +33,7 @@ public class Uoccupation {
 				continue;
 			list.add(new Uoccupation(line));
 		}
-
+		bufferedReader.close();
 		return list;
 	}
 

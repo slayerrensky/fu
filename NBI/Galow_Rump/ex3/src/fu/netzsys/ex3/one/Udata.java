@@ -88,7 +88,7 @@ public class Udata {
 			}
 
 		}
-
+		bufferedReader.close();
 		return list;
 	}
 

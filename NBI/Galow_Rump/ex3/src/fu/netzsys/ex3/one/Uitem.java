@@ -112,6 +112,7 @@ public class Uitem {
 					values[2], values[4], bitfield));
 		}
 
+		bufferedReader.close();
 		return list;
 	}
 

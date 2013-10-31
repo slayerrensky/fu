@@ -38,7 +38,7 @@ public class Ugenre {
 				continue;
 			list.add(new Ugenre(Integer.parseInt(values[1]), values[0]));
 		}
-
+		bufferedReader.close();
 		return list;
 	}
 
