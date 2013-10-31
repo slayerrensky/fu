@@ -41,7 +41,11 @@ public class RecommenderSystem {
 		// Addiere zu jedem Item beide Ratings multipliziert von beiden Usern
 		// ->qSum
 		// TODO
-		qSum(ratedIDataU1, ratedIDataU1);
+		//
+		// Es sollten hier zwei Arrays vorhanden sein mit Userdaten von den usern
+		// Diese daten enthalten nur die daten welche die User gemeinsam haben.
+		// Das ist vorraussetzung für die qSum funktion
+		qSum = qSum(ratedIDataU1, ratedIDataU2);
 
 		// Calculate Pearson score
 		double n = similarItems.size();
@@ -52,13 +56,29 @@ public class RecommenderSystem {
 			return 0;
 		return num / den;
 	}
-
+	
+	
+	/**
+	 * Berechnet die Summe aller Gemeinsamen Bewerteten items der User (R)
+	 * Die beiden Array müssen die selbe länge haben
+	 * @param user1
+	 * @param user2
+	 * @return
+	 */
 	private int qSum(ArrayList<Udata> user1, ArrayList<Udata> user2) {
-		// qSum += ratedItemsU1.get(i).getRating() *
-		// ratedItemsU2.get(i).getRating();
-		return 0;
+		int n = 0;
+		if (user1.size() != user2.size())
+		{
+			for (int i = 0; i<user1.size(); i++)
+			{
+				n += user1.get(i).getRating() * user2.get(i).getRating();
+			}
+		}
+		return n;
 	}
 
+
+	
 	// TODO: Performanceverbesserung durch direkte Abfrage getRatedItems()
 	public int getSumRatingOfItemAndUser(Uitem item, Uuser u) {
 
@@ -71,12 +91,18 @@ public class RecommenderSystem {
 		return sum;
 	}
 
+	/***
+	 * Berechnet die Menge der Items die U1 und U2 gemeinsam haben.
+	 * @param user1
+	 * @param user2
+	 * @return
+	 */
 	public ArrayList<Uitem> getSimilarItems(Uuser user1, Uuser user2) {
 		ratedIDataU1 = getRatedData(user1);
 		ratedIDataU2 = getRatedData(user2);
 		
 		ArrayList<Uitem> ratedItemsU1 = Udata.getAllItems(ratedIDataU1);
-		ArrayList<Uitem> ratedItemsU2 = Udata.getAllItems(ratedIDataU1);
+		ArrayList<Uitem> ratedItemsU2 = Udata.getAllItems(ratedIDataU2);
 		
 		ArrayList<Uitem> similar = new ArrayList<Uitem>();
 
@@ -84,12 +110,18 @@ public class RecommenderSystem {
 				.size() : ratedItemsU1.size();
 		for (int i = 0; i < cycle; i++) {
 			if (ratedItemsU1.contains(ratedItemsU2.get(i))) {
-				similar.add(ratedItemsU1.get(i));
+				similar.add(ratedItemsU2.get(i));
 			}
 		}
 
-		return similar;
+		return similar; // eigentlich könnte man hier qsum ausführen
 	}
+	
+	private double qsumEasy(Udata x, Udata y)
+	{
+		return x.getRating() * y.getRating();
+	}
+	
 
 	public ArrayList<Udata> getRatedData(Uuser user) {
 		ArrayList<Udata> ratedItems = new ArrayList<Udata>();
