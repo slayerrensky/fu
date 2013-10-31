@@ -42,12 +42,12 @@ public class Uuser {
 		this.male = male;
 	}
 
-	public String getDataReference() {
+	public String getZipCode() {
 		return zipCode;
 	}
 
-	public void setDataReference(String dataReference) {
-		this.zipCode = dataReference;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	public Uoccupation getOccupation() {
@@ -103,7 +103,8 @@ public class Uuser {
 			if (values.length < 5)
 				continue;
 			list.add(new Uuser(Integer.parseInt(values[0]), Integer
-					.parseInt(values[1]), values[2], Uoccupation.getOccupateFromValue(values[3]), values[4]));
+					.parseInt(values[1]), values[2], Uoccupation
+					.getOccupateFromValue(values[3]), values[4]));
 		}
 
 		bufferedReader.close();
@@ -131,5 +132,4 @@ public class Uuser {
 		}
 		return null;
 	}
-
 }

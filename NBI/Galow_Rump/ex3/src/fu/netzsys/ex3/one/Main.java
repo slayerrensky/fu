@@ -1,5 +1,7 @@
 package fu.netzsys.ex3.one;
 
+import java.util.ArrayList;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -20,9 +22,14 @@ public class Main {
 		// Ugenre.printList();
 		// Uitem.printList();
 		// Uoccupation.printList();
-		 Uuser.printList();
+		// Uuser.printList();
 		// Udata.printList();
-//		System.out.println(Udata.list.get(0).getItem().getTitle()
-//				+ " hat das Rating -> " + Udata.list.get(0).getRating());
+		// System.out.println(Udata.list.get(0).getItem().getTitle()
+		// + " hat das Rating -> " + Udata.list.get(0).getRating());
+		RecommenderSystem r = new RecommenderSystem();
+		///166 3
+		double similarityFromUsers = r.getSimilarityFromUsers(
+				Uuser.list.get(2), Uuser.list.get(165));
+		System.out.println(similarityFromUsers);
 	}
 }

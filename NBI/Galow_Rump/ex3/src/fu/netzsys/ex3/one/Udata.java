@@ -111,4 +111,12 @@ public class Udata {
 			System.out.println(Udata.list.get(i));
 		}
 	}
+	
+	public static ArrayList<Uitem> getAllItems(ArrayList<Udata> data){
+		ArrayList<Uitem> items = new ArrayList<Uitem>();
+		for (int i = 0;i<data.size();i++){
+			items.add(data.get(i).getItem());
+		}
+		return items;
+	}
 }
