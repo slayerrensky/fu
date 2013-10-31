@@ -1,6 +1,16 @@
 package fu.netzsys.ex3.one;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import com.sun.org.apache.xpath.internal.functions.Function;
 
 public class RecommenderSystem {
 
@@ -90,4 +100,57 @@ public class RecommenderSystem {
 		}
 		return ratedItems;
 	}
+	
+	public ArrayList<Uuser> getAllSimilarItems(Uuser user1, ArrayList<Uuser> users, double graterThan, int max){
+		System.out.println("calculate sim...");
+		int c =0;
+		ArrayList<Uuser> ret = new ArrayList<Uuser>();
+		Map<Integer, Double> map = new HashMap<Integer, Double>();
+		for(int i=0;i<users.size();i++){
+			c++;
+			if(c>=100){
+				c=0;
+				System.out.println("100 user computed");
+			}
+			Uuser otherUser = users.get(i);
+			double sim = getSimilarityFromUsers(user1, otherUser);
+			if(sim > graterThan){
+				map.put(i,sim);
+			}
+		}
+		int counter = 0;
+	    for(Map.Entry<Integer, Double> entry : map.entrySet()) {
+	    	ret.add(users.get(entry.getKey()));
+	    	System.out.println("add userid: "+entry.getKey());
+	    	counter++;
+	    	if(counter >=max){
+	    		break;
+	    	}
+	    }
+		return ret;
+	}
+}
+
+class MapUtil
+{
+    public static <K, V extends Comparable<? super V>> Map<K, V> 
+        sortByValue( Map<K, V> map )
+    {
+        List<Map.Entry<K, V>> list =
+            new LinkedList<Map.Entry<K, V>>( map.entrySet() );
+        Collections.sort( list, new Comparator<Map.Entry<K, V>>()
+        {
+            public int compare( Map.Entry<K, V> o1, Map.Entry<K, V> o2 )
+            {
+                return (o1.getValue()).compareTo( o2.getValue() );
+            }
+        } );
+
+        Map<K, V> result = new LinkedHashMap<K, V>();
+        for (Map.Entry<K, V> entry : list)
+        {
+            result.put( entry.getKey(), entry.getValue() );
+        }
+        return result;
+    }
 }
