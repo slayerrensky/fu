@@ -14,8 +14,8 @@ public class Uuser {
 	int id = -1;
 	private int age = -1;
 	private String male = "";
-	private String dataReference = "";
-	private String occupation = "";
+	private String zipCode = "";
+	private Uoccupation occupation = null;
 	public static ArrayList<Uuser> list = new ArrayList<Uuser>();
 
 	public int getId() {
@@ -43,18 +43,18 @@ public class Uuser {
 	}
 
 	public String getDataReference() {
-		return dataReference;
+		return zipCode;
 	}
 
 	public void setDataReference(String dataReference) {
-		this.dataReference = dataReference;
+		this.zipCode = dataReference;
 	}
 
-	public String getOccupation() {
+	public Uoccupation getOccupation() {
 		return occupation;
 	}
 
-	public void setOccupation(String occupation) {
+	public void setOccupation(Uoccupation occupation) {
 		this.occupation = occupation;
 	}
 
@@ -69,19 +69,19 @@ public class Uuser {
 
 	// 2|53|F|other|94043
 
-	public Uuser(int id, int age, String male, String occupation,
-			String dataReference) {
+	public Uuser(int id, int age, String male, Uoccupation occupation,
+			String zipCode) {
 		this.id = id;
 		this.age = age;
 		this.male = male;
 		this.occupation = occupation;
-		this.dataReference = dataReference;
+		this.zipCode = zipCode;
 	}
 
 	@Override
 	public String toString() {
 		return id + "" + " " + age + " " + male + " " + occupation + " "
-				+ dataReference;
+				+ zipCode;
 	}
 
 	public static void fillList(String pathToDir) throws IOException {
@@ -103,7 +103,7 @@ public class Uuser {
 			if (values.length < 5)
 				continue;
 			list.add(new Uuser(Integer.parseInt(values[0]), Integer
-					.parseInt(values[1]), values[2], values[3], values[4]));
+					.parseInt(values[1]), values[2], Uoccupation.getOccupateFromValue(values[3]), values[4]));
 		}
 
 		bufferedReader.close();
@@ -131,4 +131,5 @@ public class Uuser {
 		}
 		return null;
 	}
+
 }

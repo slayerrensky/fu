@@ -20,9 +20,9 @@ public class Main {
 		// Ugenre.printList();
 		// Uitem.printList();
 		// Uoccupation.printList();
-		// Uuser.printList();
+		 Uuser.printList();
 		// Udata.printList();
-		System.out.println(Udata.list.get(0).getItem().getTitle()
-				+ " hat das Rating -> " + Udata.list.get(0).getRating());
+//		System.out.println(Udata.list.get(0).getItem().getTitle()
+//				+ " hat das Rating -> " + Udata.list.get(0).getRating());
 	}
 }

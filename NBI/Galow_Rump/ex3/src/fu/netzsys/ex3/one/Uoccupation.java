@@ -10,6 +10,18 @@ public class Uoccupation {
 	String occupation;
 	public static ArrayList<Uoccupation> list = new ArrayList<Uoccupation>();
 
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+
+	public static String getFilename() {
+		return FILENAME;
+	}
+
 	public Uoccupation(String occupation) {
 		super();
 		this.occupation = occupation;
@@ -54,5 +66,12 @@ public class Uoccupation {
 		for (int i = 0; i < Uoccupation.list.size(); i++) {
 			System.out.println(Uoccupation.list.get(i));
 		}
+	}
+
+	public static Uoccupation getOccupateFromValue(String string) {
+		for (int i = 0; i < Uoccupation.list.size(); i++) {
+			if (Uoccupation.list.get(i).getOccupation().equals(string)) return Uoccupation.list.get(i);
+		}
+		return null;
 	}
 }
