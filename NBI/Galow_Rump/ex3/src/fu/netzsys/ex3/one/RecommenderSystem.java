@@ -36,12 +36,10 @@ public class RecommenderSystem {
 		// Calculate Pearson score
 		double n = similarItems.size();
 		double num = qSum - (((double) (sum1 * sum2)) / n);
-		System.out.println(num);
 		double den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n)
 				* (sum2Sq - Math.pow(sum2, 2) / n));
 		if (den == 0)
 			return 0;
-		System.out.println(den);
 		return num / den;
 	}
 
@@ -76,7 +74,6 @@ public class RecommenderSystem {
 				.size() : ratedItemsU1.size();
 		for (int i = 0; i < cycle; i++) {
 			if (ratedItemsU1.contains(ratedItemsU2.get(i))) {
-				System.out.println("treffer!");
 				similar.add(ratedItemsU1.get(i));
 			}
 		}
