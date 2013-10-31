@@ -26,7 +26,6 @@ public class Uitem {
 	String bits;
 	public static ArrayList<Uitem> list = new ArrayList<Uitem>();
 
-
 	public int getId() {
 		return id;
 	}
@@ -84,8 +83,8 @@ public class Uitem {
 	public String toString() {
 		return id + " " + title + " " + date + " " + link + " " + bits;
 	}
-	
-	public static void fillList(String pathToDir) throws IOException{
+
+	public static void fillList(String pathToDir) throws IOException {
 		setList(getAllData(pathToDir + FILENAME));
 	}
 
@@ -123,7 +122,8 @@ public class Uitem {
 	public static void setList(ArrayList<Uitem> list) {
 		Uitem.list = list;
 	}
-	public static void printList(){
+
+	public static void printList() {
 		for (int i = 0; i < Uitem.list.size(); i++) {
 			System.out.println(Uitem.list.get(i));
 		}
@@ -131,7 +131,8 @@ public class Uitem {
 
 	public static Uitem getItemByID(int parseInt) {
 		for (int i = 0; i < Uitem.list.size(); i++) {
-			if (parseInt == Uitem.list.get(i).getId()) return Uitem.list.get(i);
+			if (parseInt == Uitem.list.get(i).getId())
+				return Uitem.list.get(i);
 		}
 		return null;
 	}

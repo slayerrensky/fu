@@ -18,7 +18,6 @@ public class Uuser {
 	private String occupation = "";
 	public static ArrayList<Uuser> list = new ArrayList<Uuser>();
 
-
 	public int getId() {
 		return id;
 	}
@@ -67,7 +66,8 @@ public class Uuser {
 		super();
 		this.id = id;
 	}
-//	2|53|F|other|94043
+
+	// 2|53|F|other|94043
 
 	public Uuser(int id, int age, String male, String occupation,
 			String dataReference) {
@@ -80,13 +80,14 @@ public class Uuser {
 
 	@Override
 	public String toString() {
-		return id + "" + " " + age + " " + male + " " + occupation + " " + dataReference;
+		return id + "" + " " + age + " " + male + " " + occupation + " "
+				+ dataReference;
 	}
-	
-	public static void fillList(String pathToDir) throws IOException{
+
+	public static void fillList(String pathToDir) throws IOException {
 		setList(getAllData(pathToDir + FILENAME));
 	}
-	
+
 	public static ArrayList<Uuser> getAllData(String fullPath)
 			throws IOException {
 		ArrayList<Uuser> list = new ArrayList<Uuser>();
@@ -101,8 +102,8 @@ public class Uuser {
 			values = Util.getStringListFromStringLine(line, "\\u007C");
 			if (values.length < 5)
 				continue;
-			list.add(new Uuser(Integer.parseInt(values[0]), Integer.parseInt(values[1]),
-					values[2], values[3], values[4]));
+			list.add(new Uuser(Integer.parseInt(values[0]), Integer
+					.parseInt(values[1]), values[2], values[3], values[4]));
 		}
 
 		return list;
@@ -115,16 +116,17 @@ public class Uuser {
 	public static void setList(ArrayList<Uuser> list) {
 		Uuser.list = list;
 	}
-	
-	public static void printList(){
+
+	public static void printList() {
 		for (int i = 0; i < Uuser.list.size(); i++) {
 			System.out.println(Uuser.list.get(i));
 		}
 	}
-	
+
 	public static Uuser getUserByID(int parseInt) {
 		for (int i = 0; i < Uuser.list.size(); i++) {
-			if (parseInt == Uuser.list.get(i).getId()) return Uuser.list.get(i);
+			if (parseInt == Uuser.list.get(i).getId())
+				return Uuser.list.get(i);
 		}
 		return null;
 	}

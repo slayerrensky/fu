@@ -10,13 +10,12 @@ public class Uoccupation {
 	String occupation;
 	public static ArrayList<Uoccupation> list = new ArrayList<Uoccupation>();
 
-
 	public Uoccupation(String occupation) {
 		super();
 		this.occupation = occupation;
 	}
-	
-	public static void fillList(String pathToDir) throws IOException{
+
+	public static void fillList(String pathToDir) throws IOException {
 		setList(getAllData(pathToDir + FILENAME));
 	}
 
@@ -50,8 +49,8 @@ public class Uoccupation {
 	public static void setList(ArrayList<Uoccupation> list) {
 		Uoccupation.list = list;
 	}
-	
-	public static void printList(){
+
+	public static void printList() {
 		for (int i = 0; i < Uoccupation.list.size(); i++) {
 			System.out.println(Uoccupation.list.get(i));
 		}

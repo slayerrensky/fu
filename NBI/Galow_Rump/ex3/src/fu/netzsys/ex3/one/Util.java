@@ -17,7 +17,8 @@ public class Util {
 		return new BufferedReader(fr);
 	}
 
-	public static String[] getStringListFromStringLine(String line, String splitter) {
+	public static String[] getStringListFromStringLine(String line,
+			String splitter) {
 		String[] split = line.split(splitter);
 
 		// Set Values

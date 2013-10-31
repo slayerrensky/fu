@@ -17,8 +17,8 @@ public class Ugenre {
 		this.id = id;
 		this.genre = genre;
 	}
-	
-	public static void fillList(String pathToDir) throws IOException{
+
+	public static void fillList(String pathToDir) throws IOException {
 		setList(getAllData(pathToDir + FILENAME));
 	}
 
@@ -34,13 +34,14 @@ public class Ugenre {
 		String[] values = null;
 		while ((line = bufferedReader.readLine()) != null) {
 			values = Util.getStringListFromStringLine(line, "\\u007C");
-			if (values.length < 2) continue;
+			if (values.length < 2)
+				continue;
 			list.add(new Ugenre(Integer.parseInt(values[1]), values[0]));
 		}
 
 		return list;
 	}
-	
+
 	@Override
 	public String toString() {
 		return genre + " " + id;
@@ -53,8 +54,8 @@ public class Ugenre {
 	public static void setList(ArrayList<Ugenre> list) {
 		Ugenre.list = list;
 	}
-	
-	public static void printList(){
+
+	public static void printList() {
 		for (int i = 0; i < Ugenre.list.size(); i++) {
 			System.out.println(Ugenre.list.get(i));
 		}

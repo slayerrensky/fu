@@ -79,10 +79,10 @@ public class Udata {
 			if (values.length < 4)
 				continue;
 			try {
-				list.add(new Udata(Uuser.getUserByID(Integer.parseInt(values[0])),
-						Uitem.getItemByID(Integer.parseInt(values[1])), Integer
-								.parseInt(values[2]), Integer
-								.parseInt(values[3])));
+				list.add(new Udata(Uuser.getUserByID(Integer
+						.parseInt(values[0])), Uitem.getItemByID(Integer
+						.parseInt(values[1])), Integer.parseInt(values[2]),
+						Integer.parseInt(values[3])));
 			} catch (Exception e) {
 				throw e;
 			}
