@@ -31,7 +31,7 @@ public class Main {
 		// + " hat das Rating -> " + Udata.list.get(0).getRating());
 		RecommenderSystem r = new RecommenderSystem();
 		///166 3
-		double similarityFromUsers = r.getSimilarityFromUsers(Uuser.list.get(2), Uuser.list.get(165));
+		double similarityFromUsers = r.getSimilarityFromUsers(Uuser.list.get(2), Uuser.list.get(2));
 		System.out.println(similarityFromUsers);
 		//r.getAllSimilarItems(Uuser.list.get(2), Uuser.list, 0, 50);
 	}

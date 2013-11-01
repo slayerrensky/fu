@@ -33,10 +33,10 @@ public class RecommenderSystem {
 			return 0;
 
 		// Addiere Ratings zu jedem Item
-		int sum1 = 0;
-		int sum1Sq = 0;
-		int sum2 = 0;
-		int sum2Sq = 0;
+		double sum1 = 0;
+		double sum1Sq = 0;
+		double sum2 = 0;
+		double sum2Sq = 0;
 
 		ArrayList<Udata> User1Data = getDataByItemList(similarItems,ratedIDataU1);
 		ArrayList<Udata> User2Data = getDataByItemList(similarItems,ratedIDataU2);
@@ -50,14 +50,10 @@ public class RecommenderSystem {
 			sum2 = getSumRatingOfItemAndUser(similarItems.get(i), user2, mittelw2);
 			sum2Sq += sum2 * sum2;
 		}
-		
 
-		// Calculate Pearson score
-		double n = similarItems.size();
-		//double num = qSum - (((double) (sum1 * sum2)) / n);
 		double den = Math.sqrt((sum1Sq * sum2Sq));
 		if(den == 0 )
-		return 0;
+			return 0;
 		else
 			return qSum / den;
 				
@@ -118,13 +114,13 @@ public class RecommenderSystem {
 	}
 	
 	// TODO: Performanceverbesserung durch direkte Abfrage getRatedItems()
-	public int getSumRatingOfItemAndUser(Uitem item, Uuser u,double mittelw) {
+	public double getSumRatingOfItemAndUser(Uitem item, Uuser u,double mittelw) {
 
-		int sum = 0;
+		double sum = 0;
 		for (int i = 0; i < Udata.list.size(); i++) {
 			if (Udata.list.get(i).getUser() == u)
 				if (Udata.list.get(i).getItem() == item)
-					sum += Udata.list.get(i).getRating() -mittelw;
+					sum += Udata.list.get(i).getRating() - mittelw;
 		}
 		return sum;
 	}
