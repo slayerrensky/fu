@@ -14,7 +14,7 @@ import com.sun.org.apache.xpath.internal.functions.Function;
 
 public class RecommenderSystem {
 
-	int qSum = 0;
+	double qSum = 0;
 	ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
 	ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
 
@@ -65,9 +65,9 @@ public class RecommenderSystem {
 	 * @param user2
 	 * @return
 	 */
-	private int qSum(ArrayList<Udata> user1, ArrayList<Udata> user2) {
-		int n = 0;
-		if (user1.size() != user2.size())
+	private double qSum(ArrayList<Udata> user1, ArrayList<Udata> user2) {
+		double n = 0;
+		if (user1.size() == user2.size())
 		{
 			for (int i = 0; i<user1.size(); i++)
 			{
