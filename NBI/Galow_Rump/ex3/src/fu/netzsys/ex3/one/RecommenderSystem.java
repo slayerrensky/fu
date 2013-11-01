@@ -45,10 +45,8 @@ public class RecommenderSystem {
 		qSum = qSum(User1Data,User2Data,mittelw1,mittelw2);
 		
 		for (int i = 0; i < similarItems.size(); i++) {
-			sum1 = getSumRatingOfItemAndUser(similarItems.get(i), user1, mittelw1);
-			sum1Sq += sum1 * sum1;
-			sum2 = getSumRatingOfItemAndUser(similarItems.get(i), user2, mittelw2);
-			sum2Sq += sum2 * sum2;
+			sum1Sq += getSumRatingOfItemAndUser(similarItems.get(i), user1, mittelw1);
+			sum2Sq += getSumRatingOfItemAndUser(similarItems.get(i), user2, mittelw2);
 		}
 
 		double den = Math.sqrt((sum1Sq * sum2Sq));
@@ -84,7 +82,7 @@ public class RecommenderSystem {
 		double mittel = 0;
 		for (int i = 0; i<user.size(); i++)
 		{
-			mittel = user.get(i).getRating();
+			mittel += user.get(i).getRating();
 		}
 		mittel = mittel/ user.size();
 		return mittel;
@@ -120,9 +118,9 @@ public class RecommenderSystem {
 		for (int i = 0; i < Udata.list.size(); i++) {
 			if (Udata.list.get(i).getUser() == u)
 				if (Udata.list.get(i).getItem() == item)
-					sum += Udata.list.get(i).getRating() - mittelw;
+					return Math.pow(Udata.list.get(i).getRating() - mittelw,2);
 		}
-		return sum;
+		return 0;
 	}
 
 	/***
