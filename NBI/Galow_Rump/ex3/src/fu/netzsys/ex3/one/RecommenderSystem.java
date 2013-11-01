@@ -18,6 +18,12 @@ public class RecommenderSystem {
 	ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
 	ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
 
+	/**
+	 * Calculate Pearson score
+	 * @param user1
+	 * @param user2
+	 * @return
+	 */
 	public double getSimilarityFromUsers(Uuser user1, Uuser user2) {
 
 		ArrayList<Uitem> similarItems = getSimilarItems(user1, user2);
@@ -31,30 +37,30 @@ public class RecommenderSystem {
 		int sum1Sq = 0;
 		int sum2 = 0;
 		int sum2Sq = 0;
-		for (int i = 0; i < similarItems.size(); i++) {
-			sum1 = getSumRatingOfItemAndUser(similarItems.get(i), user1);
-			sum1Sq = sum1 * sum1;
-			sum2 = getSumRatingOfItemAndUser(similarItems.get(i), user2);
-			sum2Sq = sum2 * sum2;
-		}
 
-		// Addiere zu jedem Item beide Ratings multipliziert von beiden Usern
-		// ->qSum
-		// TODO
-		//
-		// Es sollten hier zwei Arrays vorhanden sein mit Userdaten von den usern
-		// Diese daten enthalten nur die daten welche die User gemeinsam haben.
-		// Das ist vorraussetzung für die qSum funktion
-		qSum = qSum(getDataByItemList(similarItems,ratedIDataU1), getDataByItemList(similarItems,ratedIDataU2));
+		ArrayList<Udata> User1Data = getDataByItemList(similarItems,ratedIDataU1);
+		ArrayList<Udata> User2Data = getDataByItemList(similarItems,ratedIDataU2);
+		double mittelw1 = mittelw(User1Data);
+		double mittelw2 = mittelw(User2Data);
+		qSum = qSum(User1Data,User2Data,mittelw1,mittelw2);
+		
+		for (int i = 0; i < similarItems.size(); i++) {
+			sum1 = getSumRatingOfItemAndUser(similarItems.get(i), user1, mittelw1);
+			sum1Sq += sum1 * sum1;
+			sum2 = getSumRatingOfItemAndUser(similarItems.get(i), user2, mittelw2);
+			sum2Sq += sum2 * sum2;
+		}
+		
 
 		// Calculate Pearson score
 		double n = similarItems.size();
-		double num = qSum - (((double) (sum1 * sum2)) / n);
-		double den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n)
-				* (sum2Sq - Math.pow(sum2, 2) / n));
-		if (den == 0)
-			return 0;
-		return num / den;
+		//double num = qSum - (((double) (sum1 * sum2)) / n);
+		double den = Math.sqrt((sum1Sq * sum2Sq));
+		if(den == 0 )
+		return 0;
+		else
+			return qSum / den;
+				
 	}
 	
 	
@@ -65,17 +71,29 @@ public class RecommenderSystem {
 	 * @param user2
 	 * @return
 	 */
-	private double qSum(ArrayList<Udata> user1, ArrayList<Udata> user2) {
+	private double qSum(ArrayList<Udata> user1, ArrayList<Udata> user2, double mitteluser1, double mitteluser2) {
 		double n = 0;
 		if (user1.size() == user2.size())
 		{
 			for (int i = 0; i<user1.size(); i++)
 			{
-				n += user1.get(i).getRating() * user2.get(i).getRating();
+				n += (user1.get(i).getRating() - mitteluser1) * (user2.get(i).getRating()- mitteluser2);
 			}
 		}
 		return n;
 	}
+	
+	public double mittelw(ArrayList<Udata> user)
+	{
+		double mittel = 0;
+		for (int i = 0; i<user.size(); i++)
+		{
+			mittel = user.get(i).getRating();
+		}
+		mittel = mittel/ user.size();
+		return mittel;
+	}
+	
 	/**
 	 * Holt sich die Udata die mit den Userdata und der Itemliste übereinstimmen
 	 * @param item
@@ -100,13 +118,13 @@ public class RecommenderSystem {
 	}
 	
 	// TODO: Performanceverbesserung durch direkte Abfrage getRatedItems()
-	public int getSumRatingOfItemAndUser(Uitem item, Uuser u) {
+	public int getSumRatingOfItemAndUser(Uitem item, Uuser u,double mittelw) {
 
 		int sum = 0;
 		for (int i = 0; i < Udata.list.size(); i++) {
 			if (Udata.list.get(i).getUser() == u)
 				if (Udata.list.get(i).getItem() == item)
-					sum += Udata.list.get(i).getRating();
+					sum += Udata.list.get(i).getRating() -mittelw;
 		}
 		return sum;
 	}
