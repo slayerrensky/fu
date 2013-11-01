@@ -102,7 +102,7 @@ public class RecommenderSystem {
 			for (int i = 0; i < userdata.size(); i++) {
 				if (userdata.get(i).getItem() == it )
 				{
-					data.add(Udata.list.get(i));
+					data.add(userdata.get(i));
 					break;
 				}
 			}
@@ -146,7 +146,7 @@ public class RecommenderSystem {
 			}
 		}
 
-		return similar; // eigentlich könnte man hier qsum ausführen
+		return similar;
 	}
 	
 	private double qsumEasy(Udata x, Udata y)
@@ -179,7 +179,7 @@ public class RecommenderSystem {
 			Uuser otherUser = users.get(i);
 			double sim = getSimilarityFromUsers(user1, otherUser);
 			if(sim > graterThan){
-				map.put(i,sim);
+				map.put(otherUser.id,sim);
 			}
 		}
 		int counter = 0;

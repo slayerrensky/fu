@@ -2,6 +2,7 @@ package fu.netzsys.ex3.one;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -31,8 +32,14 @@ public class Main {
 		// + " hat das Rating -> " + Udata.list.get(0).getRating());
 		RecommenderSystem r = new RecommenderSystem();
 		///166 3
-		double similarityFromUsers = r.getSimilarityFromUsers(Uuser.list.get(1), Uuser.list.get(2));
+		double similarityFromUsers = r.getSimilarityFromUsers(Uuser.list.get(3), Uuser.list.get(10));
 		System.out.println(similarityFromUsers);
-		//r.getAllSimilarItems(Uuser.list.get(2), Uuser.list, 0, 50);
+		
+		ArrayList<Uuser> userAreSimilar = r.getAllSimilarItems(Uuser.list.get(2), Uuser.list, 0.9, 50);
+		for(Uuser u : userAreSimilar)
+		{
+			System.out.println(u);
+		}
+		
 	}
 }
