@@ -180,6 +180,7 @@ public class RecommenderSystem {
 			double sim = getSimilarityFromUsers(user1, otherUser);
 			if(sim > graterThan){
 				map.put(otherUser.id,sim);
+				
 			}
 		}
 		int counter = 0;
