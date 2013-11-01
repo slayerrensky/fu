@@ -45,7 +45,7 @@ public class RecommenderSystem {
 		// Es sollten hier zwei Arrays vorhanden sein mit Userdaten von den usern
 		// Diese daten enthalten nur die daten welche die User gemeinsam haben.
 		// Das ist vorraussetzung für die qSum funktion
-		qSum = qSum(ratedIDataU1, ratedIDataU2);
+		qSum = qSum(getDataByItemList(similarItems,ratedIDataU1), getDataByItemList(similarItems,ratedIDataU2));
 
 		// Calculate Pearson score
 		double n = similarItems.size();
@@ -76,8 +76,28 @@ public class RecommenderSystem {
 		}
 		return n;
 	}
-
-
+	/**
+	 * Holt sich die Udata die mit den Userdata und der Itemliste übereinstimmen
+	 * @param item
+	 * @return
+	 */
+	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> item, ArrayList<Udata> userdata)
+	{
+		ArrayList<Udata> data = new ArrayList<Udata>();
+		
+		for (Uitem it : item)
+		{
+			for (int i = 0; i < userdata.size(); i++) {
+				if (userdata.get(i).getItem() == it )
+				{
+					data.add(Udata.list.get(i));
+					break;
+				}
+			}
+		}
+		
+		return data;
+	}
 	
 	// TODO: Performanceverbesserung durch direkte Abfrage getRatedItems()
 	public int getSumRatingOfItemAndUser(Uitem item, Uuser u) {
