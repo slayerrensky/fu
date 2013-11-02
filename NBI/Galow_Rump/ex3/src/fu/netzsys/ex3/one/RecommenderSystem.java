@@ -73,7 +73,7 @@ public class RecommenderSystem {
 
 	/**
 	 * Berechnet die Summe aller Gemeinsamen Bewerteten items der User (R) Die
-	 * beiden Array müssen die selbe länge haben
+	 * beiden Array mï¿½ssen die selbe lï¿½nge haben
 	 * 
 	 * @param user1
 	 * @param user2
@@ -101,7 +101,7 @@ public class RecommenderSystem {
 	}
 
 	/**
-	 * Holt sich die Udata die mit den Userdata und der Itemliste übereinstimmen
+	 * Holt sich die Udata die mit den Userdata und der Itemliste ï¿½bereinstimmen
 	 * 
 	 * @param item
 	 * @return
