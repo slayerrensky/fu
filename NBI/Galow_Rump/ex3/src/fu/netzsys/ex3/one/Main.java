@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// File Testdata -> Korrelationskoeffizient ist 0,88
-		String pathToDir = new File("testData/").getAbsoluteFile() + "/";
+		String pathToDir = new File("data/").getAbsoluteFile() + "/";
 		System.out.println(pathToDir);
 		RecommenderSystem r = new RecommenderSystem(pathToDir);
 

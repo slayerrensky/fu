@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RecommenderSystem {
 
@@ -113,32 +114,34 @@ public class RecommenderSystem {
 	 */
 	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> similarItem,
 			ArrayList<Udata> userdata) {
-		ArrayList<Udata> data = new ArrayList<Udata>();
-		
-		for (Uitem it : similarItem) {
-			for (int i = 0; i < userdata.size(); i++) {
-				if (userdata.get(i).getItem() == it) {
-					data.add(userdata.get(i));
-					break;
-				}
-			}
-		}
-		return data;
-	}
-//		ArrayList<Udata> data = new ArrayList<Udata>();
-//	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> similarItem,
-//			ArrayList<Udata> userdata) {
-//		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>(
-//				userdata);
-//
-//		for (Udata uData : data) {
-//			if (!similarItem.contains(uData.getItem()))
-//				data.remove(uData);
+//		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>();
+//		
+//		for (Uitem it : similarItem) {
+//			for (int i = 0; i < userdata.size(); i++) {
+//				if (userdata.get(i).getItem() == it) {
+//					data.add(userdata.get(i));
+//					break;
+//				}
+//			}
 //		}
-//		return new ArrayList<Udata>(data);
-//	}
-//		return data;
+//		if (data.size() != similarItem.size())
+//			System.out.println(data.size() + "FALSCH!!!!"+similarItem.size());
+//		ArrayList<Udata> arrayList = new ArrayList<Udata>(data);
+//		
+//		return arrayList;
+	
+		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>(
+				userdata);
 
+		for (Udata uData : data) {
+			if (!similarItem.contains(uData.getItem()))
+				data.remove(uData);
+		}
+		
+		ArrayList<Udata> arrayList = new ArrayList<Udata>(data);
+		
+		return arrayList;
+	}
 	public double getPowerOfUserRatingMinusArithmeticMean(Uitem item, Uuser u,
 			double mittelw) {
 
