@@ -38,25 +38,7 @@ public class RecommenderSystem {
 	}
 
 	public ArrayList<Uitem> getRecommendedItemsByUser(Uuser user, int maxItems) {
-		ArrayList<SimilarUser> simUser2 = getMaxSimilarUser(user, 0.8, 100);
-
-		// sortiere simUsers nach besten €hnlichkeiten => Gruppe A
-		Collections.sort(simUser2);
-		CopyOnWriteArrayList<SimilarUser> simUser = new CopyOnWriteArrayList<SimilarUser>(
-				simUser2);
-		double bestSim = simUser.get(0).getSimilarity();
-		for (Iterator iterator = simUser.iterator(); iterator.hasNext();) {
-			SimilarUser similarUser = (SimilarUser) iterator.next();
-			if (similarUser.getSimilarity() < bestSim) {
-				simUser.remove(similarUser);
-			}
-		}
-
-		ArrayList<Uitem> itemList = new ArrayList<Uitem>();
-		for (int i = 0; i < itemList.size(); i++) {
-
-		}
-		return null;
+		return getRelevantItems(user, getMaxSimilarUser(user, -1, 100));
 	}
 
 	public double getSimilarFromUsers(Uuser user1, Uuser user2) {
