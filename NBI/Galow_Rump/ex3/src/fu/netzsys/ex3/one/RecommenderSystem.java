@@ -192,6 +192,40 @@ public class RecommenderSystem {
 		}
 		return similarUserList;
 	}
+	
+	public ArrayList<RelevatRatedMovieWeigth> getRelevatMovies(Uuser me, ArrayList<SimilarUser> releavtUsers){
+		// liste bauen, die alle filme der relevatne user beinhaltet
+		ArrayList<Uitem> allRelevatMovies = new ArrayList<Uitem>();
+		
+		for (SimilarUser user : releavtUsers) {
+			ArrayList<Udata> userDataList = getRatedData(user.getUser2());
+			for(Udata data : userDataList){
+				if( ! allRelevatMovies.contains(data.item)){
+					allRelevatMovies.add(data.item);
+					// list +
+				}//else rating anpassen
+			}
+		}
+		
+		// aus der liste filme löschen, die user me schon gerated hat
+		ArrayList<Udata> meDataList = getRatedData(me);
+		for(Udata data : meDataList){
+			if(allRelevatMovies.contains(data.item)){
+				allRelevatMovies.remove(data.item);
+			}
+		}
+		
+		// bewertung errechnen nach formel Seite 42 3-IRFiltering.pdf (Vorlesung)
+		// gegeben: alle wichtige filme
+		// gesucht: filmrating errechent aus den usern und der sim()
+		//for über alle ratings (Udata) gewicht speichern
+		//RelevatRatedMovieWeigth
+		
+		// sortieren --  am besten mit gewichtung (filme mit vielen bewertungen der relevaten user, sind besser)
+		
+		
+		return null;
+	}
 }
 
 class SimilarUser {
@@ -228,7 +262,7 @@ class SimilarUser {
 
 	public void setUser2(Uuser user2) {
 		this.user2 = user2;
-	}
+	}	
 }
 
 class MapUtil {
@@ -247,5 +281,5 @@ class MapUtil {
 			result.put(entry.getKey(), entry.getValue());
 		}
 		return result;
-	}
+	}	
 }
