@@ -10,7 +10,7 @@ public class Main {
 		RecommenderSystem r = new RecommenderSystem(pathToDir);
 
 		ArrayList<SimilarUser> similarUserList = r.getMaxSimilarUser(
-				Uuser.list.get(0), Uuser.list, 0.9, 50);
+				Uuser.list.get(0), Uuser.list, -1, 50);
 
 		// How much found?
 		System.out.println("found: " + similarUserList.size()
