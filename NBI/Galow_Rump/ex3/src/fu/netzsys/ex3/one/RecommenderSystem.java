@@ -3,10 +3,12 @@ package fu.netzsys.ex3.one;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RecommenderSystem {
 
@@ -34,9 +36,37 @@ public class RecommenderSystem {
 			e.printStackTrace();
 		}
 	}
+	
+	public ArrayList<Uitem> getRecommendedItemsByUser(Uuser user, int maxItems){
+		ArrayList<SimilarUser> simUser2 = getMaxSimilarUser(user, 0.8, 100);
+		
+		//sortiere simUsers nach besten €hnlichkeiten => Gruppe A
+		Collections.sort(simUser2);
+		CopyOnWriteArrayList<SimilarUser> simUser = new CopyOnWriteArrayList<SimilarUser>(simUser2);
+		double bestSim = simUser.get(0).getSimilarity();
+		for (Iterator iterator = simUser.iterator(); iterator.hasNext();) {
+			SimilarUser similarUser = (SimilarUser) iterator.next();
+			if (similarUser.getSimilarity() < bestSim) {
+				simUser.remove(similarUser);
+			}
+		}
+		
+		ArrayList<Uitem> itemList = new ArrayList<Uitem>();
+		for (int i = 0;i<itemList.size();i++){
+			
+		}
+		
+//		for (SimilarUser sUser : simUser) {
+//			if (sUser.getSimilarity() < bestSim) {
+//				simUser.remove(sUser);
+//			}
+//		}
+		return null;
+	}
 
-	public double getSimilarityFromUsers(Uuser user1, Uuser user2) {
+	public double getSimilarFromUsers(Uuser user1, Uuser user2) {
 
+		if (user1 == user2) return 1;
 		ArrayList<Uitem> similarItems = getSimilarItems(user1, user2);
 		if (similarItems == null)
 			return -1;
@@ -93,9 +123,8 @@ public class RecommenderSystem {
 
 	public double calcArithmeticMean(ArrayList<Udata> user) {
 		double mittel = 0;
-		for (int i = 0; i < user.size(); i++) {
+		for (int i = 0; i < user.size(); i++)
 			mittel += user.get(i).getRating();
-		}
 		mittel = mittel / user.size();
 		return mittel;
 	}
@@ -170,10 +199,10 @@ public class RecommenderSystem {
 		return ratedItems;
 	}
 
-	public ArrayList<SimilarUser> getMaxSimilarUser(Uuser user1,
-			ArrayList<Uuser> users, double similarityGraeterThan, int max) {
+	public ArrayList<SimilarUser> getMaxSimilarUser(Uuser user1, double similarityGraeterThan, int max) {
 		ArrayList<SimilarUser> similarUserList = new ArrayList<SimilarUser>();
 
+		ArrayList<Uuser> users = Uuser.list;
 		for (int i = 0; i < users.size(); i++) {
 			if (similarUserList.size() == 50)
 				break;
@@ -185,50 +214,16 @@ public class RecommenderSystem {
 			}
 			Uuser compareUser = users.get(i);
 
-			double sim = getSimilarityFromUsers(user1, compareUser);
+			double sim = getSimilarFromUsers(user1, compareUser);
 			if (sim > similarityGraeterThan) {
 				similarUserList.add(new SimilarUser(user1, compareUser, sim));
 			}
 		}
 		return similarUserList;
 	}
-	
-	public ArrayList<RelevatRatedMovieWeigth> getRelevatMovies(Uuser me, ArrayList<SimilarUser> releavtUsers){
-		// liste bauen, die alle filme der relevatne user beinhaltet
-		ArrayList<Uitem> allRelevatMovies = new ArrayList<Uitem>();
-		
-		for (SimilarUser user : releavtUsers) {
-			ArrayList<Udata> userDataList = getRatedData(user.getUser2());
-			for(Udata data : userDataList){
-				if( ! allRelevatMovies.contains(data.item)){
-					allRelevatMovies.add(data.item);
-					// list +
-				}//else rating anpassen
-			}
-		}
-		
-		// aus der liste filme löschen, die user me schon gerated hat
-		ArrayList<Udata> meDataList = getRatedData(me);
-		for(Udata data : meDataList){
-			if(allRelevatMovies.contains(data.item)){
-				allRelevatMovies.remove(data.item);
-			}
-		}
-		
-		// bewertung errechnen nach formel Seite 42 3-IRFiltering.pdf (Vorlesung)
-		// gegeben: alle wichtige filme
-		// gesucht: filmrating errechent aus den usern und der sim()
-		//for über alle ratings (Udata) gewicht speichern
-		//RelevatRatedMovieWeigth
-		
-		// sortieren --  am besten mit gewichtung (filme mit vielen bewertungen der relevaten user, sind besser)
-		
-		
-		return null;
-	}
 }
 
-class SimilarUser {
+class SimilarUser implements Comparable<SimilarUser>{
 	Uuser user1 = null;
 	Uuser user2 = null;
 	double similarity = -2;
@@ -262,7 +257,14 @@ class SimilarUser {
 
 	public void setUser2(Uuser user2) {
 		this.user2 = user2;
-	}	
+	}
+
+	@Override
+	public int compareTo(SimilarUser o) {
+		if (o.getSimilarity()>this.getSimilarity()) return 1;
+		else if (o.getSimilarity() == this.getSimilarity()) return 0;
+		return -1;
+	}
 }
 
 class MapUtil {
@@ -281,5 +283,5 @@ class MapUtil {
 			result.put(entry.getKey(), entry.getValue());
 		}
 		return result;
-	}	
+	}
 }
