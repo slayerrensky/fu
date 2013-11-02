@@ -3,18 +3,16 @@ package fu.netzsys.ex3.one;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RecommenderSystem {
 
 	double qSum = 0;
-	ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
-	ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
+//	ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
+//	ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
 
 	/**
 	 * Calculate Pearson score
@@ -56,9 +54,9 @@ public class RecommenderSystem {
 		double sum2Sq = 0;
 
 		ArrayList<Udata> User1Data = getDataByItemList(similarItems,
-				ratedIDataU1);
+				user1.getMyRatings());
 		ArrayList<Udata> User2Data = getDataByItemList(similarItems,
-				ratedIDataU2);
+				user2.getMyRatings());
 		double arithmeticMean1 = calcArithmeticMean(User1Data);
 		double arithmeticMean2 = calcArithmeticMean(User2Data);
 		qSum = getSumOfSquares(User1Data, User2Data, arithmeticMean1,
@@ -110,14 +108,14 @@ public class RecommenderSystem {
 	/**
 	 * Holt sich die Udata die mit den Userdata und der Itemliste übereinstimmen
 	 * 
-	 * @param item
+	 * @param similarItem
 	 * @return
 	 */
-	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> item,
+	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> similarItem,
 			ArrayList<Udata> userdata) {
 		ArrayList<Udata> data = new ArrayList<Udata>();
 		
-		for (Uitem it : item) {
+		for (Uitem it : similarItem) {
 			for (int i = 0; i < userdata.size(); i++) {
 				if (userdata.get(i).getItem() == it) {
 					data.add(userdata.get(i));
@@ -128,11 +126,17 @@ public class RecommenderSystem {
 		return data;
 	}
 //		ArrayList<Udata> data = new ArrayList<Udata>();
+//	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> similarItem,
+//			ArrayList<Udata> userdata) {
+//		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>(
+//				userdata);
 //
-//		for (Uitem it : item) {
-//			data.addAll(it.getMyRatings());
+//		for (Udata uData : data) {
+//			if (!similarItem.contains(uData.getItem()))
+//				data.remove(uData);
 //		}
-//
+//		return new ArrayList<Udata>(data);
+//	}
 //		return data;
 
 	public double getPowerOfUserRatingMinusArithmeticMean(Uitem item, Uuser u,
@@ -154,11 +158,9 @@ public class RecommenderSystem {
 	 * @return
 	 */
 	public ArrayList<Uitem> getSimilarItems(Uuser user1, Uuser user2) {
-		ratedIDataU1 = getRatedData(user1);
-		ratedIDataU2 = getRatedData(user2);
 
-		ArrayList<Uitem> ratedItemsU1 = Udata.getAllItems(ratedIDataU1);
-		ArrayList<Uitem> ratedItemsU2 = Udata.getAllItems(ratedIDataU2);
+		ArrayList<Uitem> ratedItemsU1 = Udata.getAllItems(user1.getMyRatings());
+		ArrayList<Uitem> ratedItemsU2 = Udata.getAllItems(user2.getMyRatings());
 
 		ArrayList<Uitem> similar = new ArrayList<Uitem>();
 
