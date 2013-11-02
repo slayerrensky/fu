@@ -6,11 +6,11 @@ import java.util.ArrayList;
 public class Main {
 
 	public static void main(String[] args) {
-		String pathToDir = new File("data/").getAbsoluteFile() + "/";
+		String pathToDir = new File("testData/").getAbsoluteFile() + "/";
 		RecommenderSystem r = new RecommenderSystem(pathToDir);
 
 		ArrayList<SimilarUser> similarUserList = r.getMaxSimilarUser(
-				Uuser.list.get(2), Uuser.list, 0.9, 50);
+				Uuser.list.get(0), Uuser.list, 0.9, 50);
 
 		// How much found?
 		System.out.println("found: " + similarUserList.size()
