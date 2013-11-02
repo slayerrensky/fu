@@ -30,5 +30,11 @@ public class Main {
 					+ u.getUser1().getId() + " and " + u.getUser2().getId()
 					+ " is " + sim);
 		}
+		
+				// programm für 3.3 alle filme anzeigen/ als liste
+				// einloggen mit bestimmter user id
+				// meine bewerte filme
+				// seite für ein film inkl. bewertung
+				// seite mit 20 interessanten filmen <------ hierfür fehlt die berechnung
 	}
 }
