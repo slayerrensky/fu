@@ -16,6 +16,7 @@ public class Uuser {
 	private String male = "";
 	private String zipCode = "";
 	private Uoccupation occupation = null;
+	private ArrayList<Udata> myRatings = new ArrayList<Udata>();
 	public static ArrayList<Uuser> list = new ArrayList<Uuser>();
 
 	public int getId() {
@@ -132,4 +133,16 @@ public class Uuser {
 		}
 		return null;
 	}
+	
+	public Udata getUDataByItem(Uitem item){
+		for (int i = 0; i < myRatings.size(); i++) {
+			if (myRatings.get(i).getItem() == item) return myRatings.get(i);
+		}
+		return null;
+	}
+
+	public ArrayList<Udata> getMyRatings() {
+		return myRatings;
+	}
+	
 }

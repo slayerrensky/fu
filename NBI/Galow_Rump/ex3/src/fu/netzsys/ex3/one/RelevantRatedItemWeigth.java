@@ -9,12 +9,12 @@ import java.util.ArrayList;
  * @author Dennis
  * 
  */
-public class RelevatRatedMovieWeigth {
+public class RelevantRatedItemWeigth {
 	public Uitem item;
 	public ArrayList<RatingRelatedToSim> rating;
 	public Double weigth;
 	
-	public RelevatRatedMovieWeigth(Uitem item){
+	public RelevantRatedItemWeigth(Uitem item){
 		this.item = item;
 		rating = new ArrayList<RatingRelatedToSim>();
 	}

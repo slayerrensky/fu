@@ -36,13 +36,14 @@ public class RecommenderSystem {
 			e.printStackTrace();
 		}
 	}
-	
-	public ArrayList<Uitem> getRecommendedItemsByUser(Uuser user, int maxItems){
+
+	public ArrayList<Uitem> getRecommendedItemsByUser(Uuser user, int maxItems) {
 		ArrayList<SimilarUser> simUser2 = getMaxSimilarUser(user, 0.8, 100);
-		
-		//sortiere simUsers nach besten €hnlichkeiten => Gruppe A
+
+		// sortiere simUsers nach besten €hnlichkeiten => Gruppe A
 		Collections.sort(simUser2);
-		CopyOnWriteArrayList<SimilarUser> simUser = new CopyOnWriteArrayList<SimilarUser>(simUser2);
+		CopyOnWriteArrayList<SimilarUser> simUser = new CopyOnWriteArrayList<SimilarUser>(
+				simUser2);
 		double bestSim = simUser.get(0).getSimilarity();
 		for (Iterator iterator = simUser.iterator(); iterator.hasNext();) {
 			SimilarUser similarUser = (SimilarUser) iterator.next();
@@ -50,23 +51,18 @@ public class RecommenderSystem {
 				simUser.remove(similarUser);
 			}
 		}
-		
+
 		ArrayList<Uitem> itemList = new ArrayList<Uitem>();
-		for (int i = 0;i<itemList.size();i++){
-			
+		for (int i = 0; i < itemList.size(); i++) {
+
 		}
-		
-//		for (SimilarUser sUser : simUser) {
-//			if (sUser.getSimilarity() < bestSim) {
-//				simUser.remove(sUser);
-//			}
-//		}
 		return null;
 	}
 
 	public double getSimilarFromUsers(Uuser user1, Uuser user2) {
 
-		if (user1 == user2) return 1;
+		if (user1 == user2)
+			return 1;
 		ArrayList<Uitem> similarItems = getSimilarItems(user1, user2);
 		if (similarItems == null)
 			return -1;
@@ -138,7 +134,7 @@ public class RecommenderSystem {
 	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> item,
 			ArrayList<Udata> userdata) {
 		ArrayList<Udata> data = new ArrayList<Udata>();
-
+		
 		for (Uitem it : item) {
 			for (int i = 0; i < userdata.size(); i++) {
 				if (userdata.get(i).getItem() == it) {
@@ -147,9 +143,15 @@ public class RecommenderSystem {
 				}
 			}
 		}
-
 		return data;
 	}
+//		ArrayList<Udata> data = new ArrayList<Udata>();
+//
+//		for (Uitem it : item) {
+//			data.addAll(it.getMyRatings());
+//		}
+//
+//		return data;
 
 	public double getPowerOfUserRatingMinusArithmeticMean(Uitem item, Uuser u,
 			double mittelw) {
@@ -199,7 +201,8 @@ public class RecommenderSystem {
 		return ratedItems;
 	}
 
-	public ArrayList<SimilarUser> getMaxSimilarUser(Uuser user1, double similarityGraeterThan, int max) {
+	public ArrayList<SimilarUser> getMaxSimilarUser(Uuser user1,
+			double similarityGraeterThan, int max) {
 		ArrayList<SimilarUser> similarUserList = new ArrayList<SimilarUser>();
 
 		ArrayList<Uuser> users = Uuser.list;
@@ -221,43 +224,66 @@ public class RecommenderSystem {
 		}
 		return similarUserList;
 	}
-	
-	public ArrayList<RelevatRatedMovieWeigth> getRelevatMovies(Uuser me, ArrayList<SimilarUser> releavtUsers){
-		// liste bauen, die alle filme der relevatne user beinhaltet
-		ArrayList<Uitem> allRelevatMovies = new ArrayList<Uitem>();
-		
-		for (SimilarUser user : releavtUsers) {
-			ArrayList<Udata> userDataList = getRatedData(user.getUser2());
-			for(Udata data : userDataList){
-				if( ! allRelevatMovies.contains(data.item)){
-					allRelevatMovies.add(data.item);
+
+	public boolean isRelevant(Uitem item, ArrayList<SimilarUser> relevantUsers,
+			double threshold) {
+		if (relevantUsers.size() == 0)
+			return true;
+		// for each user: item rating * r
+		double denominator = 0;
+		double numerator = 0;
+		for (SimilarUser sUser : relevantUsers) {
+			denominator += sUser.getSimilarity()
+					* sUser.getUser2().getUDataByItem(item).getRating();
+			numerator += sUser.getSimilarity();
+		}
+		if (denominator / numerator > threshold)
+			return true;
+		return false;
+	}
+
+	public ArrayList<Uitem> getRelevantItems(Uuser me,
+			ArrayList<SimilarUser> relevanttUsers) {
+		// liste generieren, die alle filme der relevanten user beinhaltet
+		ArrayList<Uitem> allRelevantItems = new ArrayList<Uitem>();
+
+		for (SimilarUser user : relevanttUsers) {
+			ArrayList<Udata> myRatings = user.getUser2().getMyRatings();
+			ArrayList<Udata> userDataList = myRatings;
+			for (Udata data : userDataList) {
+				if (!allRelevantItems.contains(data.getItem())) {
+					allRelevantItems.add(data.getItem());
 					// list +
-				}//else rating anpassen
+				}// else rating anpassen
 			}
 		}
-		
-		// aus der liste filme löschen, die user me schon gerated hat
-		ArrayList<Udata> meDataList = getRatedData(me);
-		for(Udata data : meDataList){
-			if(allRelevatMovies.contains(data.item)){
-				allRelevatMovies.remove(data.item);
-			}
+
+		ArrayList<Udata> ratedData = me.getMyRatings();
+		ArrayList<Uitem> ratedItems = new ArrayList<Uitem>();
+		for (int i = 0; i < ratedData.size(); i++) {
+			ratedItems.add(ratedData.get(i).getItem());
 		}
-		
-		// bewertung errechnen nach formel Seite 42 3-IRFiltering.pdf (Vorlesung)
+		allRelevantItems.removeAll(ratedItems);
+
+		ArrayList<Uitem> relevantItems = new ArrayList<Uitem>();
+		for (int i = 0; i < ratedItems.size(); i++) {
+			if (isRelevant(ratedItems.get(i), relevanttUsers, 0.5))
+				relevantItems.add(ratedItems.get(i));
+		}
+		return relevantItems;
+		// bewertung errechnen nach formel Seite 42 3-IRFiltering.pdf
+		// (Vorlesung)
 		// gegeben: alle wichtige filme
 		// gesucht: filmrating errechent aus den usern und der sim()
-		//for über alle ratings (Udata) gewicht speichern
-		//RelevatRatedMovieWeigth
-		
-		// sortieren --  am besten mit gewichtung (filme mit vielen bewertungen der relevaten user, sind besser)
-		
-		
-		return null;
+		// for über alle ratings (Udata) gewicht speichern
+		// RelevatRatedMovieWeigth
+
+		// sortieren -- am besten mit gewichtung (filme mit vielen bewertungen
+		// der relevaten user, sind besser)
 	}
 }
 
-class SimilarUser implements Comparable<SimilarUser>{
+class SimilarUser implements Comparable<SimilarUser> {
 	Uuser user1 = null;
 	Uuser user2 = null;
 	double similarity = -2;
@@ -295,8 +321,10 @@ class SimilarUser implements Comparable<SimilarUser>{
 
 	@Override
 	public int compareTo(SimilarUser o) {
-		if (o.getSimilarity()>this.getSimilarity()) return 1;
-		else if (o.getSimilarity() == this.getSimilarity()) return 0;
+		if (o.getSimilarity() > this.getSimilarity())
+			return 1;
+		else if (o.getSimilarity() == this.getSimilarity())
+			return 0;
 		return -1;
 	}
 }

@@ -24,6 +24,7 @@ public class Uitem {
 	// nichts
 	String link;
 	String bits;
+	private ArrayList<Udata> myRatings = new ArrayList<Udata>();
 	public static ArrayList<Uitem> list = new ArrayList<Uitem>();
 
 	public int getId() {
@@ -137,4 +138,9 @@ public class Uitem {
 		}
 		return null;
 	}
+
+	public ArrayList<Udata> getMyRatings() {
+		return myRatings;
+	}
+	
 }
