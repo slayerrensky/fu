@@ -70,7 +70,8 @@ public class Uoccupation {
 
 	public static Uoccupation getOccupateFromValue(String string) {
 		for (int i = 0; i < Uoccupation.list.size(); i++) {
-			if (Uoccupation.list.get(i).getOccupation().equals(string)) return Uoccupation.list.get(i);
+			if (Uoccupation.list.get(i).getOccupation().equals(string))
+				return Uoccupation.list.get(i);
 		}
 		return null;
 	}

@@ -1,45 +1,30 @@
 package fu.netzsys.ex3.one;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class Main {
 
 	public static void main(String[] args) {
-		File f = new File("data/");
-		String pathToDir = f.getAbsoluteFile() + "/";
-		f = null;
+		String pathToDir = new File("data/").getAbsoluteFile() + "/";
+		RecommenderSystem r = new RecommenderSystem(pathToDir);
 
-		try {
-			Ugenre.fillList(pathToDir); // Keine Referenzen
-			Uitem.fillList(pathToDir);// Keine Referenzen
-			Uoccupation.fillList(pathToDir); // Keine Referenzen
+		ArrayList<SimilarUser> similarUserList = r.getMaxSimilarUser(
+				Uuser.list.get(2), Uuser.list, 0.9, 50);
 
-			Uuser.fillList(pathToDir); // Referenz zu Uoccupation
-			Udata.fillList(pathToDir); // Referenz zu Uuser und Uitem
-		} catch (Exception e) {
-			e.printStackTrace();
+		// How much found?
+		System.out.println("found: " + similarUserList.size()
+				+ " sim users (max:" + 50 + ")");
+
+		// Print all
+		for (int i = 0; i < similarUserList.size(); i++) {
+			SimilarUser u = similarUserList.get(i);
+
+			System.out.println(i + 1 + ": similarity between "
+					+ u.getUser1().getId() + " and " + u.getUser2().getId()
+					+ " is " + (double) Math.round(u.getSimilarity() * 1000)
+					/ 1000);
 		}
 
-		// Print lists
-		// Ugenre.printList();
-		// Uitem.printList();
-		// Uoccupation.printList();
-		// Uuser.printList();
-		// Udata.printList();
-		// System.out.println(Udata.list.get(0).getItem().getTitle()
-		// + " hat das Rating -> " + Udata.list.get(0).getRating());
-		RecommenderSystem r = new RecommenderSystem();
-		///166 3
-		double similarityFromUsers = r.getSimilarityFromUsers(Uuser.list.get(3), Uuser.list.get(10));
-		System.out.println(similarityFromUsers);
-		
-		ArrayList<Uuser> userAreSimilar = r.getAllSimilarItems(Uuser.list.get(2), Uuser.list, 0.9, 50);
-		for(Uuser u : userAreSimilar)
-		{
-			System.out.println(u);
-		}
-		
 	}
 }
