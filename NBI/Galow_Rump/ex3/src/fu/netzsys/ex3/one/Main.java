@@ -6,7 +6,6 @@ import java.util.Collections;
 
 import fu.netzsys.ex3.one.RecommenderSystem;
 import fu.netzsys.ex3.one.RelevantRatedItemWeigth;
-import fu.netzsys.ex3.one.Uitem;
 import fu.netzsys.ex3.one.Uuser;
 
 public class Main {

@@ -1,7 +1,5 @@
 package fu.netzsys.ex3.one;
 
-import java.util.ArrayList;
-
 /**
  *  die klasse soll ein Film aufnehmen und
  *  das errechnete Rating beinhalten und

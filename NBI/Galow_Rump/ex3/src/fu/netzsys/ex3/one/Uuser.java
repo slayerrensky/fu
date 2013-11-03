@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import fu.netzsys.ex3.one.Udata;
+import fu.netzsys.ex3.one.Uoccupation;
+
 public class Uuser {
 	// u.user -- Demographic information about the users; this is a tab
 	// separated list of
@@ -136,7 +139,8 @@ public class Uuser {
 	
 	public Udata getUDataByItem(Uitem item){
 		for (int i = 0; i < myRatings.size(); i++) {
-			if (myRatings.get(i).getItem() == item) return myRatings.get(i);
+			if (myRatings.get(i).getItem() == item) 
+				return myRatings.get(i);
 		}
 		return null;
 	}
