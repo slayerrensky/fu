@@ -265,6 +265,7 @@ public class RecommenderSystem {
 		// sortieren -- am besten mit gewichtung (filme mit vielen bewertungen
 		// der relevaten user, sind besser)
 	}
+	
 }
 
 class SimilarUser implements Comparable<SimilarUser> {
