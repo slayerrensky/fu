@@ -12,8 +12,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RecommenderSystem {
 
 	double qSum = 0;
-//	ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
-//	ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
+
+	// ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
+	// ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
 
 	/**
 	 * Calculate Pearson score
@@ -58,6 +59,7 @@ public class RecommenderSystem {
 				user1.getMyRatings());
 		ArrayList<Udata> User2Data = getDataByItemList(similarItems,
 				user2.getMyRatings());
+
 		double arithmeticMean1 = calcArithmeticMean(User1Data);
 		double arithmeticMean2 = calcArithmeticMean(User2Data);
 		qSum = getSumOfSquares(User1Data, User2Data, arithmeticMean1,
@@ -114,34 +116,21 @@ public class RecommenderSystem {
 	 */
 	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> similarItem,
 			ArrayList<Udata> userdata) {
-//		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>();
-//		
-//		for (Uitem it : similarItem) {
-//			for (int i = 0; i < userdata.size(); i++) {
-//				if (userdata.get(i).getItem() == it) {
-//					data.add(userdata.get(i));
-//					break;
-//				}
-//			}
-//		}
-//		if (data.size() != similarItem.size())
-//			System.out.println(data.size() + "FALSCH!!!!"+similarItem.size());
-//		ArrayList<Udata> arrayList = new ArrayList<Udata>(data);
-//		
-//		return arrayList;
-	
-		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>(
-				userdata);
+		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>();
 
-		for (Udata uData : data) {
-			if (!similarItem.contains(uData.getItem()))
-				data.remove(uData);
+		for (Uitem it : similarItem) {
+			for (int i = 0; i < userdata.size(); i++) {
+				if (userdata.get(i).getItem() == it) {
+					data.add(userdata.get(i));
+					break;
+				}
+			}
 		}
-		
+
 		ArrayList<Udata> arrayList = new ArrayList<Udata>(data);
-		
 		return arrayList;
 	}
+
 	public double getPowerOfUserRatingMinusArithmeticMean(Uitem item, Uuser u,
 			double mittelw) {
 
