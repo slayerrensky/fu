@@ -266,6 +266,11 @@ public class RecommenderSystem {
 		// der relevaten user, sind besser)
 	}
 	
+	public ArrayList<Uitem> getMovielist()
+	{
+		return Uitem.list;
+	}
+	
 }
 
 class MapUtil {
