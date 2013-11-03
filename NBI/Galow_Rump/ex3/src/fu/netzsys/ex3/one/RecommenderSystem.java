@@ -249,7 +249,7 @@ public class RecommenderSystem {
 
 		ArrayList<RelevantRatedItemWeigth> relevantItems = new ArrayList<RelevantRatedItemWeigth>();
 		for (int i = 0; i < ratedItems.size(); i++) {
-			RelevantRatedItemWeigth rUI = isRelevant(ratedItems.get(i), relevanttUsers, 0.5); 
+			RelevantRatedItemWeigth rUI = isRelevant(ratedItems.get(i), relevanttUsers, 4); //Trashhold von 0-5 
 			if (rUI.relevant)
 				relevantItems.add(rUI);
 		}
@@ -259,7 +259,7 @@ public class RecommenderSystem {
 		// (Vorlesung)
 		// gegeben: alle wichtige filme
 		// gesucht: filmrating errechent aus den usern und der sim()
-		// for über alle ratings (Udata) gewicht speichern
+		// for ï¿½ber alle ratings (Udata) gewicht speichern
 		// RelevatRatedMovieWeigth
 
 		// sortieren -- am besten mit gewichtung (filme mit vielen bewertungen
