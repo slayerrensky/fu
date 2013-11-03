@@ -12,10 +12,10 @@ public class Udata {
 	// The time stamps are unix seconds since 1/1/1970 UTC
 
 	public static final String FILENAME = "u.data";
-	public int rating;
-	public int unixTimestamp;
-	public Uitem item;
-	public Uuser user;
+	private int rating;
+	private int unixTimestamp;
+	private Uitem item;
+	private Uuser user;
 	public static ArrayList<Udata> list = new ArrayList<Udata>();
 
 	public int getRating() {
@@ -79,10 +79,15 @@ public class Udata {
 			if (values.length < 4)
 				continue;
 			try {
-				list.add(new Udata(Uuser.getUserByID(Integer
-						.parseInt(values[0])), Uitem.getItemByID(Integer
-						.parseInt(values[1])), Integer.parseInt(values[2]),
-						Integer.parseInt(values[3])));
+				Uuser userByID = Uuser.getUserByID(Integer
+						.parseInt(values[0]));
+				Uitem itemByID = Uitem.getItemByID(Integer
+						.parseInt(values[1]));
+				Udata udata = new Udata(userByID,itemByID , Integer.parseInt(values[2]),
+						Integer.parseInt(values[3]));
+				list.add(udata);
+				itemByID.getMyRatings().add(udata);
+				userByID.getMyRatings().add(udata);
 			} catch (Exception e) {
 				throw e;
 			}

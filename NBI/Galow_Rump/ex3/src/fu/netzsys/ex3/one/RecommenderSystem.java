@@ -7,12 +7,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RecommenderSystem {
 
 	double qSum = 0;
-	ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
-	ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
+
+	// ArrayList<Udata> ratedIDataU1 = new ArrayList<Udata>();
+	// ArrayList<Udata> ratedIDataU2 = new ArrayList<Udata>();
 
 	/**
 	 * Calculate Pearson score
@@ -35,8 +37,14 @@ public class RecommenderSystem {
 		}
 	}
 
-	public double getSimilarityFromUsers(Uuser user1, Uuser user2) {
+	public ArrayList<Uitem> getRecommendedItemsByUser(Uuser user, int maxItems) {
+		return getRelevantItems(user, getMaxSimilarUser(user, -1, 100));
+	}
 
+	public double getSimilarFromUsers(Uuser user1, Uuser user2) {
+
+		if (user1 == user2)
+			return 1;
 		ArrayList<Uitem> similarItems = getSimilarItems(user1, user2);
 		if (similarItems == null)
 			return -1;
@@ -48,9 +56,10 @@ public class RecommenderSystem {
 		double sum2Sq = 0;
 
 		ArrayList<Udata> User1Data = getDataByItemList(similarItems,
-				ratedIDataU1);
+				user1.getMyRatings());
 		ArrayList<Udata> User2Data = getDataByItemList(similarItems,
-				ratedIDataU2);
+				user2.getMyRatings());
+
 		double arithmeticMean1 = calcArithmeticMean(User1Data);
 		double arithmeticMean2 = calcArithmeticMean(User2Data);
 		qSum = getSumOfSquares(User1Data, User2Data, arithmeticMean1,
@@ -93,9 +102,8 @@ public class RecommenderSystem {
 
 	public double calcArithmeticMean(ArrayList<Udata> user) {
 		double mittel = 0;
-		for (int i = 0; i < user.size(); i++) {
+		for (int i = 0; i < user.size(); i++)
 			mittel += user.get(i).getRating();
-		}
 		mittel = mittel / user.size();
 		return mittel;
 	}
@@ -103,14 +111,14 @@ public class RecommenderSystem {
 	/**
 	 * Holt sich die Udata die mit den Userdata und der Itemliste ï¿½bereinstimmen
 	 * 
-	 * @param item
+	 * @param similarItem
 	 * @return
 	 */
-	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> item,
+	private ArrayList<Udata> getDataByItemList(ArrayList<Uitem> similarItem,
 			ArrayList<Udata> userdata) {
-		ArrayList<Udata> data = new ArrayList<Udata>();
+		CopyOnWriteArrayList<Udata> data = new CopyOnWriteArrayList<Udata>();
 
-		for (Uitem it : item) {
+		for (Uitem it : similarItem) {
 			for (int i = 0; i < userdata.size(); i++) {
 				if (userdata.get(i).getItem() == it) {
 					data.add(userdata.get(i));
@@ -119,7 +127,8 @@ public class RecommenderSystem {
 			}
 		}
 
-		return data;
+		ArrayList<Udata> arrayList = new ArrayList<Udata>(data);
+		return arrayList;
 	}
 
 	public double getPowerOfUserRatingMinusArithmeticMean(Uitem item, Uuser u,
@@ -141,11 +150,9 @@ public class RecommenderSystem {
 	 * @return
 	 */
 	public ArrayList<Uitem> getSimilarItems(Uuser user1, Uuser user2) {
-		ratedIDataU1 = getRatedData(user1);
-		ratedIDataU2 = getRatedData(user2);
 
-		ArrayList<Uitem> ratedItemsU1 = Udata.getAllItems(ratedIDataU1);
-		ArrayList<Uitem> ratedItemsU2 = Udata.getAllItems(ratedIDataU2);
+		ArrayList<Uitem> ratedItemsU1 = Udata.getAllItems(user1.getMyRatings());
+		ArrayList<Uitem> ratedItemsU2 = Udata.getAllItems(user2.getMyRatings());
 
 		ArrayList<Uitem> similar = new ArrayList<Uitem>();
 
@@ -171,9 +178,10 @@ public class RecommenderSystem {
 	}
 
 	public ArrayList<SimilarUser> getMaxSimilarUser(Uuser user1,
-			ArrayList<Uuser> users, double similarityGraeterThan, int max) {
+			double similarityGraeterThan, int max) {
 		ArrayList<SimilarUser> similarUserList = new ArrayList<SimilarUser>();
 
+		ArrayList<Uuser> users = Uuser.list;
 		for (int i = 0; i < users.size(); i++) {
 			if (similarUserList.size() == 50)
 				break;
@@ -185,16 +193,73 @@ public class RecommenderSystem {
 			}
 			Uuser compareUser = users.get(i);
 
-			double sim = getSimilarityFromUsers(user1, compareUser);
+			double sim = getSimilarFromUsers(user1, compareUser);
 			if (sim > similarityGraeterThan) {
 				similarUserList.add(new SimilarUser(user1, compareUser, sim));
 			}
 		}
 		return similarUserList;
 	}
+
+	public boolean isRelevant(Uitem item, ArrayList<SimilarUser> relevantUsers,
+			double threshold) {
+		if (relevantUsers.size() == 0)
+			return true;
+		// for each user: item rating * r
+		double denominator = 0;
+		double numerator = 0;
+		for (SimilarUser sUser : relevantUsers) {
+			denominator += sUser.getSimilarity()
+					* sUser.getUser2().getUDataByItem(item).getRating();
+			numerator += sUser.getSimilarity();
+		}
+		if (denominator / numerator > threshold)
+			return true;
+		return false;
+	}
+
+	public ArrayList<Uitem> getRelevantItems(Uuser me,
+			ArrayList<SimilarUser> relevanttUsers) {
+		// liste generieren, die alle filme der relevanten user beinhaltet
+		ArrayList<Uitem> allRelevantItems = new ArrayList<Uitem>();
+
+		for (SimilarUser user : relevanttUsers) {
+			ArrayList<Udata> myRatings = user.getUser2().getMyRatings();
+			ArrayList<Udata> userDataList = myRatings;
+			for (Udata data : userDataList) {
+				if (!allRelevantItems.contains(data.getItem())) {
+					allRelevantItems.add(data.getItem());
+					// list +
+				}// else rating anpassen
+			}
+		}
+
+		ArrayList<Udata> ratedData = me.getMyRatings();
+		ArrayList<Uitem> ratedItems = new ArrayList<Uitem>();
+		for (int i = 0; i < ratedData.size(); i++) {
+			ratedItems.add(ratedData.get(i).getItem());
+		}
+		allRelevantItems.removeAll(ratedItems);
+
+		ArrayList<Uitem> relevantItems = new ArrayList<Uitem>();
+		for (int i = 0; i < ratedItems.size(); i++) {
+			if (isRelevant(ratedItems.get(i), relevanttUsers, 0.5))
+				relevantItems.add(ratedItems.get(i));
+		}
+		return relevantItems;
+		// bewertung errechnen nach formel Seite 42 3-IRFiltering.pdf
+		// (Vorlesung)
+		// gegeben: alle wichtige filme
+		// gesucht: filmrating errechent aus den usern und der sim()
+		// for über alle ratings (Udata) gewicht speichern
+		// RelevatRatedMovieWeigth
+
+		// sortieren -- am besten mit gewichtung (filme mit vielen bewertungen
+		// der relevaten user, sind besser)
+	}
 }
 
-class SimilarUser {
+class SimilarUser implements Comparable<SimilarUser> {
 	Uuser user1 = null;
 	Uuser user2 = null;
 	double similarity = -2;
@@ -228,6 +293,15 @@ class SimilarUser {
 
 	public void setUser2(Uuser user2) {
 		this.user2 = user2;
+	}
+
+	@Override
+	public int compareTo(SimilarUser o) {
+		if (o.getSimilarity() > this.getSimilarity())
+			return 1;
+		else if (o.getSimilarity() == this.getSimilarity())
+			return 0;
+		return -1;
 	}
 }
 
