@@ -9,27 +9,28 @@ import java.util.ArrayList;
  * @author Dennis
  * 
  */
-public class RelevantRatedItemWeigth {
+public class RelevantRatedItemWeigth implements Comparable<RelevantRatedItemWeigth>{
 	public Uitem item;
-	public ArrayList<RatingRelatedToSim> rating;
-	public Double weigth;
-	
-	public RelevantRatedItemWeigth(Uitem item){
-		this.item = item;
-		rating = new ArrayList<RatingRelatedToSim>();
-	}
-	
-	public void addRating(Double rating, Double sim){
-		this.rating.add(new RatingRelatedToSim(rating, sim));
-	}
-}
-
-class RatingRelatedToSim{
 	public Double rating;
-	public Double sim;
+	public boolean relevant;
 	
-	public RatingRelatedToSim(Double rating, Double sim){
+	public RelevantRatedItemWeigth(Uitem item, Double rating, boolean relevant){
+		this.item = item;
 		this.rating = rating;
-		this.sim = sim;
+		this.relevant = relevant;
+	}
+
+	@Override
+	public int compareTo(RelevantRatedItemWeigth arg0) {		
+		if (arg0.rating == null && this.rating == null) {
+		      return 0;
+		    }
+		    if (this.rating == null) {
+		      return 1;
+		    }
+		    if (arg0.rating == null) {
+		      return -1;
+		    }
+		    return arg0.rating.compareTo(this.rating);
 	}
 }

@@ -37,7 +37,7 @@ public class RecommenderSystem {
 		}
 	}
 
-	public ArrayList<Uitem> getRecommendedItemsByUser(Uuser user, int maxItems) {
+	public ArrayList<RelevantRatedItemWeigth> getRecommendedItemsByUser(Uuser user, int maxItems) {
 		return getRelevantItems(user, getMaxSimilarUser(user, -1, 100));
 	}
 
@@ -201,24 +201,30 @@ public class RecommenderSystem {
 		return similarUserList;
 	}
 
-	public boolean isRelevant(Uitem item, ArrayList<SimilarUser> relevantUsers,
+	public RelevantRatedItemWeigth isRelevant(Uitem item, ArrayList<SimilarUser> relevantUsers,
 			double threshold) {
 		if (relevantUsers.size() == 0)
-			return true;
+			return new RelevantRatedItemWeigth(item, 0.0, true);
 		// for each user: item rating * r
 		double denominator = 0;
 		double numerator = 0;
 		for (SimilarUser sUser : relevantUsers) {
-			denominator += sUser.getSimilarity()
-					* sUser.getUser2().getUDataByItem(item).getRating();
-			numerator += sUser.getSimilarity();
+			Udata ratingUser2 = sUser.getUser2().getUDataByItem(item);
+			if(ratingUser2 != null){
+				denominator += sUser.getSimilarity()
+						* ratingUser2.getRating();
+				numerator += sUser.getSimilarity();
+			}
 		}
-		if (denominator / numerator > threshold)
-			return true;
-		return false;
+		Double rating = denominator / numerator;
+		if (rating > threshold){
+			return new RelevantRatedItemWeigth(item, rating, true);
+		}else{
+			return new RelevantRatedItemWeigth(item, rating, false);
+		}
 	}
 
-	public ArrayList<Uitem> getRelevantItems(Uuser me,
+	public ArrayList<RelevantRatedItemWeigth> getRelevantItems(Uuser me,
 			ArrayList<SimilarUser> relevanttUsers) {
 		// liste generieren, die alle filme der relevanten user beinhaltet
 		ArrayList<Uitem> allRelevantItems = new ArrayList<Uitem>();
@@ -241,11 +247,13 @@ public class RecommenderSystem {
 		}
 		allRelevantItems.removeAll(ratedItems);
 
-		ArrayList<Uitem> relevantItems = new ArrayList<Uitem>();
+		ArrayList<RelevantRatedItemWeigth> relevantItems = new ArrayList<RelevantRatedItemWeigth>();
 		for (int i = 0; i < ratedItems.size(); i++) {
-			if (isRelevant(ratedItems.get(i), relevanttUsers, 0.5))
-				relevantItems.add(ratedItems.get(i));
+			RelevantRatedItemWeigth rUI = isRelevant(ratedItems.get(i), relevanttUsers, 0.5); 
+			if (rUI.relevant)
+				relevantItems.add(rUI);
 		}
+		Collections.sort(relevantItems);
 		return relevantItems;
 		// bewertung errechnen nach formel Seite 42 3-IRFiltering.pdf
 		// (Vorlesung)

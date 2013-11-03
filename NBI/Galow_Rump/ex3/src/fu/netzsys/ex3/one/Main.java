@@ -4,6 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import fu.netzsys.ex3.one.RecommenderSystem;
+import fu.netzsys.ex3.one.RelevantRatedItemWeigth;
+import fu.netzsys.ex3.one.Uitem;
+import fu.netzsys.ex3.one.Uuser;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -29,6 +34,11 @@ public class Main {
 			System.out.println(i + 1 + ": similarity between "
 					+ u.getUser1().getId() + " and " + u.getUser2().getId()
 					+ " is " + sim);
+		}
+		
+		ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(0), similarUserList);
+		for (RelevantRatedItemWeigth uitem : tmp) {
+			System.out.println(uitem.item.getTitle()+"\t\t\t\t Rating: "+uitem.rating);
 		}
 
 		// programm für 3.3 alle filme anzeigen/ als liste
