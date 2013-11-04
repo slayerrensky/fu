@@ -7,5 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+<p><a href="/MovieList.jsp"></a> </p>
 </body>
 </html>

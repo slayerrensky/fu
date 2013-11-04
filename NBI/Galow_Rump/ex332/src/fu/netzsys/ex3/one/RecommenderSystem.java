@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
 public class RecommenderSystem {
 
 	double qSum = 0;
@@ -264,6 +265,11 @@ public class RecommenderSystem {
 
 		// sortieren -- am besten mit gewichtung (filme mit vielen bewertungen
 		// der relevaten user, sind besser)
+	}
+	
+	public ArrayList<Uitem> getMovielist()
+	{
+		return Uitem.list;
 	}
 }
 

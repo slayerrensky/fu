@@ -18,6 +18,7 @@ import org.apache.tomcat.util.net.URL;
 import fu.netzsys.ex3.one.RecommenderSystem;
 import fu.netzsys.ex3.one.SimilarUser;
 import fu.netzsys.ex3.one.Uuser;
+import fu.netzsys.ex3.one.Uitem;
 
 /**
  * Servlet implementation class Recommender
@@ -51,6 +52,10 @@ public class Recommender extends HttpServlet {
 		// TODO Auto-generated method stub
 		Map parameters = request.getParameterMap();
 		String nextDestination = "/ChooseUser.jsp";
+		if (request.getContextPath().contains("MovieList.jsp"))
+		{
+			System.out.println("open Movie list");
+		}
 		
 	    if (parameters.containsKey("switchUser")){
 	    	userID = Integer.parseInt(request.getParameter("switchUser"));
@@ -58,6 +63,19 @@ public class Recommender extends HttpServlet {
 	    	nextDestination = "/ChooseUser.jsp";
 	    }
 		
+	    if (parameters.containsKey("movies")){
+	    	ArrayList<Uitem> movies = r.getMovielist();
+	    	String page = "http://localhost:8080/ex332/Recommender/Movie";
+	    	String list = new String();
+	    	for (Uitem m :movies)
+	    	{
+	    		String href = "href=\"" + page + "?movie=" + m.getId(); 
+	    		list += "<li><a "+ href + ">" + m.getTitle() + "</a></li>\n";
+	    	}
+	    	request.setAttribute("list",list);
+	    	nextDestination = "/MovieList.jsp";
+	    }
+	    
 	    RequestDispatcher view = request.getRequestDispatcher(nextDestination);
 	    view.forward(request, response);
 	}
@@ -67,6 +85,7 @@ public class Recommender extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("post anfrage");
 	}
 
 }
