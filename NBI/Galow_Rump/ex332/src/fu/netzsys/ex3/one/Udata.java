@@ -124,4 +124,8 @@ public class Udata {
 		}
 		return items;
 	}
+	
+	public static void add(Uuser user, Uitem item, int rating, int unixTimestamp){
+		list.add(new Udata(user,item,rating,unixTimestamp));
+	}
 }

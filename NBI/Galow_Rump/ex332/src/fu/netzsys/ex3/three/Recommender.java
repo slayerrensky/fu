@@ -109,13 +109,24 @@ public class Recommender extends HttpServlet {
 	    		movieID = -1;
 	    	}
 	    	Uitem item = Uitem.getItemByID(movieID);
-	    	Udata data = r.getDataRating(item, Uuser.getUserByID(userID));
+	    	Udata data = r.getDataRating(item, Uuser.getUserByID(userID-1));
 	    	String MovieInformations = new String();
 	    	MovieInformations += "<h2>" + item.getTitle() +"</h2>\n";
 	    	MovieInformations += "<p>Title: "+item.getTitle() +"</p>\n";
 	    	MovieInformations += "<p>Datum: "+item.getDate() +"</p>\n";
 	    	MovieInformations += "<p><a href\""+item.getLink()+"\">" + "more Information about this movie" + "</p>\n";
 	    	String radio = new String();
+	    	
+	    	if(parameters.containsKey("rating")){
+	    		int mynewrating = Integer.parseInt(request.getParameter("rating"));
+	    		if(data == null){
+	    			Udata.add(Uuser.getUserByID(userID-1), item, mynewrating, (int)(System.currentTimeMillis() / 1000L));
+	    			data = r.getDataRating(item, Uuser.getUserByID(userID-1));
+	    		}else{
+	    			data.setRating(mynewrating);
+	    		}
+	    	}
+	    	
 	    	
 	    	if (data == null){
 	    		//Date Formular
