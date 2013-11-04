@@ -17,6 +17,7 @@ import org.apache.tomcat.util.net.URL;
 
 import fu.netzsys.ex3.one.RecommenderSystem;
 import fu.netzsys.ex3.one.SimilarUser;
+import fu.netzsys.ex3.one.Udata;
 import fu.netzsys.ex3.one.Uuser;
 import fu.netzsys.ex3.one.Uitem;
 
@@ -58,8 +59,16 @@ public class Recommender extends HttpServlet {
 		}
 		
 	    if (parameters.containsKey("switchUser")){
-	    	userID = Integer.parseInt(request.getParameter("switchUser"));
-	    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
+	    	try{
+	    		userID = Integer.parseInt(request.getParameter("switchUser"));
+	    	}catch(Exception e){
+	    		userID = -1;
+	    	}
+	    	request.setAttribute("userid",userID);
+	    	if((userID >= 0) && (Uuser.list.size() > userID)){
+		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
+		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID)));
+	    	}
 	    	nextDestination = "/ChooseUser.jsp";
 	    }
 		

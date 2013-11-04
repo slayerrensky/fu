@@ -4,9 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>User selected</title>
+<title>List of movies</title>
 </head>
 <body>
-	<p>${myRatings}</p>
+
+<h1>List of movies</h1>
+
+<ul>
+
+</ul>
+
 </body>
 </html>
