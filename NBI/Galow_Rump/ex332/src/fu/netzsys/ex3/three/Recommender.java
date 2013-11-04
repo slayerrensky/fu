@@ -115,19 +115,37 @@ public class Recommender extends HttpServlet {
 	    	MovieInformations += "<p>Title: "+item.getTitle() +"</p>\n";
 	    	MovieInformations += "<p>Datum: "+item.getDate() +"</p>\n";
 	    	MovieInformations += "<p><a href\""+item.getLink()+"\">" + "more Information about this movie" + "</p>\n";
+	    	String radio = new String();
+	    	
 	    	if (data == null){
 	    		//Date Formular
 	    		MovieInformations += "<p>You Rate the move: not rated</p>";
+	    		for (int i = 0; i<5;i++)
+		    	{
+		    		radio += "<input type=\"radio\" name=\"rating\" value=\"" + (i+1) + "\">" + (i+1) + "<br> \n";
+		    	}
 	    	}
 	    	else
 	    	{
 	    		Date date = new Date(data.getUnixTimestamp());
 	    		SimpleDateFormat dateformater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    		MovieInformations += "<p>You Rate the move: "+data.getRating() + "at" + dateformater.format(date) + "</p>\n";
+	    		MovieInformations += "<p>You Rate the move: "+data.getRating() + " at " + dateformater.format(date) + "</p>\n";
+	    		for (int i = 0; i<5;i++)
+		    	{
+		    		radio += "<input type=\"radio\" name=\"rating\" value=\"" + (i+1) + "\"";
+		    		if ((i +1)== data.getRating()){
+		    			radio += "checked";
+		    		}	
+		    		radio += ">" + (i+1) + "<br> \n";
+		    	}
 	    	}
-	    	request.setAttribute("MovieID",movieID);
+	    	radio += "<input type=\"hidden\" name=\"movie\" value=\"" + movieID + "\">\n";
+	    	radio += "<input type=\"submit\" value=\"senden\">\n";
+	    	
 	    	request.setAttribute("MovieInformations",MovieInformations);
+	    	request.setAttribute("radio",radio);
 	    	nextDestination = "/Movie.jsp";
+	    	
 	    }else if(parameters.containsKey("predict")){
 	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(userID-1), similarUserList);
 	    	String page = request.getRequestURL().toString();

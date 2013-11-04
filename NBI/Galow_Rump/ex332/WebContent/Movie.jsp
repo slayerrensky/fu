@@ -13,13 +13,7 @@ ${MovieInformations}
 <form action="/ex332/Recommender">
   <p>Rating:</p>
   <p>
-    <input type="radio" name="rating" value="1">1<br>
-    <input type="radio" name="rating" value="2">2<br>
-    <input type="radio" name="rating" value="3">3<br>
-    <input type="radio" name="rating" value="4">4<br>
-    <input type="radio" name="rating" value="5">5<br>
-    <input type="hidden" name="movie" value="${MovieID}">
-    <input type="submit" value="senden">
+    ${radio}
   </p>
 </form>
 
