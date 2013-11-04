@@ -69,7 +69,16 @@ public class Recommender extends HttpServlet {
 	    	request.setAttribute("userid",userID);
 	    	if((userID >= 0) && (Uuser.list.size() > userID)){
 		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
-		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID)));
+		    	String myRatings = new String();
+		    	ArrayList<Udata> data = r.getRatedData(Uuser.list.get(userID));
+		    	String page = request.getRequestURL().toString();
+		    	String list = new String();
+		    	for (Udata d : data)
+		    	{
+		    		String href = "href=\"" + page + "?movie=" + d.getItem().getId() + "\""; 
+			    	list += "<li><a "+ href + ">" + d.getItem().getTitle() + " Rating: " + d.getRating() + "</a></li>\n";
+		    	}
+		    	request.setAttribute("myRatings",list);
 	    	}
 	    	nextDestination = "/ChooseUser.jsp";
 	    }
