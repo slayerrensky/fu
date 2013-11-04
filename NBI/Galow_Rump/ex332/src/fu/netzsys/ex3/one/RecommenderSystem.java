@@ -171,7 +171,7 @@ public class RecommenderSystem {
 	public ArrayList<Udata> getRatedData(Uuser user) {
 		ArrayList<Udata> ratedItems = new ArrayList<Udata>();
 		for (int i = 0; i < Udata.list.size(); i++) {
-			if (Udata.list.get(i).getUser() == user) {
+			if (Udata.list.get(i).getUser().getId() == user.getId()) {
 				ratedItems.add(Udata.list.get(i));
 			}
 		}
