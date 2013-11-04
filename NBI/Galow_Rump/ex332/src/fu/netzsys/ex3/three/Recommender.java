@@ -56,6 +56,7 @@ public class Recommender extends HttpServlet {
 		// TODO Auto-generated method stub
 		Map parameters = request.getParameterMap();
 		String nextDestination = "/ChooseUser.jsp";
+		request.setAttribute("userid",userID);
 		if (request.getContextPath().contains("MovieList.jsp"))
 		{
 			System.out.println("open Movie list");
@@ -136,7 +137,6 @@ public class Recommender extends HttpServlet {
 				list += "<tr><th><a "+ href + ">" + ruitem.item.getTitle() + "</a></th><th>" + String.format("%.1f", ruitem.rating.doubleValue()) + "</th></tr>\n";
 			}
 			request.setAttribute("list",list);
-			request.setAttribute("userid",userID);
 			nextDestination = "/PredictedList.jsp";
 	    }
 	    
