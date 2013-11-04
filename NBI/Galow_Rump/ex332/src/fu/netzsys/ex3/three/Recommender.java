@@ -125,6 +125,7 @@ public class Recommender extends HttpServlet {
 	    		SimpleDateFormat dateformater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    		MovieInformations += "<p>You Rate the move: "+data.getRating() + "at" + dateformater.format(date) + "</p>\n";
 	    	}
+	    	request.setAttribute("MovieID",movieID);
 	    	request.setAttribute("MovieInformations",MovieInformations);
 	    	nextDestination = "/Movie.jsp";
 	    }else if(parameters.containsKey("predict")){

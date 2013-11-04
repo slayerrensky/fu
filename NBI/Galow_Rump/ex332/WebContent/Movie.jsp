@@ -18,7 +18,7 @@ ${MovieInformations}
     <input type="radio" name="rating" value="3">3<br>
     <input type="radio" name="rating" value="4">4<br>
     <input type="radio" name="rating" value="5">5<br>
-    <input type="hidden" name="movie" value="">
+    <input type="hidden" name="movie" value="${MovieID}">
     <input type="submit" value="senden">
   </p>
 </form>
