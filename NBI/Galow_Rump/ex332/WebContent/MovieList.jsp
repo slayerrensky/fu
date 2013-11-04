@@ -11,7 +11,7 @@
 <h1>List of movies</h1>
 
 <ul>
-
+${list}
 </ul>
 
 </body>

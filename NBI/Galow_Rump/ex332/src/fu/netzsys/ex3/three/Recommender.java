@@ -74,7 +74,7 @@ public class Recommender extends HttpServlet {
 		
 	    if (parameters.containsKey("movies")){
 	    	ArrayList<Uitem> movies = r.getMovielist();
-	    	String page = "http://localhost:8080/ex332/Recommender/Movie";
+	    	String page = request.getRequestURL().toString();
 	    	String list = new String();
 	    	for (Uitem m :movies)
 	    	{
