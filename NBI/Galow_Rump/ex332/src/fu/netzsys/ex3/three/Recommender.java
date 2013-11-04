@@ -85,6 +85,7 @@ public class Recommender extends HttpServlet {
 		    	}
 		    	request.setAttribute("list",list);
 	    	}
+
 	    	nextDestination = "/ChooseUser.jsp";
 	    }
 		
