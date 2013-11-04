@@ -248,8 +248,8 @@ public class RecommenderSystem {
 		allRelevantItems.removeAll(ratedItems);
 
 		ArrayList<RelevantRatedItemWeigth> relevantItems = new ArrayList<RelevantRatedItemWeigth>();
-		for (int i = 0; i < ratedItems.size(); i++) {
-			RelevantRatedItemWeigth rUI = isRelevant(ratedItems.get(i), relevanttUsers, 4); //Trashhold von 0-5 
+		for (int i = 0; i < allRelevantItems.size(); i++) {
+			RelevantRatedItemWeigth rUI = isRelevant(allRelevantItems.get(i), relevanttUsers, 4); //Trashhold von 0-5 
 			if (rUI.relevant)
 				relevantItems.add(rUI);
 		}
