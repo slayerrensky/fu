@@ -271,6 +271,19 @@ public class RecommenderSystem {
 	{
 		return Uitem.list;
 	}
+	
+	public Udata getDataRating(Uitem item, Uuser user){
+		
+		for (Udata d :Udata.list)
+		{
+			if (d.getItem() == item && d.getUser() == user){
+				return d;
+			}
+		}
+		return null;
+	}
+	
+	
 }
 
 class MapUtil {

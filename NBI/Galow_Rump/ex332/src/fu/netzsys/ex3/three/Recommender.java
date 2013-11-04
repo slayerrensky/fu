@@ -2,6 +2,8 @@ package fu.netzsys.ex3.three;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -78,11 +80,39 @@ public class Recommender extends HttpServlet {
 	    	String list = new String();
 	    	for (Uitem m :movies)
 	    	{
-	    		String href = "href=\"" + page + "?movie=" + m.getId(); 
+	    		String href = "href=\"" + page + "?movie=" + m.getId() + "\""; 
 	    		list += "<li><a "+ href + ">" + m.getTitle() + "</a></li>\n";
 	    	}
 	    	request.setAttribute("list",list);
 	    	nextDestination = "/MovieList.jsp";
+	    }
+	    
+	    if (parameters.containsKey("movie")){
+	    	int movieID = -1;
+	    	try{
+	    		movieID = Integer.parseInt(request.getParameter("movie"));
+	    	}catch(Exception e){
+	    		movieID = -1;
+	    	}
+	    	Uitem item = Uitem.getItemByID(movieID);
+	    	Udata data = r.getDataRating(item, Uuser.getUserByID(userID));
+	    	String MovieInformations = new String();
+	    	MovieInformations += "<h2>" + item.getTitle() +"</h2>\n";
+	    	MovieInformations += "<p>Title: "+item.getTitle() +"</p>\n";
+	    	MovieInformations += "<p>Datum: "+item.getDate() +"</p>\n";
+	    	MovieInformations += "<p><a href\""+item.getLink()+"\">" + "more Information about this movie" + "</p>\n";
+	    	if (data == null){
+	    		//Date Formular
+	    		MovieInformations += "<p>You Rate the move: not rated</p>";
+	    	}
+	    	else
+	    	{
+	    		Date date = new Date(data.getUnixTimestamp());
+	    		SimpleDateFormat dateformater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    		MovieInformations += "<p>You Rate the move: "+data.getRating() + "at" + dateformater.format(date) + "</p>\n";
+	    	}
+	    	request.setAttribute("MovieInformations",MovieInformations);
+	    	nextDestination = "/Movie.jsp";
 	    }
 	    
 	    RequestDispatcher view = request.getRequestDispatcher(nextDestination);
