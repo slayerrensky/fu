@@ -56,6 +56,7 @@ public class Recommender extends HttpServlet {
 		// TODO Auto-generated method stub
 		Map parameters = request.getParameterMap();
 		String nextDestination = "/ChooseUser.jsp";
+		request.setAttribute("userid",userID);
 		if (request.getContextPath().contains("MovieList.jsp"))
 		{
 			System.out.println("open Movie list");
@@ -74,16 +75,16 @@ public class Recommender extends HttpServlet {
 	    	request.setAttribute("occupations",Uuser.list.get(userID).getOccupation().toString());
 	    	
 	    	if((userID >= 0) && (Uuser.list.size() > userID)){
-                similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
-                request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID)));
-                String page = request.getRequestURL().toString();
-                String list = new String();
-                for (Udata d :r.getRatedData(Uuser.list.get(userID)))
-                {
-                        String href = "href=\"" + page + "?movie=" + d.getItem().getId() + "\""; 
-                        list += "<li><a "+ href + ">" + d.getItem().getTitle() + " Rating: " + d.getRating() + "</a></li>\n";
-                }
-                request.setAttribute("list",list);
+		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
+		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID)));
+		    	String page = request.getRequestURL().toString();
+		    	String list = "<tr><th>movie</th><th>my rating</th></tr>";
+		    	for (Udata d :r.getRatedData(Uuser.list.get(userID)))
+		    	{
+		    		String href = "href=\"" + page + "?movie=" + d.getItem().getId() + "\""; 
+		    		list += "<tr><th><a "+ href + ">" + d.getItem().getTitle() + "</a></th><th>" + d.getRating() + "</th></tr>\n";
+		    	}
+		    	request.setAttribute("list",list);
 	    	}
 
 	    	nextDestination = "/ChooseUser.jsp";
@@ -129,15 +130,13 @@ public class Recommender extends HttpServlet {
 	    }else if(parameters.containsKey("predict")){
 	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(userID), similarUserList);
 	    	String page = request.getRequestURL().toString();
-	    	String list = new String();
-	    	
+	    	String list = "<tr><th>movie</th><th>predicted rating<tr></tr>";
 			for (RelevantRatedItemWeigth ruitem : tmp) {
 				String href = "href=\"" + page + "?movie=" + ruitem.item.getId() + "\"";
 	    		//list += "<li><a "+ href + ">" + ruitem.item.getTitle() + " Rating: " + String.format("%.1f", ruitem.rating.doubleValue()) + "</a></li>\n";
-				list += "<li><a "+ href + ">" + String.format("%-50s Rating: %.1f", ruitem.item.getTitle(), ruitem.rating.doubleValue()) + "</a></li>\n";
+				list += "<tr><th><a "+ href + ">" + ruitem.item.getTitle() + "</a></th><th>" + String.format("%.1f", ruitem.rating.doubleValue()) + "</th></tr>\n";
 			}
 			request.setAttribute("list",list);
-			request.setAttribute("userid",userID);
 			nextDestination = "/PredictedList.jsp";
 	    }
 	    
