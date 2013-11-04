@@ -4,16 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>User selected</title>
+<title>List of movies</title>
 </head>
 <body>
-	<h1>UserID: ${userid}</h1>
-	<h3>age: ${age}; sex: ${sex}; zipcode: ${zipcode}; job: ${occupations}</h3>
-	<h3>My rated movies:</h3>
-	 <a href="/ex332/Recommender?movies">Movielist</a>
-	 <a href="/ex332/Recommender?predict">Movies i could also like</a>
-	<ul>
-		${list}
-	</ul>
+
+<h1>List of movies they are recommended for User: ${userid}</h1>
+
+<ul>
+${list}
+</ul>
+
 </body>
 </html>

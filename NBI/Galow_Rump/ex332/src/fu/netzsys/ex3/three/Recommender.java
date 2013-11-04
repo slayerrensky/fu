@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.net.URL;
 
 import fu.netzsys.ex3.one.RecommenderSystem;
+import fu.netzsys.ex3.one.RelevantRatedItemWeigth;
 import fu.netzsys.ex3.one.SimilarUser;
 import fu.netzsys.ex3.one.Udata;
 import fu.netzsys.ex3.one.Uuser;
@@ -67,9 +68,22 @@ public class Recommender extends HttpServlet {
 	    		userID = -1;
 	    	}
 	    	request.setAttribute("userid",userID);
+	    	request.setAttribute("sex",Uuser.list.get(userID).getMale());
+	    	request.setAttribute("age",Uuser.list.get(userID).getAge());
+	    	request.setAttribute("zipcode",Uuser.list.get(userID).getZipCode());
+	    	request.setAttribute("occupations",Uuser.list.get(userID).getOccupation().toString());
+	    	
 	    	if((userID >= 0) && (Uuser.list.size() > userID)){
 		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
 		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID)));
+		    	String page = request.getRequestURL().toString();
+		    	String list = new String();
+		    	for (Udata d :r.getRatedData(Uuser.list.get(userID)))
+		    	{
+		    		String href = "href=\"" + page + "?movie=" + d.getItem().getId() + "\""; 
+		    		list += "<li><a "+ href + ">" + d.getItem().getTitle() + " Rating: " + d.getRating() + "</a></li>\n";
+		    	}
+		    	request.setAttribute("list",list);
 	    	}
 	    	nextDestination = "/ChooseUser.jsp";
 	    }
@@ -85,9 +99,7 @@ public class Recommender extends HttpServlet {
 	    	}
 	    	request.setAttribute("list",list);
 	    	nextDestination = "/MovieList.jsp";
-	    }
-	    
-	    if (parameters.containsKey("movie")){
+	    }else if (parameters.containsKey("movie")){
 	    	int movieID = -1;
 	    	try{
 	    		movieID = Integer.parseInt(request.getParameter("movie"));
@@ -113,6 +125,19 @@ public class Recommender extends HttpServlet {
 	    	}
 	    	request.setAttribute("MovieInformations",MovieInformations);
 	    	nextDestination = "/Movie.jsp";
+	    }else if(parameters.containsKey("predict")){
+	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(userID), similarUserList);
+	    	String page = request.getRequestURL().toString();
+	    	String list = new String();
+	    	
+			for (RelevantRatedItemWeigth ruitem : tmp) {
+				String href = "href=\"" + page + "?movie=" + ruitem.item.getId() + "\"";
+	    		//list += "<li><a "+ href + ">" + ruitem.item.getTitle() + " Rating: " + String.format("%.1f", ruitem.rating.doubleValue()) + "</a></li>\n";
+				list += "<li><a "+ href + ">" + String.format("%-50s Rating: %.1f", ruitem.item.getTitle(), ruitem.rating.doubleValue()) + "</a></li>\n";
+			}
+			request.setAttribute("list",list);
+			request.setAttribute("userid",userID);
+			nextDestination = "/PredictedList.jsp";
 	    }
 	    
 	    RequestDispatcher view = request.getRequestDispatcher(nextDestination);
