@@ -69,17 +69,17 @@ public class Recommender extends HttpServlet {
 	    		userID = -1;
 	    	}
 	    	request.setAttribute("userid",userID);
-	    	request.setAttribute("sex",Uuser.list.get(userID).getMale());
-	    	request.setAttribute("age",Uuser.list.get(userID).getAge());
-	    	request.setAttribute("zipcode",Uuser.list.get(userID).getZipCode());
-	    	request.setAttribute("occupations",Uuser.list.get(userID).getOccupation().toString());
+	    	request.setAttribute("sex",Uuser.list.get(userID-1).getMale());
+	    	request.setAttribute("age",Uuser.list.get(userID-1).getAge());
+	    	request.setAttribute("zipcode",Uuser.list.get(userID-1).getZipCode());
+	    	request.setAttribute("occupations",Uuser.list.get(userID-1).getOccupation().toString());
 	    	
 	    	if((userID >= 0) && (Uuser.list.size() > userID)){
-		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID), 0.8, 50);
-		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID)));
+		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID-1), 0.8, 50);
+		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID-1)));
 		    	String page = request.getRequestURL().toString();
 		    	String list = "<tr><th>movie</th><th>my rating</th></tr>";
-		    	for (Udata d :r.getRatedData(Uuser.list.get(userID)))
+		    	for (Udata d :r.getRatedData(Uuser.list.get(userID-1)))
 		    	{
 		    		String href = "href=\"" + page + "?movie=" + d.getItem().getId() + "\""; 
 		    		list += "<tr><th><a "+ href + ">" + d.getItem().getTitle() + "</a></th><th>" + d.getRating() + "</th></tr>\n";
@@ -128,7 +128,7 @@ public class Recommender extends HttpServlet {
 	    	request.setAttribute("MovieInformations",MovieInformations);
 	    	nextDestination = "/Movie.jsp";
 	    }else if(parameters.containsKey("predict")){
-	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(userID), similarUserList);
+	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(userID-1), similarUserList);
 	    	String page = request.getRequestURL().toString();
 	    	String list = "<tr><th>movie</th><th>predicted rating<tr></tr>";
 			for (RelevantRatedItemWeigth ruitem : tmp) {
