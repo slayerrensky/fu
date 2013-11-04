@@ -10,9 +10,9 @@
 
 <h1>List of movies they are recommended for User: ${userid}</h1>
 
-<ul>
+<table>
 ${list}
-</ul>
+</table>
 
 </body>
 </html>

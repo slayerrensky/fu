@@ -12,8 +12,8 @@
 	<h3>My rated movies:</h3>
 	 <a href="/ex332/Recommender?movies">Movielist</a>
 	 <a href="/ex332/Recommender?predict">Movies i could also like</a>
-	<ul>
+	<table>
 		${list}
-	</ul>
+	</table>
 </body>
 </html>
