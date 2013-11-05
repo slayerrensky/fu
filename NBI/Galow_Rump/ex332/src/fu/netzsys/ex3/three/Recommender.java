@@ -69,17 +69,16 @@ public class Recommender extends HttpServlet {
 	    		userID = -1;
 	    	}
 	    	request.setAttribute("userid",userID);
-	    	request.setAttribute("sex",Uuser.list.get(userID-1).getMale());
-	    	request.setAttribute("age",Uuser.list.get(userID-1).getAge());
-	    	request.setAttribute("zipcode",Uuser.list.get(userID-1).getZipCode());
-	    	request.setAttribute("occupations",Uuser.list.get(userID-1).getOccupation().toString());
+	    	request.setAttribute("sex",Uuser.getUserByID(userID).getMale());
+	    	request.setAttribute("age",Uuser.getUserByID(userID).getAge());
+	    	request.setAttribute("zipcode",Uuser.getUserByID(userID).getZipCode());
+	    	request.setAttribute("occupations",Uuser.getUserByID(userID).getOccupation().toString());
 	    	
 	    	if((userID >= 0) && (Uuser.list.size() > userID)){
-		    	similarUserList = r.getMaxSimilarUser(Uuser.list.get(userID-1), 0.8, 50);
-		    	request.setAttribute("myRatings",r.getRatedData(Uuser.list.get(userID-1)));
+		    	similarUserList = r.getMaxSimilarUser(Uuser.getUserByID(userID), 0.8, 50);
 		    	String page = request.getRequestURL().toString();
 		    	String list = "<tr><th>movie</th><th>my rating</th></tr>";
-		    	for (Udata d :r.getRatedData(Uuser.list.get(userID-1)))
+		    	for (Udata d :r.getRatedData(Uuser.getUserByID(userID)))
 		    	{
 		    		String href = "href=\"" + page + "?movie=" + d.getItem().getId() + "\""; 
 		    		list += "<tr><th><a "+ href + ">" + d.getItem().getTitle() + "</a></th><th>" + d.getRating() + "</th></tr>\n";
@@ -109,7 +108,7 @@ public class Recommender extends HttpServlet {
 	    		movieID = -1;
 	    	}
 	    	Uitem item = Uitem.getItemByID(movieID);
-	    	Udata data = r.getDataRating(item, Uuser.getUserByID(userID-1));
+	    	Udata data = r.getDataRating(item, Uuser.getUserByID(userID));
 	    	String MovieInformations = new String();
 	    	MovieInformations += "<h2>" + item.getTitle() +"</h2>\n";
 	    	MovieInformations += "<p>Title: "+item.getTitle() +"</p>\n";
@@ -120,8 +119,8 @@ public class Recommender extends HttpServlet {
 	    	if(parameters.containsKey("rating")){
 	    		int mynewrating = Integer.parseInt(request.getParameter("rating"));
 	    		if(data == null){
-	    			Udata.add(Uuser.getUserByID(userID-1), item, mynewrating, (int)(System.currentTimeMillis() / 1000L));
-	    			data = r.getDataRating(item, Uuser.getUserByID(userID-1));
+	    			Udata.add(Uuser.getUserByID(userID), item, mynewrating, (int)(System.currentTimeMillis() / 1000L));
+	    			data = r.getDataRating(item, Uuser.getUserByID(userID));
 	    		}else{
 	    			data.setRating(mynewrating);
 	    		}
@@ -158,7 +157,7 @@ public class Recommender extends HttpServlet {
 	    	nextDestination = "/Movie.jsp";
 	    	
 	    }else if(parameters.containsKey("predict")){
-	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.list.get(userID-1), similarUserList);
+	    	ArrayList<RelevantRatedItemWeigth> tmp =  r.getRelevantItems(Uuser.getUserByID(userID), similarUserList);
 	    	String page = request.getRequestURL().toString();
 	    	String list = "<tr><th>movie</th><th>predicted rating<tr></tr>";
 			for (RelevantRatedItemWeigth ruitem : tmp) {
