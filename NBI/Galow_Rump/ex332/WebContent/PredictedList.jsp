@@ -9,7 +9,9 @@
 <body>
 
 <h1>List of movies they are recommended for User: ${userid}</h1>
-
+<a href="javascript:history.back()">back</a>
+<a href="/ex332/Recommender?movies">Movielist</a>
+<a href="/ex332/Recommender?switchUser=6">switch to user 6</a>
 <table>
 ${list}
 </table>

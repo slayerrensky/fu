@@ -10,6 +10,7 @@
 	<h1>UserID: ${userid}</h1>
 	<h3>age: ${age}; sex: ${sex}; zipcode: ${zipcode}; job: ${occupations}</h3>
 	<h3>My rated movies:</h3>
+	 <a href="javascript:history.back()">back</a>
 	 <a href="/ex332/Recommender?movies">Movielist</a>
 	 <a href="/ex332/Recommender?predict">Movies i could also like</a>
 	<table>

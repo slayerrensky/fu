@@ -9,7 +9,8 @@
 <body>
 
 <h1>List of movies</h1>
-
+<a href="javascript:history.back()">back</a>
+<a href="/ex332/Recommender?switchUser=6">switch to user 6</a>
 <ul>
 ${list}
 </ul>

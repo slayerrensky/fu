@@ -9,7 +9,7 @@
 <body>
 
 ${MovieInformations}
-
+<a href="javascript:history.back()">back</a>
 <form action="/ex332/Recommender">
   <p>Rating:</p>
   <p>
