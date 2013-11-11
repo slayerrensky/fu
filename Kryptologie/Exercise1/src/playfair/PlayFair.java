@@ -59,11 +59,24 @@ public class PlayFair {
 		
 		for (int i = 0; i < split.length; i++) {
 
-			chiffre += getCryptLetters(key, split[i]) + " ";
+			chiffre += getCryptLetters(key, split[i], true) + " ";
 		}
 		
 		
 		return chiffre;
+	}
+	
+	public static String decrypt(char[][] key, String chiffre) {
+		String clearText = "";
+		String[] split = chiffre.split(" ");
+		
+		for (int i = 0; i < split.length; i++) {
+
+			clearText += getCryptLetters(key, split[i], false) + " ";
+		}
+		
+		
+		return clearText;
 	}
 	
 	
@@ -83,7 +96,7 @@ public class PlayFair {
 	 *   		
 	 *   2 buchstande erst y dann x  
 	 */
-	protected static String getCryptLetters(char[][] key, String s) {
+	protected static String getCryptLetters(char[][] key, String s, boolean encrypt) {
 		char[] c = s.toCharArray();
 		
 		Dimension first = new Dimension(); 
@@ -106,11 +119,22 @@ public class PlayFair {
 		char[] out = new char[2];
 		
 		if(first.height == secound.height){  // y = y
+			if (encrypt){
 			out[0] =  key[first.height][(first.width + 1 ) % 5];
 			out[1] =  key[secound.height][(secound.width + 1 ) % 5];
+			}else{
+				out[0] =  key[first.height][(first.width - 1 ) % 5];
+				out[1] =  key[secound.height][(secound.width - 1 ) % 5];
+			}
 		} else if ( first.width == secound.width){ // x = x 
-			out[0] =  key[(first.height+ 1 ) % 5][first.width];
-			out[1] =  key[(secound.height+ 1 ) % 5][secound.width];
+			if (encrypt){
+				out[0] =  key[(first.height+ 1 ) % 5][first.width];
+				out[1] =  key[(secound.height+ 1 ) % 5][secound.width];
+			}else{
+				out[0] =  key[(first.height- 1 ) % 5][first.width];
+				out[1] =  key[(secound.height- 1 ) % 5][secound.width];
+			}
+
 		} else { //x != y Kreuzung
 			// Zeile beleibt gleich (y) height
 			// spalte des anderen 
