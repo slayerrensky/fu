@@ -91,7 +91,7 @@ public class PlayFair {
 	 *   x = x  Jewels den Rechten Platz also x + 1 % 5
 	 *   y = y  Jewels den unteren platz also y + 1 % 5 
 	 *   x != y Kreuzung
-	 *   	m (1,3)    -> _ bei den höheren also (3,2) 
+	 *   	m (1,3)    -> _ bei den hoeheren also (3,2) 
 	 *      k (2,0)    -> | bei den niedrigen also (1,0)  
 	 *   		
 	 *   2 buchstande erst y dann x  
