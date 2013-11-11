@@ -123,16 +123,17 @@ public class PlayFair {
 				out[0] =  key[first.height][(first.width + 1 ) % 5];
 				out[1] =  key[secound.height][(secound.width + 1 ) % 5];
 			}else{
-				out[0] =  key[first.height][Math.abs((first.width - 1 ) % 5)];
-				out[1] =  key[secound.height][Math.abs((secound.width - 1 ) % 5)];
+				
+				out[0] =  key[first.height][(first.width + 4 ) % 5];
+				out[1] =  key[secound.height][(secound.width + 4 ) % 5];
 			}
 		} else if ( first.width == secound.width){ // x = x 
 			if (encrypt){
 				out[0] =  key[(first.height+ 1 ) % 5][first.width];
 				out[1] =  key[(secound.height+ 1 ) % 5][secound.width];
 			}else{
-				out[0] =  key[Math.abs((first.height- 1 ) % 5)][first.width];
-				out[1] =  key[Math.abs((secound.height- 1 ) % 5)][secound.width];
+				out[0] =  key[(first.height + 4 ) % 5][first.width];
+				out[1] =  key[(secound.height + 4 ) % 5][secound.width];
 			}
 
 		} else { //x != y Kreuzung
