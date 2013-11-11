@@ -2,10 +2,11 @@ package playfair;
 
 public class PlayFair {
 
-	static char[] alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+	static char[] alphabet = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
 			'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
 			'W', 'X', 'Y', 'Z' };
-	
+	static final String ALPHABETSTRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 	public PlayFair() {
 	}
 
@@ -15,27 +16,27 @@ public class PlayFair {
 	 * @return die 5x5 Matrix
 	 */
 	public static char[][] generatePlayFairQuadrat(String key) {
-		if (key.length()>25) return null;
-		
-		char[][] pfQuadrat = new char[5][5];
+		if (key.length() > 25)
+			return null;
 
+		String alphabetToReduce = new String(ALPHABETSTRING).replaceAll("J", "");
+		char[][] pfQuadrat = new char[5][5];
 		char[] charArray = key.toUpperCase().toCharArray();
-		while (key != "") {
-			for (int x = 0; x < 5; x++) {
-				for (int y = 0; y < 5; y++) {
-					if (key.length() > (x*5 + y)) pfQuadrat[x][y] = charArray[(x*5 + y)];
-					else{
-						pfQuadrat[x][y] = getNext(charArray[(x*5 + y)]);
-					}
+		for (int x = 0; x < 5; x++) {
+			for (int y = 0; y < 5; y++) {
+				if (key.length() > (x * 5 + y)) {
+					pfQuadrat[x][y] = charArray[(x * 5 + y)];
+					alphabetToReduce = alphabetToReduce.replace(
+							String.valueOf(charArray[(x * 5 + y)]), "");
+				} else {
+					char c = alphabetToReduce.toCharArray()[0];
+					pfQuadrat[x][y] = c;
+					alphabetToReduce = alphabetToReduce.replace(String.valueOf(c), "");
 				}
 			}
 		}
-
-		return null;
-	}
-
-	private static char getNext(char c) {
-		return 0;
+		if (alphabetToReduce.length() != 0) return null;
+		return pfQuadrat;
 	}
 
 	/**

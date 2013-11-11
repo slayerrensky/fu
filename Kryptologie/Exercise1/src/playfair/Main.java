@@ -11,6 +11,18 @@ public class Main {
 		
 		char[][] key = PlayFair.generatePlayFairQuadrat(KEY);
 		
+		//Print PlayFair Matrix
+		//*******
+		System.out.println("5x5 PlayFair Matrix with Key: " + KEY);
+		for (int x = 0;x<key.length;x++){
+			for (int y = 0;y<key[0].length;y++){
+				System.out.print(key[x][y]);
+			}
+			System.out.println();
+		}
+		System.out.println();
+		//*******
+		
 		String chiffreText = PlayFair.encrypt(key, CLEAR);
 		
 		System.out.println("Encrypt: \n" + CLEAR);
