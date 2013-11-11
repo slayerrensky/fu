@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		
-		String[][] key = PlayFair.generatePlayFairQuadrat(KEY);
+		char[][] key = PlayFair.generatePlayFairQuadrat(KEY);
 		
 		String chiffreText = PlayFair.encrypt(key, CLEAR);
 		
