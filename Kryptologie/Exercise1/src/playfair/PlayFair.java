@@ -103,15 +103,15 @@ public class PlayFair {
 		Dimension secound = new Dimension(); 
 		
 		// find letter
-		for (int x = 0; x < key.length; x++) {
-			for (int y = 0; y < key[0].length; y++) {
-				if (c[0] == key[x][y]) {
-					first.height = y;
-					first.width = x;
+		for (int height = 0; height < key.length; height++) {
+			for (int width = 0; width < key[0].length; width++) {
+				if (c[0] == key[height][width]) {
+					first.width = width;  //key[x][y] = key [width][height]
+					first.height = height; 
 				}
-				if (c[1] == key[x][y]) {
-					secound.height = y;
-					secound.width = x;
+				if (c[1] == key[height][width]) {
+					secound.width = width;
+					secound.height = height;
 				}
 			}
 		}
@@ -120,29 +120,30 @@ public class PlayFair {
 		
 		if(first.height == secound.height){  // y = y
 			if (encrypt){
-			out[0] =  key[first.height][(first.width + 1 ) % 5];
-			out[1] =  key[secound.height][(secound.width + 1 ) % 5];
+				out[0] =  key[first.height][(first.width + 1 ) % 5];
+				out[1] =  key[secound.height][(secound.width + 1 ) % 5];
 			}else{
-				out[0] =  key[first.height][(first.width - 1 ) % 5];
-				out[1] =  key[secound.height][(secound.width - 1 ) % 5];
+				out[0] =  key[first.height][Math.abs((first.width - 1 ) % 5)];
+				out[1] =  key[secound.height][Math.abs((secound.width - 1 ) % 5)];
 			}
 		} else if ( first.width == secound.width){ // x = x 
 			if (encrypt){
 				out[0] =  key[(first.height+ 1 ) % 5][first.width];
 				out[1] =  key[(secound.height+ 1 ) % 5][secound.width];
 			}else{
-				out[0] =  key[(first.height- 1 ) % 5][first.width];
-				out[1] =  key[(secound.height- 1 ) % 5][secound.width];
+				out[0] =  key[Math.abs((first.height- 1 ) % 5)][first.width];
+				out[1] =  key[Math.abs((secound.height- 1 ) % 5)][secound.width];
 			}
 
 		} else { //x != y Kreuzung
 			// Zeile beleibt gleich (y) height
 			// spalte des anderen 
 			
-			out[0] = key[first.width][secound.height]; //key[x][y] = key [width][height]
-			out[1] = key[secound.width][first.height];
+			out[0] = key[first.height][secound.width];
+			out[1] = key[secound.height][first.width];
 		}
-
-		return String.valueOf(out[0]) + String.valueOf(out[1]); 
+		
+		//System.out.print(String.valueOf(out[0]) + String.valueOf(out[1]) + " ");
+		return String.valueOf(out[0]) + String.valueOf(out[1]);  
 	}
 }

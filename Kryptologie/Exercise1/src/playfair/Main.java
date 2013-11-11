@@ -24,9 +24,11 @@ public class Main {
 		//*******
 		
 		String chiffreText = PlayFair.encrypt(key, CLEAR);
-		String chiffreText2 = PlayFair.encrypt(key, CLEAR);
+		
 		System.out.println("Encrypt: \n" + CLEAR);
 		System.out.println("With Key: \n" + KEY);
 		System.out.println("Chiffre: \n" + chiffreText);
+		System.out.println("Decrypt: \n" + PlayFair.decrypt(key, chiffreText));
+		
 	}
 }
