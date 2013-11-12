@@ -48,15 +48,20 @@ public class Main {
 		wr.addWord(new CommonWord("DEATH",1,wordList.size()+1));
 		for(int i = 0;i<wordList.size();i++){
 			String removeDoubleLetters = PlayFair.removeDoubleLetters(wordList.get(i).getWord());
-			System.out.print("try: " +  wordList.get(i).getWord());
+			
 			char[][] generatePlayFairQuadrat = PlayFair.generatePlayFairQuadrat(removeDoubleLetters);
-			if (!removeDoubleLetters.equals(wordList.get(i).getWord()))
-				System.out.println(" -> " + removeDoubleLetters);
-			else System.out.println();
 			if (generatePlayFairQuadrat == null) continue;
 			String chiffreText = PlayFair.decrypt(generatePlayFairQuadrat, Chiffre);
 			int found = CommonWord.countWords(wordList, chiffreText);
-			System.out.println(i + " Uebereinstimmungen: " + found);
+			
+			//OUT
+			if (found > 10){
+				System.out.print(i + " try: " +  wordList.get(i).getWord());
+				if (!removeDoubleLetters.equals(wordList.get(i).getWord()))
+					System.out.println(" -> " + removeDoubleLetters);
+				else System.out.println();
+				 System.out.println(i + " Uebereinstimmungen: " + found);
+			}
 		}
 	}
 }
