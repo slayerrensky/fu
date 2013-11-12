@@ -51,6 +51,6 @@ public class Main {
 			if (decryptText.contains(cw.getWord()))
 				found++;
 		}
-		System.out.print("Übereinstümmungen: " + found); 
+		System.out.print("Uebereinstimmungen: " + found); 
 	}
 }
