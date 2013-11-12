@@ -47,6 +47,7 @@ public class Main {
 		for(int i = 0;i<wordList.size();i++){
 			System.out.println("try: " +  wordList.get(i).getWord());
 			char[][] generatePlayFairQuadrat = PlayFair.generatePlayFairQuadrat(wordList.get(i).getWord());
+			if (generatePlayFairQuadrat == null) continue;
 			String chiffreText = PlayFair.decrypt(generatePlayFairQuadrat, Chiffre);
 			int found = CommonWord.countWords(wordList, chiffreText);
 			System.out.println("Uebereinstimmungen: " + found);
