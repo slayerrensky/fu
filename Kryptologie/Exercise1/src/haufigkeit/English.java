@@ -2,6 +2,11 @@ package haufigkeit;
 
 import java.util.ArrayList;
 
+/**
+ * Source: http://www.mathe.tu-freiberg.de/~hebisch/cafe/kryptographie/bigramme.html
+ * @author René
+ *
+ */
 public class English {
 	
 	public ArrayList<DoubbleHaufigkeit> getDoubbleLetters(){
