@@ -1,5 +1,11 @@
 package playfair;
 
+import java.util.ArrayList;
+
+import sun.security.acl.WorldGroupImpl;
+import fu.commonWords.CommonWord;
+import fu.commonWords.WordReader;
+
 public class Main {
 
 //	static final String Chiffre = "OR NH RG YO SC DP TF NG AH HS KU BW UH OP OI NH DP BX RS EN FU GN CZ PO EN OR XH MO EN HN TO PI TF ZI RI QH OH OB QH XI KA PM RP HQ HN FB HG IY OB DN PB TL ND OR DV RH AH LF ZY AH XV FS ZK ND HB KF VD CN OR HQ DN UA GB GB GD EX FS RQ EN FB DN HQ IS BD UO CO BO UQ CZ ED TH NX TP RQ PF RP XG IX PR RS EN OR XH OI NG AH BS DY QP GN OR NH NX HN KC DW EN HN CK QH FV QY IU GH GX MS NI SM FO HX YL ZO BX QF DX ZO US WI DR AU XE DX XG ND OR HT VF RO NI QC DR OR BO BO HQ OP ZH KI PR TP GD OZ QD PO CP BK LG BK PD SD HQ ZQ EN IU ZH PL RP CP AH KM CQ NE DV BK BG BK QH MP EN NK ZM RO QU NH TE AH XR QL XV PC OR XE XH VA UN BF NX GB MS EN UQ GR RA CK NX DR VN RQ CB HN OU IP OT NH WX RQ TO PI PI UH OT BH HX RQ EN IT SB BE BO QC RA NX UA SB IB SR BH ME QU MS UQ HC RN DT VN HN XQ GV HT BI IF EK KA RS EN UA DR XD KX RQ UI QU FD DV BK BG BK QH MP EN NK ZM RO QU NH BK BG BK QH MP EN NK ZM RO QU NH";
@@ -35,5 +41,16 @@ public class Main {
 		System.out.println("Chiffre: \n" + chiffreText);
 		System.out.println("Decrypt: \n" + PlayFair.decrypt(key, chiffreText));
 		
+		WordReader wr = new WordReader("./1000Common words.txt");
+		ArrayList<CommonWord> wordList =  wr.readFile();
+		String decryptText = chiffreText; //PlayFair.decrypt(key, chiffreText);
+		decryptText = decryptText.replace(" ", "");
+		int found = 0;
+		for(CommonWord cw : wordList)
+		{
+			if (decryptText.contains(cw.getWord()))
+				found++;
+		}
+		System.out.print("Übereinstümmungen: " + found); 
 	}
 }
