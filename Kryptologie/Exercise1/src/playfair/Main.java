@@ -43,8 +43,7 @@ public class Main {
 		
 		WordReader wr = new WordReader("./1000Common words.txt");
 		ArrayList<CommonWord> wordList =  wr.readFile();
-		String decryptText = chiffreText; //PlayFair.decrypt(key, chiffreText);
-		decryptText = decryptText.replace(" ", "");
+		String decryptText = chiffreText.replace(" ", "");
 		int found = 0;
 		for(CommonWord cw : wordList)
 		{
