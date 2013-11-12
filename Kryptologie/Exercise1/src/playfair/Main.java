@@ -50,7 +50,7 @@ public class Main {
 			if (generatePlayFairQuadrat == null) continue;
 			String chiffreText = PlayFair.decrypt(generatePlayFairQuadrat, Chiffre);
 			int found = CommonWord.countWords(wordList, chiffreText);
-			System.out.println("Uebereinstimmungen: " + found);
+			System.out.println(i + " Uebereinstimmungen: " + found);
 		}
 	}
 }
