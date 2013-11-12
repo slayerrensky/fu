@@ -1,5 +1,7 @@
 package fu.commonWords;
 
+import java.util.ArrayList;
+
 public class CommonWord {
 
 	private String Word;
@@ -34,6 +36,16 @@ public class CommonWord {
 
 	public void setRank(int rank) {
 		Rank = rank;
+	}
+	
+	public static int countWords(ArrayList<CommonWord> wordList, String chiffreText){
+		String decryptText = chiffreText.replace(" ", "");
+		int found = 0;
+		for (CommonWord cw : wordList) {
+			if (decryptText.contains(cw.getWord()))
+				found++;
+		}
+		return found;
 	}
 	
 	

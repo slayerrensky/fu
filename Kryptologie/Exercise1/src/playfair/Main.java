@@ -44,12 +44,7 @@ public class Main {
 
 		WordReader wr = new WordReader("./1000Common words.txt");
 		ArrayList<CommonWord> wordList = wr.readFile();
-		String decryptText = chiffreText.replace(" ", "");
-		int found = 0;
-		for (CommonWord cw : wordList) {
-			if (decryptText.contains(cw.getWord()))
-				found++;
-		}
+		int found = CommonWord.countWords(wordList, chiffreText);
 		System.out.print("Uebereinstimmungen: " + found);
 	}
 }
