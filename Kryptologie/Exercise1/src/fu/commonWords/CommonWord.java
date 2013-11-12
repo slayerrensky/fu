@@ -43,7 +43,15 @@ public class CommonWord {
 		int found = 0;
 		for (CommonWord cw : wordList) {
 			if (decryptText.contains(cw.getWord()))
-				found++;
+			{
+				int index = 0;
+				while (index != -1)
+				{
+					index = decryptText.indexOf(cw.Word, index + cw.Word.length());
+					if (index != -1 )
+						found++;
+				}
+			}
 		}
 		return found;
 	}
