@@ -43,6 +43,15 @@ public class PlayFair {
 		if (alphabetToReduce.length() != 0) return null;
 		return pfQuadrat;
 	}
+	
+	public static String removeDoubleLetters(String text){
+		String newString = "";
+		for (int i = 0;i<text.length();i++){
+			String c = text.substring(i, i+1);
+			if (!newString.contains(c)) newString += c;
+		}
+		return newString;
+	}
 
 	/**
 	 * @param key
