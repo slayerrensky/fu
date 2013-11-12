@@ -45,18 +45,16 @@ public class CommonWord {
 			if (decryptText.contains(cw.getWord()))
 			{
 				int index = 0;
-				while (index != -1)
+				while (true)
 				{
-					index = decryptText.indexOf(cw.getWord(), index + cw.getWord().length());
-					if (index != -1 )
+					index = decryptText.indexOf(cw.getWord(), index);
+					if (index != -1 ){
 						found++;
+						index += cw.getWord().length();
+					}else break;
 				}
 			}
 		}
 		return found;
 	}
-	
-	
-	
-	
 }

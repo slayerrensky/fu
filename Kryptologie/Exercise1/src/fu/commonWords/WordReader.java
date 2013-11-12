@@ -42,7 +42,8 @@ public class WordReader {
 						WithoutSpaceStr.add(s);
 					}
 				}
-				list.add(new CommonWord(WithoutSpaceStr.get(1),
+				if (WithoutSpaceStr.get(1).length() > 4)
+				list.add(new CommonWord(WithoutSpaceStr.get(1).toUpperCase(),
 						Integer.parseInt(WithoutSpaceStr.get(2)), 
 						Integer.parseInt(WithoutSpaceStr.get(0))));
 			}
