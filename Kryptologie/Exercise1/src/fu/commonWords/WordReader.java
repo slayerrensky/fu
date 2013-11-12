@@ -58,4 +58,10 @@ public class WordReader {
 	{
 		return readFile(path);
 	}
+	
+	public void addWord(CommonWord w)
+	{
+		list.add(w);
+	}
+	
 }

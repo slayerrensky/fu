@@ -43,7 +43,9 @@ public class Main {
 //		System.out.println("Decrypt: \n" + PlayFair.decrypt(key, chiffreText));
 
 		WordReader wr = new WordReader("./1000Common words.txt");
+		
 		ArrayList<CommonWord> wordList = wr.readFile();
+		wr.addWord(new CommonWord("DEATH",1,wordList.size()+1));
 		for(int i = 0;i<wordList.size();i++){
 			System.out.println("try: " +  wordList.get(i).getWord());
 			char[][] generatePlayFairQuadrat = PlayFair.generatePlayFairQuadrat(wordList.get(i).getWord());

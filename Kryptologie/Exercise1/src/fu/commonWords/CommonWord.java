@@ -47,7 +47,7 @@ public class CommonWord {
 				int index = 0;
 				while (index != -1)
 				{
-					index = decryptText.indexOf(cw.Word, index + cw.Word.length());
+					index = decryptText.indexOf(cw.getWord(), index + cw.getWord().length());
 					if (index != -1 )
 						found++;
 				}
