@@ -1,7 +1,10 @@
 package playfair;
 
+import haufigkeit.Bigramme;
+
 import java.awt.Dimension;
 import java.awt.geom.Dimension2D;
+import java.util.ArrayList;
 
 import sun.org.mozilla.javascript.internal.ast.WithStatement;
 
@@ -42,6 +45,15 @@ public class PlayFair {
 		}
 		if (alphabetToReduce.length() != 0) return null;
 		return pfQuadrat;
+	}
+	
+	public static String removeDoubleLetters(String text){
+		String newString = "";
+		for (int i = 0;i<text.length();i++){
+			String c = text.substring(i, i+1);
+			if (!newString.contains(c)) newString += c;
+		}
+		return newString;
 	}
 
 	/**
@@ -146,5 +158,23 @@ public class PlayFair {
 		
 		//System.out.print(String.valueOf(out[0]) + String.valueOf(out[1]) + " ");
 		return String.valueOf(out[0]) + String.valueOf(out[1]);  
+	}
+	
+	public static ArrayList<Bigramme> getBigramms(String cypherText){
+		ArrayList<Bigramme> myList = new ArrayList<Bigramme>();
+		String[] split = cypherText.split(" ");
+		for(int i = 0;i<split.length;i++){
+			
+			boolean found = false;
+			for (int a = 0;a<myList.size();a++){
+				if (myList.get(a).letters.equals(split[i])){
+					myList.get(a).haufigkeit++;
+					found = true;
+					break;
+				}
+			}
+			if (!found) myList.add(new Bigramme(split[i], 1));
+		}
+		return myList;
 	}
 }

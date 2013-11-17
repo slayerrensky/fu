@@ -2,9 +2,14 @@ package haufigkeit;
 
 import java.util.ArrayList;
 
+/**
+ * Source: http://www.mathe.tu-freiberg.de/~hebisch/cafe/kryptographie/bigramme.html
+ * @author Rene
+ *
+ */
 public class English {
 	
-	public ArrayList<DoubbleHaufigkeit> getDoubbleLetters(){
+	public static ArrayList<DoubbleHaufigkeit> getDoubbleLetters(){
 		ArrayList<DoubbleHaufigkeit> dh = new ArrayList<DoubbleHaufigkeit>();
 		dh.add(new DoubbleHaufigkeit("LL",55));
 		dh.add(new DoubbleHaufigkeit("TT",53));
@@ -19,7 +24,7 @@ public class English {
 		return dh;
 	}
 	
-	public ArrayList<DoubbleHaufigkeit> getBigrammLetters(){
+	public static ArrayList<DoubbleHaufigkeit> getBigrammLetters(){
 		ArrayList<DoubbleHaufigkeit> b = new ArrayList<DoubbleHaufigkeit>();
 		b.add(new DoubbleHaufigkeit("TH",315));
 		b.add(new DoubbleHaufigkeit("HE",251));
@@ -43,10 +48,10 @@ public class English {
 		return b;
 	}
 	
-	// Häufige Bigramme mit seltenen Reversen ("Drehern") sind
+	// Haufige Bigramme mit seltenen Reversen ("Drehern") sind
 	// TH  HE  EA  ND  NT  HA  OU  NG  HI  EO  FT  SC  RS
 
-	// Dagegen treten die folgenden Bigramme fast gleich häufig mit ihren Reversen auf 
+	// Dagegen treten die folgenden Bigramme fast gleich haufig mit ihren Reversen auf 
 	// ER - RE,  ES - SE,  AN - NA,  TI - IT,  ON - NO,  IN - NI,  EN - NE,  AT - TA,  TE - ET,  OR - RO,  TO - OT,  AR - RA,  ST - TS,  IS - SI,  ED - DE,  OF - FO
 }
 
