@@ -1,5 +1,7 @@
 package beauford;
 
+import java.util.ArrayList;
+
 import alphabetic.Alphabetic;
 import alphabetic.LetterList;
 
@@ -37,5 +39,37 @@ public class Beauford {
 		list.sortByNumber();
 //		list.out();
 		list.printDistance();
+		
+		
+		// http://www.personal.psu.edu/users/m/r/mrk5094/Kasiski.html
+		
+		int kGV = 5;
+		char[][] kasiskiList = new char[kGV][(int)(CIPHER.length()/kGV)+1]; 
+ 		
+		
+		int i = 0;
+		for(char c : CIPHER.toCharArray())
+		{
+			kasiskiList[i%kGV][(int)(i/kGV)] = c;
+			i++;
+		}
+		
+		System.out.println(kasiskiList.length);
+		
+		ArrayList<String> kasiski = new ArrayList<String>(); 
+		for(i=0; i < kGV; i++)
+		{
+			String s = new String();
+			for (int j = 0; j < (int) (kasiskiList[0].length);j++)
+			{
+				s += String.valueOf(kasiskiList[i][j]);
+			}
+			kasiski.add(s);
+		}
+		
+		for(String s : kasiski)
+		{
+			System.out.println(s);
+		}
 	}
 }

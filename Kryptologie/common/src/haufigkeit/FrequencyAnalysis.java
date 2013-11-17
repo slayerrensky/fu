@@ -17,11 +17,11 @@ public class FrequencyAnalysis {
 		
 		for(int i= 0; i<=TEXT.length; i++)
 		{
-			if (fll)	
+				
 		}
 		
 		
-		return FrequencyLetters;
+		return null;
 	}
 	
 }
