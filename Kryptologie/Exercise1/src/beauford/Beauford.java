@@ -1,4 +1,4 @@
-package Beauford;
+package beauford;
 
 public class Beauford {
 
