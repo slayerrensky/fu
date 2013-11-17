@@ -57,6 +57,7 @@ public class Beauford {
 		
 		System.out.println(kasiskiList.length);
 		
+		// Listen zusammen basteln 2)
 		ArrayList<String> kasiski = new ArrayList<String>(); 
 		for(i=0; i < kGV; i++)
 		{
@@ -65,19 +66,59 @@ public class Beauford {
 			{
 				s += String.valueOf(kasiskiList[i][j]);
 			}
+			
+			
+			
+			// Austauschen der meist bentzten buchstaben durch e un t
+			LetterList l = Alphabetic.frequenceAnalyzer(s);
+			l.sortByNumber();
+			s = s.toLowerCase();
+			for (int j=0;j<5;j++)
+			{
+				System.out.print(l.get(j).getLetter() + "->" + l.get(j).getNumber() + " ");
+				
+			}
+			switch (i) {
+			case 1: // Zeile 1 köönte auch ein h als meist benutzen Buchstaben haben
+				s = s.replace((char)(l.get(0).getLetter() + 32), 'H');
+				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
+				//s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
+				break;
+
+			default:
+				s = s.replace((char)(l.get(0).getLetter() + 32), 'E');
+				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
+				s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
+				break;
+			}
+			
+			System.out.println(" " + s);
+
+			
 			kasiski.add(s);
 		}
 		
-		for(String s : kasiski)
+		// zurück formen
+		
+		String out = new String();
+		for (i = 0; i< (int)(CIPHER.length()/5+1); i++)
 		{
-			System.out.println(s);
-			LetterList l = Alphabetic.frequenceAnalyzer(s);
-			l.sortByNumber();
-			for (i = 0; i <= 5; i++)
-			{
-				System.out.print(l.get(i).getLetter() + "->" + l.get(i).getNumber() + " ");
-			}
-			System.out.println();
+			int j = 0;
+			out += kasiski.get(j++).substring(i,i+1);
+			out += kasiski.get(j++).substring(i,i+1);
+			out += kasiski.get(j++).substring(i,i+1);
+			out += kasiski.get(j++).substring(i,i+1);
+			out += kasiski.get(j++).substring(i,i+1);
 		}
+		
+		int offset = 60;
+		for (i = 0; i< out.length(); i+=offset){
+			if (offset < out.length()-i)
+				System.out.println(out.substring(i,i+offset));
+			else 
+				System.out.println(out.substring(i,out.length()));
+		}
+		
+		// vielleicht könnte man mit den most common words etwas entwickeln was diese mit den text vergleicht.
 	}
 }
