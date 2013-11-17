@@ -1,9 +1,5 @@
 package alphabetic;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Alphabetic {
 	public static char[] alphabet = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -23,25 +19,32 @@ public class Alphabetic {
 		return alphabet[index];
 	}
 
-	public static int[] frequenceAnalyzer(String str) {
+	public static LetterList frequenceAnalyzer(String str) {
+		LetterList list = new LetterList();
+		list.setText(str);
+		list.fillWithAlphabeticLetters();
+		
 		str = str.toUpperCase();
-		int[] numbers = new int[alphabet.length];
 
 		char[] charArray = str.toCharArray();
 		for (int i = 0; i < charArray.length; i++) {
-			int index = getIndexOfLetter(charArray[i]);
-			numbers[index]++;
+			list.inkrementByLetter(charArray[i]);
 		}
-		return numbers;
+		return list;
 	}
 
 	public static void printFrequentlyAnalytic(String str) {
-		int[] frequenceAnalyzer = Alphabetic.frequenceAnalyzer(str);
-		int sumOfLetters = str.length();
+		LetterList list = Alphabetic.frequenceAnalyzer(str);
+		printFrequentlyAnalytic(list);
+	}
+	
+	public static void printFrequentlyAnalytic(LetterList list) {
+		int sumOfLetters = list.getText().length();
 
-		for (int i = 0; i < frequenceAnalyzer.length; i++) {
-			System.out.printf("%c : %3d : %6.2f %% \n", alphabet[i],
-					frequenceAnalyzer[i], (double) frequenceAnalyzer[i]
+		for (int i = 0; i < list.size(); i++) {
+			LetterListElement letterListElement = list.get(i);
+			System.out.printf("%c : %3d : %6.2f %% \n", letterListElement.getLetter(),
+					letterListElement.getNumber(), (double) letterListElement.getNumber()
 							/ (double) sumOfLetters * 100);
 		}
 	}
