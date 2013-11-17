@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import alphabetic.Alphabetic;
 import alphabetic.LetterList;
 
+
 public class Beauford {
 	static String CIPHER = "MKKBPNRBPVNNKGBMKKMFUOKFBVTOFQZDDPPSZKOHNYHOBFELUEURGFGRKORLMRVKFSFKOANYHOPHNUFIBZWKGMKKLFOJPEGOJCAFTNHSIAVOUZQYHOIXFKAAREKWTUGVLTMZZEARMNHTDHGAGRYOAAFJBECNKOPFJQUZTDRTOCSKAHPJKKBPNDCOFSNUAPCYAQIXFNSGCPXSXUYABPNYJBFTKGASBZKZAXEINPFAWKBBNVLPDRDHZNDBLLNZAYIMKKPLNRZDPFAGFNURWZFAKGGTSOANMXZXSRBZVSCKRVKFSZDKHRKQOTOZOMFMNBZMRXWSGCTKSCN";
 
@@ -70,6 +71,13 @@ public class Beauford {
 		for(String s : kasiski)
 		{
 			System.out.println(s);
+			LetterList l = Alphabetic.frequenceAnalyzer(s);
+			l.sortByNumber();
+			for (i = 0; i <= 5; i++)
+			{
+				System.out.print(l.get(i).getLetter() + "->" + l.get(i).getNumber() + " ");
+			}
+			System.out.println();
 		}
 	}
 }
