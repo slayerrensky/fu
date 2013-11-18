@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import alphabetic.Alphabetic;
 import alphabetic.LetterList;
 
-
 public class Beauford {
 	static String CIPHER = "MKKBPNRBPVNNKGBMKKMFUOKFBVTOFQZDDPPSZKOHNYHOBFELUEURGFGRKORLMRVKFSFKOANYHOPHNUFIBZWKGMKKLFOJPEGOJCAFTNHSIAVOUZQYHOIXFKAAREKWTUGVLTMZZEARMNHTDHGAGRYOAAFJBECNKOPFJQUZTDRTOCSKAHPJKKBPNDCOFSNUAPCYAQIXFNSGCPXSXUYABPNYJBFTKGASBZKZAXEINPFAWKBBNVLPDRDHZNDBLLNZAYIMKKPLNRZDPFAGFNURWZFAKGGTSOANMXZXSRBZVSCKRVKFSZDKHRKQOTOZOMFMNBZMRXWSGCTKSCN";
 
@@ -16,8 +15,8 @@ public class Beauford {
 	}
 
 	public static void main(String[] args) {
-//		Beauford.kasiskiTest();
-		a();
+		// Beauford.kasiskiTest();
+		analyticAtack();
 	}
 
 	public static void kasiskiTest() {
@@ -29,105 +28,138 @@ public class Beauford {
 
 			for (int i = 0; i < CIPHER.length() - b; i++) {
 				subString = CIPHER.substring(i, i + b);
-				if (!list.inkrementByString(subString,i)){
-					StringListElement stringListElement = new StringListElement(subString, 1);
+				if (!list.inkrementByString(subString, i)) {
+					StringListElement stringListElement = new StringListElement(
+							subString, 1);
 					stringListElement.getDistance().add(i);
 					list.add(stringListElement);
 				}
-					
+
 			}
 		}
 		list.removeUnrelevantsObjects();
 		list.sortByNumber();
-//		list.out();
+		// list.out();
 		list.printDistance();
-		
+
 	}
-	
-	public static char[][] permutateForAnalytic(int kGV){
-		char[][] kasiskiList = new char[kGV][(int)(CIPHER.length()/kGV)+1]; 
- 		
-		
+
+	public static char[][] permutateForAnalytic(int kGV) {
+		char[][] kasiskiList = new char[kGV][0];
+		int ueberschuss = CIPHER.length() % kGV;
+		for (int i = 0; i < kGV; i++) {
+			int lenght = CIPHER.length() / kGV;
+			if (i < ueberschuss)
+				lenght++;
+			kasiskiList[i] = new char[lenght];
+		}
+
 		int i = 0;
-		for(char c : CIPHER.toCharArray())
-		{
-			kasiskiList[i%kGV][(int)(i/kGV)] = c;
+		for (char c : CIPHER.toCharArray()) {
+			kasiskiList[i % kGV][(int) (i / kGV)] = c;
 			i++;
 		}
 		return kasiskiList;
 	}
-	
-	public static void a(){
-		// http://www.personal.psu.edu/users/m/r/mrk5094/Kasiski.html
-		int kGV = 5;
-		char[][] kasiskiList = permutateForAnalytic(kGV);
-		
-		// Listen zusammen basteln 2)
-		ArrayList<String> kasiski = new ArrayList<String>(); 
-		for(int i=0; i < kGV; i++)
-		{
-			String s = new String();
-			for (int j = 0; j < (int) (kasiskiList[0].length);j++)
-			{
-				s += String.valueOf(kasiskiList[i][j]);
-			}
-			
-			
-			
-			// Austauschen der meist bentzten buchstaben durch e un t
-			LetterList l = Alphabetic.frequenceAnalyzer(s);
-			l.sortByNumber();
-			s = s.toLowerCase();
-			for (int j=0;j<5;j++)
-			{
-				System.out.print(l.get(j).getLetter() + "->" + l.get(j).getNumber() + " ");
-				
-			}
-			switch (i) {
-			case 1: // Zeile 2 koennte auch ein h als meist benutzen Buchstaben haben
-				s = s.replace((char)(l.get(0).getLetter() + 32), 'H');
-				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
-				//s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
-				break;
-//			case 3: 
-//				s = s.replace('m', 'R'); // Zeile 4 angenommen das m zu R getauscht wird
-//				s = s.replace((char)(l.get(0).getLetter() + 32), 'E');
-//				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
-//				s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
-//				break;
-			default:
-				s = s.replace((char)(l.get(0).getLetter() + 32), 'E');
-				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
-				s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
-				break;
-			}
-			
-			System.out.println(" " + s);
 
-			
-			kasiski.add(s);
-		}
-		
-		// zurueck formen
-		
-		String out = new String();
-		for (int i = 0; i< (int)(CIPHER.length()/kGV+1); i++)
-		{
-			for (int j=0;j<kGV;j++){
-				out += kasiski.get(j).substring(i,i+1);
+	public static void substituateLetter(ArrayList<String> list) {
+
+		LetterList l = Alphabetic.frequenceAnalyzer(list.get(0));
+		String s = "";
+		for (int i = 0; i < list.size(); i++) {
+			s = list.get(i);
+			switch (i) {
+			case 1: // Zeile 2 koennte auch ein h als meist benutzen Buchstaben
+					// haben
+				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
+				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				// s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
+				break;
+			case 3:
+				// s = s.replace('m', 'R'); // Zeile 4 angenommen das m zu R
+				// s = s.replace((char) (l.get(0).getLetter() + 32), 'E');
+				// s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				// s = s.replace((char) (l.get(2).getLetter() + 32), 'A');
+				break;
+			default:
+				s = s.replace((char) (l.get(0).getLetter() + 32), 'E');
+				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				s = s.replace((char) (l.get(2).getLetter() + 32), 'A');
+				break;
 			}
 		}
+	}
+
+	public static void analyticAtack() {
+		// http://www.personal.psu.edu/users/m/r/mrk5094/Kasiski.html
+
+		// Assumption: Aus Beauford.kasiskiTest() koennen wir die Annahme
+		// treffen, dass die Schluessellaenge 5 betraegt
+		int kGV = 5;
+
+		// Fuer die Frequenzanalyse muessen wir Buchstaben mit dem gleichen
+		// Zeichen des Schluessels gemeinsa betrachten -> Permutation
 		
-		System.out.println();
-		
-		int offset = 60;
-		for (int i = 0; i< out.length(); i+=offset){
-			if (offset < out.length()-i)
-				System.out.println(out.substring(i,i+offset));
-			else 
-				System.out.println(out.substring(i,out.length()));
+		//Permutation
+		ArrayList<String> kasiskiList = convertToFrequentAnalyticList(kGV);
+		//Buchstaben ersetzen
+		substituateLetter(kasiskiList);
+		//Permutation zurueck
+		String out = convertToNormalList(kasiskiList);
+
+		// Print
+		String outText = "";
+		int step = 10;
+		for (int i = 0; i < out.length(); i += step) {
+			if (i != 0 && i % 80 == 0)
+				outText += "\n";
+			else if (i != 0)
+				outText += ",";
+			if (out.length() < i + step)
+				outText += out.substring(i, out.length());
+			else
+				outText += out.substring(i, i + step);
+
+		}
+		System.out.println(outText);
+	}
+
+	private static String convertToNormalList(
+			ArrayList<String> kasiskiList) {
+		String out = new String();
+		for (int i = 0; i < (int) (CIPHER.length() / (kasiskiList.size())) + 1; i++) {
+			for (int j = 0; j < kasiskiList.size(); j++) {
+				if (kasiskiList.size() > j
+						&& kasiskiList.get(j).length() >= i + 1)
+					out += kasiskiList.get(j).substring(i, i + 1);
+			}
+		}
+		return out;
+	}
+
+	private static ArrayList<String> convertToFrequentAnalyticList(int kGV) {
+		char[][] kasiskiArray = new char[kGV][0];
+		int ueberschuss = CIPHER.length() % kGV;
+		for (int i = 0; i < kGV; i++) {
+			int lenght = CIPHER.length() / kGV;
+			if (i < ueberschuss)
+				lenght++;
+			kasiskiArray[i] = new char[lenght];
+		}
+
+		char[] charArray = CIPHER.toCharArray();
+		for (int i = 0;i<charArray.length;i++){
+			kasiskiArray[i % kGV][(int) (i / kGV)] = charArray[i];
 		}
 		
-		// vielleicht koennte man mit den most common words etwas entwickeln was diese mit den text vergleicht.
+		ArrayList<String> kasiskiList = new ArrayList<String>();
+		for (int i = 0; i < kasiskiArray.length; i++) {
+			String s = new String();
+			for (int j = 0; j < kasiskiArray[i].length; j++) {
+				s += String.valueOf(kasiskiArray[i][j]);
+			}
+			kasiskiList.add(s);
+		}
+		return kasiskiList;
 	}
 }
