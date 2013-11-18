@@ -35,13 +35,14 @@ public class Alphabetic {
 
 	public static void printFrequentlyAnalytic(String str) {
 		LetterList list = Alphabetic.frequenceAnalyzer(str);
-		printFrequentlyAnalytic(list);
+		printFrequentlyAnalytic(list, Integer.MAX_VALUE);
 	}
 	
-	public static void printFrequentlyAnalytic(LetterList list) {
+	public static void printFrequentlyAnalytic(LetterList list, int n) {
 		int sumOfLetters = list.getText().length();
 
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < n; i++) {
+			if (n == list.size()) break;
 			LetterListElement letterListElement = list.get(i);
 			System.out.printf("%c : %3d : %6.2f %% \n", letterListElement.getLetter(),
 					letterListElement.getNumber(), (double) letterListElement.getNumber()

@@ -11,7 +11,7 @@ public class Beauford {
 	public static void calc() {
 		LetterList frequenceAnalyzer = Alphabetic.frequenceAnalyzer(CIPHER);
 		frequenceAnalyzer.sortByNumber();
-		Alphabetic.printFrequentlyAnalytic(frequenceAnalyzer);
+		Alphabetic.printFrequentlyAnalytic(frequenceAnalyzer,Integer.MAX_VALUE);
 	}
 
 	public static void main(String[] args) {
@@ -64,22 +64,34 @@ public class Beauford {
 
 	public static void substituateLetter(ArrayList<String> list) {
 
-		LetterList l = Alphabetic.frequenceAnalyzer(list.get(0));
 		String s = "";
+		LetterList l = null;
 		for (int i = 0; i < list.size(); i++) {
+			l = Alphabetic.frequenceAnalyzer(list.get(i));
+			l.sortByNumber();
+			
+			//Ausgabe der Hauefigkeitsverteilung
+			System.out.println("Hauefigkeit der " + i+1 + "ten Buchstaben");
+			Alphabetic.printFrequentlyAnalytic(l, 5);
+			System.out.println();
+			
 			s = list.get(i);
 			switch (i) {
-			case 1: // Zeile 2 koennte auch ein h als meist benutzen Buchstaben
-					// haben
+			case 0:
 				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
 				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
-				// s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
+				break;
+			case 1:
+				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
+				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				break;
+			case 2:
+				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
+				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
 				break;
 			case 3:
-				// s = s.replace('m', 'R'); // Zeile 4 angenommen das m zu R
-				// s = s.replace((char) (l.get(0).getLetter() + 32), 'E');
-				// s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
-				// s = s.replace((char) (l.get(2).getLetter() + 32), 'A');
+				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
+				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
 				break;
 			default:
 				s = s.replace((char) (l.get(0).getLetter() + 32), 'E');
@@ -100,6 +112,10 @@ public class Beauford {
 		// Fuer die Frequenzanalyse muessen wir Buchstaben mit dem gleichen
 		// Zeichen des Schluessels gemeinsa betrachten -> Permutation
 		
+		//Vorher - Print
+		analyticPrint(CIPHER);
+		System.out.println();
+		
 		//Permutation
 		ArrayList<String> kasiskiList = convertToFrequentAnalyticList(kGV);
 		//Buchstaben ersetzen
@@ -107,7 +123,12 @@ public class Beauford {
 		//Permutation zurueck
 		String out = convertToNormalList(kasiskiList);
 
-		// Print
+		//Nachher - Print
+		System.out.println();
+		analyticPrint(out);
+	}
+	
+	private static void analyticPrint(String out){
 		String outText = "";
 		int step = 10;
 		for (int i = 0; i < out.length(); i += step) {
