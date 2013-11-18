@@ -4,6 +4,8 @@ import haufigkeit.English;
 
 import java.util.ArrayList;
 
+import javax.crypto.Cipher;
+
 import alphabetic.Alphabetic;
 import alphabetic.LetterList;
 
@@ -20,6 +22,41 @@ public class Beauford {
 	public static void main(String[] args) {
 		// Beauford.kasiskiTest();
 		analyticAtack();
+		
+//		String key = "A";
+//		String distanceWord = getDistanceWord("MKK", "THE", "-");
+//		System.out.println(distanceWord);
+//		decode(key);
+	}
+	
+	private static String getDistanceWord(String a, String b, String op){
+		if (a.length() != b.length()) return null;
+		char[] aArray = a.toUpperCase().toCharArray();
+		char[] bArray = b.toUpperCase().toCharArray();
+		
+		String s = "";
+		for (int i = 0;i<aArray.length;i++){
+			int indexOfLetter_a = Alphabetic.getIndexOfLetter(aArray[i]);
+			int indexOfLetter_b = Alphabetic.getIndexOfLetter(bArray[i]);
+			int goalLetter = 0;
+			if (op.endsWith("-")){
+				if (indexOfLetter_a - indexOfLetter_b < 0) indexOfLetter_a += Alphabetic.ALPHABET_STRING.length();
+				goalLetter = indexOfLetter_a - indexOfLetter_b;
+			}else{
+				goalLetter = indexOfLetter_a + indexOfLetter_b;
+			}
+			goalLetter = goalLetter % Alphabetic.ALPHABET_STRING.length();
+			s+=Alphabetic.getLetterOfIndex(goalLetter);
+		}
+		return s;
+	}
+
+	private static void decode(String key) {
+		char[] keyArray = key.toCharArray();
+		char[] cipherArray = CIPHER.toCharArray();
+		for (int i = 0;i<cipherArray.length;i++){
+			System.out.print(getDistanceWord(""+cipherArray[i], ""+keyArray[i%key.length()], "-"));
+		}
 	}
 
 	public static void kasiskiTest() {
@@ -66,7 +103,7 @@ public class Beauford {
 	}
 
 	public static ArrayList<String> substituateLetter(ArrayList<String> list,
-			ArrayList<LetterList> letterList, boolean print) {
+			ArrayList<LetterList> letterList, boolean print, int defaultDeep) {
 
 		ArrayList<String> substituatetList = new ArrayList<String>();
 		String s = "";
@@ -75,22 +112,18 @@ public class Beauford {
 
 			s = list.get(i);
 			ArrayList<Character> commonLetters = English.getCommonLetters();
-			for (int x = 0;x<commonLetters.size();x++){
-				s = s.replaceAll("" + (l.get(x).getLetter()), "!" + (int)commonLetters.get(x) + "!");
-			}
-			for (int x = 0;x<commonLetters.size();x++){
-				s = s.replaceAll( "!" + (int)commonLetters.get(x) + "!", "" + (commonLetters.get(x)));
-			}
 
 			switch (i) {
 			case 0:
 				// s = s.replace((char) (l.get(0).getLetter()), '...');
 				break;
 			case 1:
-				// s = s.replace((char) (l.get(0).getLetter()), '...');
+				l.removeLetter('K');
+				s = s.replaceAll("K", "!" + (int) 'H' + "!");
 				break;
 			case 2:
-				// s = s.replace((char) (l.get(0).getLetter()), '...');
+				l.removeLetter('B');
+				s = s.replaceAll("B", "!" + (int) 'E' + "!");
 				break;
 			case 3:
 				// s = s.replace((char) (l.get(0).getLetter()), '...');
@@ -101,6 +134,27 @@ public class Beauford {
 			default:
 				break;
 			}
+
+			// Automatische Substitution
+			boolean automaticSubstituation = true;
+			if (defaultDeep > l.size())
+				defaultDeep = l.size();
+			if (automaticSubstituation) {
+				for (int x = 0; x < defaultDeep; x++) {
+					s = s.replaceAll("" + (l.get(x).getLetter()), "!"
+							+ (int) commonLetters.get(x) + "!");
+				}
+				for (int x = 0; x < defaultDeep; x++) {
+					s = s.replaceAll("!" + (int) commonLetters.get(x) + "!", ""
+							+ (commonLetters.get(x)));
+				}
+			} else {
+				for (int x = 0; x < defaultDeep; x++) {
+					s = s.replaceAll("!" + (int) commonLetters.get(x) + "!", ""
+							+ (commonLetters.get(x)));
+				}
+			}
+
 			substituatetList.add(s);
 		}
 		return substituatetList;
@@ -109,6 +163,7 @@ public class Beauford {
 	public static void analyticAtack() {
 		// http://www.personal.psu.edu/users/m/r/mrk5094/Kasiski.html
 
+		int deepNumberForSubstutuate = Integer.MAX_VALUE;
 		// Assumption: Aus Beauford.kasiskiTest() koennen wir die Annahme
 		// treffen, dass die Schluessellaenge 5 betraegt
 		int kGV = 5;
@@ -122,7 +177,7 @@ public class Beauford {
 		ArrayList<LetterList> frequentList = frequentAnalytic(kasiskiList, true);
 		// Buchstaben ersetzen
 		ArrayList<String> substituateLetter = substituateLetter(kasiskiList,
-				frequentList, true);
+				frequentList, true, deepNumberForSubstutuate);
 		// Permutation zurueck
 		String out = convertToNormalList(substituateLetter);
 

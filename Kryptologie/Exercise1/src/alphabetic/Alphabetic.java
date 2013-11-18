@@ -42,7 +42,7 @@ public class Alphabetic {
 		int sumOfLetters = list.getText().length();
 
 		for (int i = 0; i < n; i++) {
-			if (n == list.size()) break;
+			if (i == list.size()) break;
 			LetterListElement letterListElement = list.get(i);
 			System.out.printf("%c : %3d : %6.2f %% \n", letterListElement.getLetter(),
 					letterListElement.getNumber(), (double) letterListElement.getNumber()

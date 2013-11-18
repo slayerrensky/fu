@@ -79,6 +79,14 @@ public class English {
 		return b;
 	}
 	
+	public static int getIndexOfFrequentlyLetter(char c){
+		ArrayList<Character> commonLetters = getCommonLetters();
+		for (int i = 0;i<commonLetters.size();i++){
+			if (commonLetters.get(i).equals(new Character(c))) return i;
+		}
+		return -1;
+	}
+	
 	
 	
 	// Haufige Bigramme mit seltenen Reversen ("Drehern") sind

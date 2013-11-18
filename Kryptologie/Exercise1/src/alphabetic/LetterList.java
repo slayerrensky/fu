@@ -52,4 +52,12 @@ public class LetterList extends ArrayList<LetterListElement>{
 			if (get(i).getLetter() == letter) get(i).setNumber(get(i).getNumber() + 1);
 		}
 	}
+	
+	public void removeLetter(char c){
+		for (int i = 0;i<size();i++){
+			if (get(i).getLetter() == c){
+				remove(i);
+			}
+		}
+	}
 }
