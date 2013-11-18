@@ -48,6 +48,39 @@ public class English {
 		return b;
 	}
 	
+	public static ArrayList<Character> getCommonLetters(){
+		ArrayList<Character> b = new ArrayList<Character>();
+		b.add(new Character('E'));
+		b.add(new Character('T'));
+		b.add(new Character('A'));
+		b.add(new Character('O'));
+		b.add(new Character('I'));
+		b.add(new Character('N'));
+		b.add(new Character('S'));
+		b.add(new Character('H'));
+		b.add(new Character('R'));
+		b.add(new Character('D'));
+		b.add(new Character('L'));
+		b.add(new Character('C'));
+		b.add(new Character('U'));
+		b.add(new Character('M'));
+		b.add(new Character('W'));
+		b.add(new Character('F'));
+		b.add(new Character('G'));
+		b.add(new Character('Y'));
+		b.add(new Character('P'));
+		b.add(new Character('B'));
+		b.add(new Character('V'));
+		b.add(new Character('K'));
+		b.add(new Character('J'));
+		b.add(new Character('X'));
+		b.add(new Character('Q'));
+		b.add(new Character('Z'));
+		return b;
+	}
+	
+	
+	
 	// Haufige Bigramme mit seltenen Reversen ("Drehern") sind
 	// TH  HE  EA  ND  NT  HA  OU  NG  HI  EO  FT  SC  RS
 

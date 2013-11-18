@@ -1,5 +1,7 @@
 package beauford;
 
+import haufigkeit.English;
+
 import java.util.ArrayList;
 
 import alphabetic.Alphabetic;
@@ -63,37 +65,45 @@ public class Beauford {
 		return kasiskiList;
 	}
 
-	public static void substituateLetter(ArrayList<String> list, ArrayList<LetterList> letterList,  boolean print) {
+	public static ArrayList<String> substituateLetter(ArrayList<String> list,
+			ArrayList<LetterList> letterList, boolean print) {
 
+		ArrayList<String> substituatetList = new ArrayList<String>();
 		String s = "";
 		for (int i = 0; i < list.size(); i++) {
 			LetterList l = letterList.get(i);
 
 			s = list.get(i);
+			ArrayList<Character> commonLetters = English.getCommonLetters();
+			for (int x = 0;x<commonLetters.size();x++){
+				s = s.replaceAll("" + (l.get(x).getLetter()), "!" + (int)commonLetters.get(x) + "!");
+			}
+			for (int x = 0;x<commonLetters.size();x++){
+				s = s.replaceAll( "!" + (int)commonLetters.get(x) + "!", "" + (commonLetters.get(x)));
+			}
+
 			switch (i) {
 			case 0:
-				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
-				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				// s = s.replace((char) (l.get(0).getLetter()), '...');
 				break;
 			case 1:
-				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
-				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				// s = s.replace((char) (l.get(0).getLetter()), '...');
 				break;
 			case 2:
-				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
-				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				// s = s.replace((char) (l.get(0).getLetter()), '...');
 				break;
 			case 3:
-				s = s.replace((char) (l.get(0).getLetter() + 32), 'H');
-				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
+				// s = s.replace((char) (l.get(0).getLetter()), '...');
+				break;
+			case 4:
+				// s = s.replace((char) (l.get(0).getLetter()), '...');
 				break;
 			default:
-				s = s.replace((char) (l.get(0).getLetter() + 32), 'E');
-				s = s.replace((char) (l.get(1).getLetter() + 32), 'T');
-				s = s.replace((char) (l.get(2).getLetter() + 32), 'A');
 				break;
 			}
+			substituatetList.add(s);
 		}
+		return substituatetList;
 	}
 
 	public static void analyticAtack() {
@@ -111,14 +121,15 @@ public class Beauford {
 		// Frequenzanalyse
 		ArrayList<LetterList> frequentList = frequentAnalytic(kasiskiList, true);
 		// Buchstaben ersetzen
-		substituateLetter(kasiskiList, frequentList,  true);
+		ArrayList<String> substituateLetter = substituateLetter(kasiskiList,
+				frequentList, true);
 		// Permutation zurueck
-		String out = convertToNormalList(kasiskiList);
+		String out = convertToNormalList(substituateLetter);
 
-		
-		//Ausgabe der Haufigkeiten
-		for (int i = 0;i<frequentList.size();i++){
-			System.out.println("Haufigkeiten der " + (i+1) + "ten Buchstaben");
+		// Ausgabe der Haufigkeiten
+		for (int i = 0; i < frequentList.size(); i++) {
+			System.out
+					.println("Haufigkeiten der " + (i + 1) + "ten Buchstaben");
 			Alphabetic.printFrequentlyAnalytic(frequentList.get(i), 5);
 			System.out.println();
 		}
