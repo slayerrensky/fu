@@ -79,12 +79,17 @@ public class Beauford {
 				
 			}
 			switch (i) {
-			case 1: // Zeile 1 köönte auch ein h als meist benutzen Buchstaben haben
+			case 1: // Zeile 2 könnte auch ein h als meist benutzen Buchstaben haben
 				s = s.replace((char)(l.get(0).getLetter() + 32), 'H');
 				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
 				//s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
 				break;
-
+//			case 3: 
+//				s = s.replace('m', 'R'); // Zeile 4 angenommen das m zu R getauscht wird
+//				s = s.replace((char)(l.get(0).getLetter() + 32), 'E');
+//				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
+//				s = s.replace((char)(l.get(2).getLetter() + 32), 'A');
+//				break;
 			default:
 				s = s.replace((char)(l.get(0).getLetter() + 32), 'E');
 				s = s.replace((char)(l.get(1).getLetter() + 32), 'T');
@@ -101,15 +106,14 @@ public class Beauford {
 		// zurück formen
 		
 		String out = new String();
-		for (i = 0; i< (int)(CIPHER.length()/5+1); i++)
+		for (i = 0; i< (int)(CIPHER.length()/kGV+1); i++)
 		{
-			int j = 0;
-			out += kasiski.get(j++).substring(i,i+1);
-			out += kasiski.get(j++).substring(i,i+1);
-			out += kasiski.get(j++).substring(i,i+1);
-			out += kasiski.get(j++).substring(i,i+1);
-			out += kasiski.get(j++).substring(i,i+1);
+			for (int j=0;j<kGV;j++){
+				out += kasiski.get(j).substring(i,i+1);
+			}
 		}
+		
+		System.out.println();
 		
 		int offset = 60;
 		for (i = 0; i< out.length(); i+=offset){
