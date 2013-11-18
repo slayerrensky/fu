@@ -11,7 +11,8 @@ public class Beauford {
 	public static void calc() {
 		LetterList frequenceAnalyzer = Alphabetic.frequenceAnalyzer(CIPHER);
 		frequenceAnalyzer.sortByNumber();
-		Alphabetic.printFrequentlyAnalytic(frequenceAnalyzer,Integer.MAX_VALUE);
+		Alphabetic
+				.printFrequentlyAnalytic(frequenceAnalyzer, Integer.MAX_VALUE);
 	}
 
 	public static void main(String[] args) {
@@ -62,19 +63,12 @@ public class Beauford {
 		return kasiskiList;
 	}
 
-	public static void substituateLetter(ArrayList<String> list) {
+	public static void substituateLetter(ArrayList<String> list, ArrayList<LetterList> letterList,  boolean print) {
 
 		String s = "";
-		LetterList l = null;
 		for (int i = 0; i < list.size(); i++) {
-			l = Alphabetic.frequenceAnalyzer(list.get(i));
-			l.sortByNumber();
-			
-			//Ausgabe der Hauefigkeitsverteilung
-			System.out.println("Hauefigkeit der " + i+1 + "ten Buchstaben");
-			Alphabetic.printFrequentlyAnalytic(l, 5);
-			System.out.println();
-			
+			LetterList l = letterList.get(i);
+
 			s = list.get(i);
 			switch (i) {
 			case 0:
@@ -111,24 +105,45 @@ public class Beauford {
 
 		// Fuer die Frequenzanalyse muessen wir Buchstaben mit dem gleichen
 		// Zeichen des Schluessels gemeinsa betrachten -> Permutation
-		
-		//Vorher - Print
-		analyticPrint(CIPHER);
-		System.out.println();
-		
-		//Permutation
+
+		// Permutation
 		ArrayList<String> kasiskiList = convertToFrequentAnalyticList(kGV);
-		//Buchstaben ersetzen
-		substituateLetter(kasiskiList);
-		//Permutation zurueck
+		// Frequenzanalyse
+		ArrayList<LetterList> frequentList = frequentAnalytic(kasiskiList, true);
+		// Buchstaben ersetzen
+		substituateLetter(kasiskiList, frequentList,  true);
+		// Permutation zurueck
 		String out = convertToNormalList(kasiskiList);
 
-		//Nachher - Print
+		
+		//Ausgabe der Haufigkeiten
+		for (int i = 0;i<frequentList.size();i++){
+			System.out.println("Haufigkeiten der " + (i+1) + "ten Buchstaben");
+			Alphabetic.printFrequentlyAnalytic(frequentList.get(i), 5);
+			System.out.println();
+		}
+		// Vorher - Print
+		analyticPrint(CIPHER);
+		System.out.println();
+
+		// Nachher - Print
 		System.out.println();
 		analyticPrint(out);
 	}
-	
-	private static void analyticPrint(String out){
+
+	private static ArrayList<LetterList> frequentAnalytic(
+			ArrayList<String> kasiskiList, boolean sort) {
+		ArrayList<LetterList> kasiskiListList = new ArrayList<LetterList>();
+		for (int i = 0; i < kasiskiList.size(); i++) {
+			LetterList l = Alphabetic.frequenceAnalyzer(kasiskiList.get(i));
+			if (sort)
+				l.sortByNumber();
+			kasiskiListList.add(l);
+		}
+		return kasiskiListList;
+	}
+
+	private static void analyticPrint(String out) {
 		String outText = "";
 		int step = 10;
 		for (int i = 0; i < out.length(); i += step) {
@@ -145,8 +160,7 @@ public class Beauford {
 		System.out.println(outText);
 	}
 
-	private static String convertToNormalList(
-			ArrayList<String> kasiskiList) {
+	private static String convertToNormalList(ArrayList<String> kasiskiList) {
 		String out = new String();
 		for (int i = 0; i < (int) (CIPHER.length() / (kasiskiList.size())) + 1; i++) {
 			for (int j = 0; j < kasiskiList.size(); j++) {
@@ -169,10 +183,10 @@ public class Beauford {
 		}
 
 		char[] charArray = CIPHER.toCharArray();
-		for (int i = 0;i<charArray.length;i++){
+		for (int i = 0; i < charArray.length; i++) {
 			kasiskiArray[i % kGV][(int) (i / kGV)] = charArray[i];
 		}
-		
+
 		ArrayList<String> kasiskiList = new ArrayList<String>();
 		for (int i = 0; i < kasiskiArray.length; i++) {
 			String s = new String();
