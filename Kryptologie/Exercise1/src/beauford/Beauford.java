@@ -1,5 +1,7 @@
 package beauford;
 
+import fu.commonWords.CommonWord;
+import fu.commonWords.WordReader;
 import haufigkeit.English;
 
 import java.util.ArrayList;
@@ -21,43 +23,63 @@ public class Beauford {
 
 	public static void main(String[] args) {
 		// Beauford.kasiskiTest();
-		analyticAtack();
-		
-		String distanceWord = getDistanceWord("MKK", "THE", "-");
-		System.out.println(distanceWord);
-		decode(distanceWord);
+		// analyticAtack();
+
+		// bruteForce();
+		// Key ist frost!
+		String decode = decode(CIPHER, "FROST");
+		System.out.println(decode);
 	}
-	
-	private static String getDistanceWord(String a, String b, String op){
-		if (a.length() != b.length()) return null;
+
+	private static void bruteForce() {
+		String key = "FRO";// decode("MKK", "THE");
+		WordReader wr = new WordReader("./5000Common words.txt");
+		ArrayList<CommonWord> wordList = wr.readFile();
+
+		for (int i = 0; i < 25; i++) {
+			for (int j = 0; j < 25; j++) {
+				key = "FRO" + Alphabetic.getLetterOfIndex(i) + ""
+						+ Alphabetic.getLetterOfIndex(j);
+				String decode = decode(CIPHER, key);
+				// analyticPrint(decode);
+				int countWords = CommonWord.countWords(wordList, decode);
+				if (countWords > 20) {
+					System.out.println(key);
+					System.out.println(countWords);
+					System.out.println(decode);
+				}
+			}
+		}
+	}
+
+	private static String getDistanceWord(String a, String b) {
+		if (a.length() != b.length())
+			return null;
 		char[] aArray = a.toUpperCase().toCharArray();
 		char[] bArray = b.toUpperCase().toCharArray();
-		
 		String s = "";
-		for (int i = 0;i<aArray.length;i++){
+		for (int i = 0; i < aArray.length; i++) {
 			int indexOfLetter_a = Alphabetic.getIndexOfLetter(aArray[i]);
 			int indexOfLetter_b = Alphabetic.getIndexOfLetter(bArray[i]);
 			int goalLetter = 0;
-			if (op.endsWith("-")){
-				if (indexOfLetter_a - indexOfLetter_b < 0) indexOfLetter_a += Alphabetic.ALPHABET_STRING.length();
-				goalLetter = indexOfLetter_a - indexOfLetter_b;
-			}else{
-				goalLetter = indexOfLetter_a + indexOfLetter_b;
-			}
-			goalLetter = goalLetter % Alphabetic.ALPHABET_STRING.length();
-			s+=Alphabetic.getLetterOfIndex(goalLetter);
+			goalLetter = Math.abs(indexOfLetter_a - indexOfLetter_b);
+
+			s += Alphabetic.getLetterOfIndex(goalLetter);
 		}
 		return s;
 	}
 
-	private static void decode(String key) {
-		String s = "";
-		char[] keyArray = key.toCharArray();
-		char[] cipherArray = CIPHER.toCharArray();
-		for (int i = 0;i<cipherArray.length;i++){
-			s += getDistanceWord(""+cipherArray[i], ""+keyArray[i%key.length()], "-");
+	public static String decode(String cipherText, String key) {
+		char[] KEY = key.toLowerCase().toCharArray();
+		char[] CIPHERTEXT = cipherText.toLowerCase().toCharArray();
+		int i = 0;
+		String cipher = new String();
+		for (char c : CIPHERTEXT) {
+			int n = (((int) KEY[i % key.length()] - (int) c) + 26) % 26;
+			cipher += String.valueOf((char) (n + 97));
+			i++;
 		}
-		analyticPrint(s);
+		return cipher.toUpperCase();
 	}
 
 	public static void kasiskiTest() {
