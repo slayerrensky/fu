@@ -23,10 +23,9 @@ public class Beauford {
 		// Beauford.kasiskiTest();
 		analyticAtack();
 		
-//		String key = "A";
-//		String distanceWord = getDistanceWord("MKK", "THE", "-");
-//		System.out.println(distanceWord);
-//		decode(key);
+		String distanceWord = getDistanceWord("MKK", "THE", "-");
+		System.out.println(distanceWord);
+		decode(distanceWord);
 	}
 	
 	private static String getDistanceWord(String a, String b, String op){
@@ -52,11 +51,13 @@ public class Beauford {
 	}
 
 	private static void decode(String key) {
+		String s = "";
 		char[] keyArray = key.toCharArray();
 		char[] cipherArray = CIPHER.toCharArray();
 		for (int i = 0;i<cipherArray.length;i++){
-			System.out.print(getDistanceWord(""+cipherArray[i], ""+keyArray[i%key.length()], "-"));
+			s += getDistanceWord(""+cipherArray[i], ""+keyArray[i%key.length()], "-");
 		}
+		analyticPrint(s);
 	}
 
 	public static void kasiskiTest() {
