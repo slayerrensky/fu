@@ -58,8 +58,10 @@ public class TheCrawler extends HttpServlet {
 		Crawler c = new Crawler();
 		String destSite = "leer";
 		Map parameters = request.getParameterMap();
-	    if (parameters.containsKey("search") && (request.getParameter("search") == "crawl") && parameters.containsKey("query")){
-	    	
+	    if (parameters.containsKey("search") && 
+	    		(request.getParameter("search") == "crawl") && 
+	    		parameters.containsKey("query"))
+	    {	
 	    	destSite = request.getParameter("query");
 	    	System.out.println("Begin to crawl: " + destSite);
 	    	request.setAttribute("desti",request.getParameter("query"));
@@ -75,7 +77,9 @@ public class TheCrawler extends HttpServlet {
 	    	System.out.println("crawler + indexer = fertig");
 	    	request.setAttribute("destination",linkList);
 	    }
-	    if(parameters.containsKey("search") && (request.getParameter("search") == "search") && parameters.containsKey("query"))
+	    if(parameters.containsKey("search") && 
+	    		(request.getParameter("search") == "search") && 
+	    		parameters.containsKey("query"))
 	    {
 	    	LSearch search = new LSearch();
 	    	String query = request.getParameter("query");

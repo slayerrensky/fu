@@ -13,6 +13,7 @@ public class Crawler {
 		//Pattern pattern = Pattern.compile("<([a-z][a-z0-9]*)\b[^>]*>.*?</\1>");
 		Pattern pattern = Pattern.compile("\\s*(?i)href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))");
 		Matcher matcher = pattern.matcher(content);
+		
 		while (matcher.find()) {
 			String tmp = matcher.group();
 			String[] tmpA = tmp.split("\"");
@@ -28,23 +29,40 @@ public class Crawler {
 	
 	public String checkUrlIfValid(String url, String mainUrl){
 		
+		boolean valid = false;
 		if (url.startsWith("/") && !url.startsWith("//"))
 		{
-			String murl = mainUrl;
-			if (murl.endsWith("/"))
-			{
-				url = url.substring(0, url.length()-1) + url;
-			}
-			else
-			{
-				url = getHost(murl) + url;
-			}
+			String mainpage = getHost(mainUrl);
 			
+			System.out.println("Relative URL: " + mainpage + url);
+			return mainpage + url;
 		}
 		if (url.startsWith("//"))
 		{
 			url = url.substring(2);
+			valid = true;
 		}
+		if (url.startsWith("http://") || url.startsWith("https://"))
+		{
+			valid = true;
+		}
+		
+		int slash = url.indexOf("/");
+		int doubbleSlash = url.indexOf("//");
+		if (doubbleSlash != -1 && slash != -1 && !valid)
+		{
+			if (slash <= doubbleSlash) 
+			{
+				valid = false;
+				System.out.println("Page not Valide: " + url);
+			}
+		}
+		else 
+			valid = true;
+		
+		if (!valid)
+			return null;
+		
 		Pattern pattern = Pattern.compile("(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?");
 		Matcher matcher = pattern.matcher(url);
 
@@ -71,7 +89,7 @@ public class Crawler {
 	    int end = url.indexOf('/', doubleslash);
 	    end = end >= 0 ? end : url.length();
 
-	    return url.substring(doubleslash, end);
+	    return url.substring(0, end);
 	}
 	
 	public ArrayList<String> addWithoutDoubleEntrys(ArrayList<String> list, ArrayList<String> listNEW){
