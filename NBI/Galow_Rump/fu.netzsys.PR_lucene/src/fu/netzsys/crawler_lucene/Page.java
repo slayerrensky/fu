@@ -2,7 +2,7 @@ package fu.netzsys.crawler_lucene;
 
 import java.util.LinkedList;
 
-public class Page {
+public class Page implements Comparable<Page>{
 	public String pageName;
 	public double pageRank;
 	LinkedList<String> outLinks;
@@ -56,5 +56,15 @@ public class Page {
 	
 	public int getCountOfOutLinks(){
 		return outLinks.size();
+	}
+
+	@Override
+	public int compareTo(Page arg0) {
+		if (this.pageRank < arg0.pageRank)
+			return 1;
+		else if (this.pageRank > arg0.pageRank)
+			return -1;
+		else
+		return 0;
 	}
 }
