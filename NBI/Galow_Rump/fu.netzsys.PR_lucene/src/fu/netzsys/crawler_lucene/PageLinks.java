@@ -28,7 +28,7 @@ public class PageLinks {
 		return counter;
 	}
 	
-	public void buildHMatrix(){
+	public void initHMatrix(){
 		int i = pages.size();
 		
 		int countPointsTo[] = new int[i];
@@ -39,9 +39,48 @@ public class PageLinks {
 			for(int j=0;j<pages.size();j++){
 				if(pages.get(j).pointsToPage(pages.get(k))){
 					matrix[k][j] = pages.get(k).getPageRank() / countPointsTo[k];
+				}else{
+					matrix[k][j] = 0;
 				}
 			}
 		}
 		System.out.println(matrix);
+	}
+	
+	public int getPageCount(){
+		return pages.size();
+	}
+	
+	public double getPageRank(String name){
+		for (Page page : pages) {
+			if(name.equals(page.getName())){
+				return page.getPageRank();
+			}
+		}
+		return 0.0;
+	}
+	
+	public Page getPageByName(String name){
+		for (Page page : pages) {
+			if(name.equals(page.getName())){
+				return page;
+			}
+		}
+		return null;
+	}
+	
+	public LinkedList<Page> getPagesThatPointsToMe(Page page){
+		LinkedList<Page> setOfPages = new LinkedList<Page>();
+		
+		for (Page listPage : pages) {
+			if(listPage.pointsToPage(page)){
+				setOfPages.add(listPage);
+			}
+		}
+		return setOfPages;
+	}
+	
+	public LinkedList<Page> getAllPages(){
+		return pages;
 	}
 }

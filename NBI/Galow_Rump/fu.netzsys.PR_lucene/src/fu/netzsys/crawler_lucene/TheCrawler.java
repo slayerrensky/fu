@@ -65,6 +65,7 @@ public class TheCrawler extends HttpServlet {
 		if (query != null && search.equals("crawl")){
 	    	
 	    	destSite = query;
+
 	    	System.out.println("Begin to crawl: " + destSite);
 	    	request.setAttribute("desti",request.getParameter("query"));
 	    	
@@ -79,7 +80,9 @@ public class TheCrawler extends HttpServlet {
 	    	System.out.println("crawler + indexer = fertig");
 	    	request.setAttribute("destination",linkList);
 	    }
-	    if(parameters.containsKey("search") && (request.getParameter("search") == "search") && parameters.containsKey("query"))
+	    if(parameters.containsKey("search") && 
+	    		(request.getParameter("search") == "search") && 
+	    		parameters.containsKey("query"))
 	    {
 	    	LSearch lsearch = new LSearch();	    	
 	    	LinkedList<URLInformation> founds = lsearch.SearchForContent(query);

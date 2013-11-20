@@ -29,11 +29,15 @@ public class TestUrl {
 		list.add("https://google.de/");
 		list.add("a.google.de/");
 		list.add("https://a.google.de/");
-
+		list.add("//a.google.de?q=suche&p=not");
+		list.add("a.google.de???q=suche&p=not");
+		list.add("/a.google.de???q=suche&p=not");
+		list.add("tps://a.google.de???q=suche&p=not");
+		list.add("ftp://a.google.de???q=suche&p=not");
 
 		for(String s : list)
 		{
-			c.checkUrlIfValid(s, "");
+			c.checkUrlIfValid(s, "https://google.de/");
 		}
 		
 	}

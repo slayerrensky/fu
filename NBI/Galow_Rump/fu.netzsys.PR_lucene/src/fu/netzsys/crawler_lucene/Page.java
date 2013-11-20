@@ -53,4 +53,8 @@ public class Page {
 		}
 		return false;
 	}
+	
+	public int getCountOfOutLinks(){
+		return outLinks.size();
+	}
 }
