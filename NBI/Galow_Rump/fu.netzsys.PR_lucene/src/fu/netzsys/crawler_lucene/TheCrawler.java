@@ -71,6 +71,14 @@ public class TheCrawler extends HttpServlet {
 	    	
 	    	//ArrayList<String> linkList = c.crawlAll(destSite, 2);
 	    	ArrayList<String> linkList = c.crawl(destSite, 0, 1);
+	    	
+	    	PageLinks pages = new PageLinks();
+	    	pages.addAll(c.pages);
+	    	PageRank pr = new PageRank(pages);
+	    	pr.setAlpha(0.85);
+	    	pr.setEpsilon(0.014);
+	    	pr.calculate(20);
+	    	
 	    	Normalizer n = new Normalizer();
 	    	for (String link : linkList) {
 				URLInformation siteInfo = n.normalize(ContentByURL.getSiteContent(link), link);

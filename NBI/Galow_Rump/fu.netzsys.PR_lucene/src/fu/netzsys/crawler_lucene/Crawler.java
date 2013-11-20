@@ -2,28 +2,35 @@ package fu.netzsys.crawler_lucene;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Crawler {
 
+	public LinkedList<Page> pages;
+	
 	private ArrayList<String> extractTAGs(String urlStr, String content, int aktuellDepth, int maxDepth){
 		ArrayList<String> list = new ArrayList<String>();
 
 		//Pattern pattern = Pattern.compile("<([a-z][a-z0-9]*)\b[^>]*>.*?</\1>");
 		Pattern pattern = Pattern.compile("\\s*(?i)href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))");
 		Matcher matcher = pattern.matcher(content);
-		
+		Page page = new Page(urlStr);
 		while (matcher.find()) {
 			String tmp = matcher.group();
 			String[] tmpA = tmp.split("\"");
 			
 			if(tmpA.length>1){
 				String url = checkUrlIfValid(tmpA[1], urlStr);
-				list.add(url);
-				list = (addWithoutDoubleEntrys(list, crawl(tmpA[1], aktuellDepth+1, maxDepth)));
+				if(url != null){
+					list.add(url);
+					page.addOutLinkedPage(url);
+					list = (addWithoutDoubleEntrys(list, crawl(url, aktuellDepth+1, maxDepth)));
+				}				
 			}
 		}
+		pages.add(page);
 		return list;
 	}
 	
@@ -106,6 +113,9 @@ public class Crawler {
 	}
 	
 	public ArrayList<String> crawl(String urlStr, int aktuellDepth, int maxDepth){
+		if(aktuellDepth == 0){
+			pages = new LinkedList<Page>();
+		}
 		System.out.println("crawlSite: " + urlStr);
 		ArrayList<String> list = new ArrayList<String>();
 		if(aktuellDepth >= maxDepth){

@@ -83,4 +83,8 @@ public class PageLinks {
 	public LinkedList<Page> getAllPages(){
 		return pages;
 	}
+	
+	public void addAll(LinkedList<Page> pages){
+		this.pages.addAll(pages);
+	}
 }

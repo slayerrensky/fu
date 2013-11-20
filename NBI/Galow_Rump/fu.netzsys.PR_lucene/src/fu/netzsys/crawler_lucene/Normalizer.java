@@ -40,7 +40,7 @@ public class Normalizer {
 				line += tmpA[1] + ";";
 			}
 		}
-		System.out.println("alt info: "+line);
+		//System.out.println("alt info: "+line);
 		siteInfo.setAltInfo(line);
 		return str;
 	}
@@ -56,7 +56,7 @@ public class Normalizer {
 				line += tmpA[1] + ";";
 			}
 		}
-		System.out.println("meta info: "+line);
+		//System.out.println("meta info: "+line);
 		siteInfo.setMeta(line);
 		return str;
 	}
@@ -92,7 +92,7 @@ public class Normalizer {
 				src = src.substring(2);
 			}
 			
-			System.out.println("Alt: \"" + alt + "\"" + "src: \"" + src +"\"");
+			//System.out.println("Alt: \"" + alt + "\"" + "src: \"" + src +"\"");
 			siteInfo.getImages().add(new ImgInfo(alt, src));
 		}
 				
@@ -138,7 +138,7 @@ public class Normalizer {
         if (matcher.find()){
                 title = matcher.group();
                 title = title.replaceAll("<title>", "").replaceAll("</title>", "");
-                System.out.println("title info: "+title);
+               // System.out.println("title info: "+title);
 				siteInfo.setTitle(title);
         }
 		return str;
