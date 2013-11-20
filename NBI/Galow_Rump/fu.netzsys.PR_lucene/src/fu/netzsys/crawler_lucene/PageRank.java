@@ -37,7 +37,7 @@ public class PageRank {
 			sum += (listPage.getPageRank()/listPage.getCountOfOutLinks());
 		}
 		
-		pageRank = pageRank * sum;
+		pageRank = (pageRank * sum) + epsilon;
 		
 		page.setPageRank(pageRank);
 	}
@@ -52,6 +52,7 @@ public class PageRank {
 	public void calculate(int i){
 		for(int k = 0;k<i;k++){
 			calculateAllPageRanks();
+			System.out.println(String.format("Durchlauf %d", k));
 		}
 	}
 }

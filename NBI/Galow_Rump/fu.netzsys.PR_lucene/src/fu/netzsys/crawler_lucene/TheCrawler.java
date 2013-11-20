@@ -94,6 +94,66 @@ public class TheCrawler extends HttpServlet {
 	    	ul +="</ul>"+"\n";
 	    	request.setAttribute("linkliste",ul);
 	    }
+	    if(parameters.containsKey("pagerank") && 
+	    		(request.getParameter("pagerank").equals("test")))
+	    {
+	    	PageLinks tmpPages = new PageLinks();
+	    	Page tmpPage = new Page("A");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("B");
+	    	tmpPage.addOutLinkedPage("C");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("C");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("D");
+	    	tmpPage.addOutLinkedPage("A");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("E");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPage.addOutLinkedPage("D");
+	    	tmpPage.addOutLinkedPage("F");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("F");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPage.addOutLinkedPage("E");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("G");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPage.addOutLinkedPage("E");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("H");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPage.addOutLinkedPage("E");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("I");
+	    	tmpPage.addOutLinkedPage("B");
+	    	tmpPage.addOutLinkedPage("E");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("J");
+	    	tmpPage.addOutLinkedPage("E");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	tmpPage = new Page("K");
+	    	tmpPage.addOutLinkedPage("E");
+	    	tmpPages.addPage(tmpPage);
+	    	
+	    	PageRank pr = new PageRank(tmpPages);
+	    	pr.setAlpha(0.85);
+	    	pr.setEpsilon(0.014);
+	    	//pr.calculateAllPageRanks();
+	    	pr.calculate(35);
+	    }
 	    	
 	    RequestDispatcher view = request.getRequestDispatcher("/showInfo.jsp");
 	    view.forward(request, response);
