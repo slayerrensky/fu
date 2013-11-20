@@ -57,10 +57,14 @@ public class TheCrawler extends HttpServlet {
 		// TODO Auto-generated method stub
 		Crawler c = new Crawler();
 		String destSite = "leer";
+		String search = request.getParameter("search");
+		String query = request.getParameter("query");
 		Map parameters = request.getParameterMap();
-	    if (parameters.containsKey("search") && (request.getParameter("search") == "crawl") && parameters.containsKey("query")){
+	    System.out.println("search=" + search);
+	    System.out.println("query=" + query);
+		if (query != null && search.equals("crawl")){
 	    	
-	    	destSite = request.getParameter("query");
+	    	destSite = query;
 	    	System.out.println("Begin to crawl: " + destSite);
 	    	request.setAttribute("desti",request.getParameter("query"));
 	    	
@@ -77,9 +81,8 @@ public class TheCrawler extends HttpServlet {
 	    }
 	    if(parameters.containsKey("search") && (request.getParameter("search") == "search") && parameters.containsKey("query"))
 	    {
-	    	LSearch search = new LSearch();
-	    	String query = request.getParameter("query");
-	    	LinkedList<URLInformation> founds = search.SearchForContent(query);
+	    	LSearch lsearch = new LSearch();	    	
+	    	LinkedList<URLInformation> founds = lsearch.SearchForContent(query);
 	    	String ul = "<ul>\n";
 	    	for (URLInformation ulist : founds) {
 				ul += "<li><a href=\"" + ulist.getURL() + "\">" + ulist.getURL() + "</a>" + 

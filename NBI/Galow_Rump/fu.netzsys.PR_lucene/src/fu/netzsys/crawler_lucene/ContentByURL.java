@@ -27,9 +27,9 @@ public class ContentByURL {
 		            linesOfContent += line.toLowerCase();
 		        }
 		    } catch (MalformedURLException mue) {
-		         //mue.printStackTrace();
+		         mue.printStackTrace();
 		    } catch (IOException ioe) {
-		        //ioe.printStackTrace();
+		        ioe.printStackTrace();
 		    } finally {
 		        try {
 		            if (is != null) is.close();
