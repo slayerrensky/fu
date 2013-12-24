@@ -17,12 +17,14 @@ public class ReadAllIssues {
 	
 	ArrayList<Issue> issue;
 	Gson g;
+	public boolean doitoffline;
 	//public WebDriver driver;
 	
 	public ReadAllIssues()
 	{
 		issue = new ArrayList<Issue>();
 		g = new Gson();
+		doitoffline = false;
 	}
 	
 	public void readAll(String home)
@@ -46,8 +48,8 @@ public class ReadAllIssues {
 				readfromFile = true;
 				//System.out.print("Filesystem: ");
 			}
-			else
-				System.out.print("WWW: ");
+			//else
+				//System.out.print("WWW: for issue " + counter + "%n");
 				
 			String content;
 			if (readfromFile)
@@ -56,7 +58,11 @@ public class ReadAllIssues {
 			}
 			else
 			{
-				content = ContentByURL.getSiteContent(home + counter + "?access_token=89d91aa173d479447869f83b44df0cc068209476");
+				if(doitoffline){
+					content = "";
+				}else{
+					content = ContentByURL.getSiteContent(home + counter + "?access_token=89d91aa173d479447869f83b44df0cc068209476");
+				}
 			}
 			if (content.compareTo("") == 0 )
 			{
