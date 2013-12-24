@@ -7,7 +7,6 @@ public class main {
 				
 		ReadAllIssues instance = new ReadAllIssues();
 		instance.doitoffline = true;
-		System.out.println("loading issues...");
 		instance.readAll("https://api.github.com/repos/owncloud/core/issues/");
 		System.out.println("all issues loaded."); 
 		//instance.findDoubleInTitle();

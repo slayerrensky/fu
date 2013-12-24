@@ -35,7 +35,7 @@ public class ReadAllIssues {
 		//String path = getClass().getClassLoader().getResource(".").getPath();
 		String path = System.getProperty("user.dir");
 		IssueToFile itf = new IssueToFile(path +"/data");
-		
+		System.out.print("\nloading issues ");
 		while (noError && counter < 6563)
 		{
 			readfromFile = false;
@@ -99,7 +99,7 @@ public class ReadAllIssues {
 				
 			}	
 		}
-		System.out.println("Issues Read: " + issue.size());
+		System.out.println("\n" + issue.size() + "Issues Readed");
 	}
 	
 	public void findDoubleInTitle()
