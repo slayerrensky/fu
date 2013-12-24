@@ -92,14 +92,14 @@ public class ReadAllIssues {
 				}
 				catch (Exception ex)
 				{
-					//System.out.println(ex.toString());
+					//System.out.println(ex.toString() +" issue:"+ counter);
 					noError = true;
 					//break;
 				}
 				
 			}	
 		}
-		System.out.println("\n" + issue.size() + "Issues Readed");
+		System.out.println("\n" + issue.size() + " Issues Readed");
 	}
 	
 	public void findDoubleInTitle()
