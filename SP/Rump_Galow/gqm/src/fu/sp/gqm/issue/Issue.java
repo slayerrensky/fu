@@ -93,4 +93,13 @@ public class Issue {
 	public void setNumber(int number) {
 		this.number = number;
 	}
+	
+	public boolean hasLabel(String labeltext){
+		for (Labels label : labels) {
+			if(label.name.toLowerCase().equals(labeltext.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
+	}
 }

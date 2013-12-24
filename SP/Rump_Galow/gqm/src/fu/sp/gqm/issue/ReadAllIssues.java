@@ -34,14 +34,17 @@ public class ReadAllIssues {
 		String path = System.getProperty("user.dir");
 		IssueToFile itf = new IssueToFile(path +"/data");
 		
-		while (noError && counter < 7000)
+		while (noError && counter < 6563)
 		{
 			readfromFile = false;
 			counter++;
+			if(counter%100 == 0){
+				System.out.print('.');
+			}
 			if (itf.IssueFileExist("Issue" + counter +".json") )
 			{
 				readfromFile = true;
-				System.out.print("Filesystem: ");
+				//System.out.print("Filesystem: ");
 			}
 			else
 				System.out.print("WWW: ");
@@ -79,13 +82,13 @@ public class ReadAllIssues {
 					itf.writeToIssueFile("Issue"+counter+".json",i.getRawIssue());
 					itf.writeToCommentFile("Comment"+counter+".json",i.getRawComment());
 					
-					System.out.println(i.title);	
+					//System.out.println(i.title);	
 				}
 				catch (Exception ex)
 				{
-					System.out.println(ex.toString());
+					//System.out.println(ex.toString());
 					noError = true;
-					break;
+					//break;
 				}
 				
 			}	
