@@ -49,7 +49,8 @@ public class MasterMindGameLogic {
 	}
 	
 	private String checkInput(String inStr){
-		//LinkedList<String> asd = new LinkedList<>();
+		inStr.replaceAll(".", ",");
+		inStr.replaceAll("-", ",");
 		String[] tmp = inStr.split(",");
 		if(tmp.length != 4){
 			return "";
