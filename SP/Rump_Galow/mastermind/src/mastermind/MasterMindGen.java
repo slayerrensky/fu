@@ -4,29 +4,33 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class MasterMindGen {
-	private LinkedList<String> givenColours;
+	private LinkedList<String> givenColors;
 	private Random randGen; 
 	
 	public MasterMindGen(){
 		super();
 		randGen = new Random();
 		
-		givenColours = new LinkedList<String>();
-		givenColours.add("grün");
-		givenColours.add("rot");
-		givenColours.add("blau");
-		givenColours.add("gelb");
-		givenColours.add("orange");
-		givenColours.add("violett");
+		givenColors = new LinkedList<String>();
+		givenColors.add("gr");
+		givenColors.add("rt");
+		givenColors.add("bl");
+		givenColors.add("ge");
+		givenColors.add("or");
+		givenColors.add("vi");
 	}
 	
 	public LinkedList<String> gen(){
 		LinkedList<String> farbCode = new LinkedList<String>();
 		for(int i=0;i<4;i++){
-			farbCode.add(givenColours.get(randGen.nextInt(6)));
+			farbCode.add(givenColors.get(randGen.nextInt(6)));
 		}
 		
 		return farbCode;
+	}
+	
+	public LinkedList<String> getAvailableColors(){
+		return givenColors;
 	}
 
 }
