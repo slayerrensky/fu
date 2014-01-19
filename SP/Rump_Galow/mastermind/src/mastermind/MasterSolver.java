@@ -7,7 +7,7 @@ public class MasterSolver {
 	boolean started;
 	LinkedList<LinkedList<Integer>> liste;
 	LinkedList<Integer> givenList;
-	int durchlauf, lastOKAY, bestOKAY;
+	int durchlauf;
 	Random randGen;
 	
 
@@ -19,8 +19,6 @@ public class MasterSolver {
 			givenList.add(Integer.parseInt(string));
 		}
 		durchlauf = 0;
-		lastOKAY = 0;
-		bestOKAY = 0;
 		randGen = new Random();
 	}
 	
@@ -28,8 +26,6 @@ public class MasterSolver {
 		started = false;
 		liste.clear();
 		durchlauf = 0;
-		lastOKAY = 0;
-		bestOKAY = 0;
 	}
 	
 	
@@ -56,26 +52,17 @@ public class MasterSolver {
 				liste.add(tmp);
 			}else{
 				// so ab hier stimmen die zahlen, aber evtl noch in der falschen reinfolge
-				//liste.get(liste.size()-1)
 				LinkedList<Integer> tmp = new LinkedList<Integer>(liste.get(liste.size()-1));
-				//if(lastOKAY == 0){
-					Integer integer = tmp.get(randGen.nextInt(4));
-					Integer integer2 = tmp.get(randGen.nextInt(4));
-					tmp.remove(integer);
-					tmp.add(randGen.nextInt(4), integer);
-					tmp.remove(integer2);
-					tmp.add(randGen.nextInt(4), integer2);
-					liste.add(tmp);
-					bestOKAY = liste.size()-1;
-				//}else{
-					
-				//}
-				
-				lastOKAY = okay;
+				Integer integer = tmp.get(randGen.nextInt(4));
+				Integer integer2 = tmp.get(randGen.nextInt(4));
+				tmp.remove(integer);
+				tmp.add(randGen.nextInt(4), integer);
+				tmp.remove(integer2);
+				tmp.add(randGen.nextInt(4), integer2);
+				liste.add(tmp);
 			}
 		}
 		durchlauf ++;
-		//return liste.get(liste.size()).toString().replace("[", "").replace("]", "");
 	}
 	
 	public String getNext(){
@@ -84,8 +71,6 @@ public class MasterSolver {
 			started = true;
 			MasterMindGen gen = new MasterMindGen();
 			liste.add(gen.easyGenINT());
-			//durchlauf ++;
-			//return IntlistToStr(liste.get(0));
 		}
 		return liste.get(liste.size()-1).toString().replace("[", "").replace("]", "").replace(" ", "");
 	}

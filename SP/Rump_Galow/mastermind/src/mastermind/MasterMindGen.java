@@ -17,7 +17,6 @@ public class MasterMindGen {
 		givenColors.add("3");
 		givenColors.add("4");
 		givenColors.add("5");
-		//givenColors.add("vi");
 	}
 	
 	public LinkedList<String> gen(){
