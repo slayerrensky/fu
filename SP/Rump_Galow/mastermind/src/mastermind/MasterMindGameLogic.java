@@ -28,7 +28,7 @@ public class MasterMindGameLogic {
 			String answer = checkInput(in.nextLine());
 			if(!answer.isEmpty()){
 				System.out.println("Antwort: " + answer);
-				if(answer.contentEquals("XXXX")){
+				if(answer.contentEquals("ssss")){
 					won = true;
 					break;
 				}
@@ -87,11 +87,11 @@ public class MasterMindGameLogic {
 		for(int k = 0;k<4;k++){
 			if(masterCode.get(k).equals(strArr[k])){
 				found[i++] = k;
-				posOk += "X";
+				posOk += "s";
 			}else{
 				for(int q=0;q<4;q++){
 					if( masterCode.get(k).equals(strArr[q]) && (! isIn(found, q)) ){
-						posNotCorrect += "O";
+						posNotCorrect += "w";
 					}
 				}
 			}

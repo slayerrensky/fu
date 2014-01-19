@@ -12,18 +12,18 @@ public class MasterMindGen {
 		randGen = new Random();
 		
 		givenColors = new LinkedList<String>();
-		givenColors.add("gr");
-		givenColors.add("rt");
-		givenColors.add("bl");
-		givenColors.add("ge");
-		givenColors.add("or");
-		givenColors.add("vi");
+		givenColors.add("1");
+		givenColors.add("2");
+		givenColors.add("3");
+		givenColors.add("4");
+		givenColors.add("5");
+		//givenColors.add("vi");
 	}
 	
 	public LinkedList<String> gen(){
 		LinkedList<String> farbCode = new LinkedList<String>();
 		for(int i=0;i<4;i++){
-			farbCode.add(givenColors.get(randGen.nextInt(6)));
+			farbCode.add(givenColors.get(randGen.nextInt(5)));
 		}
 		
 		return farbCode;
