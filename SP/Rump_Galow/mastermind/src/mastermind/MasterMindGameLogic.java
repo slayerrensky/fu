@@ -7,25 +7,53 @@ public class MasterMindGameLogic {
 	private LinkedList<String> masterCode;
 	private boolean won;
 	private MasterMindGen gen;
+	private boolean automode;
 	
-	public MasterMindGameLogic(){
-		gen = new MasterMindGen(); 
+	public MasterMindGameLogic(int mode, String code){
+		gen = new MasterMindGen();
+		if(mode == 1){
+			automode = false;
+		}
+		else{
+			automode = true;
+			if(!code.isEmpty()){
+				String[] tmp = code.split(",");
+				masterCode = new LinkedList<String>();
+				masterCode.add(tmp[0]);
+				masterCode.add(tmp[1]);
+				masterCode.add(tmp[2]);
+				masterCode.add(tmp[3]);
+			}
+		}
 	}
 	
 	public void startGame(){
 		//masterCode = gen.gen();
-		masterCode = gen.easyGen();
+		if(!automode || masterCode==null) masterCode = gen.easyGen();
 		won = false;
-
+		// --------->> test
+		MasterSolver solver = new MasterSolver(gen.getAvailableColors());
+		// <<---------------
+		
 		System.out.println("MasterCode generated " + masterCode.toString());
 		System.out.println("Available Colors: "+gen.getAvailableColors());
 		
 		Scanner in = new Scanner(System.in);
+		int versuche = 0;
+		if(automode) versuche = 100;
+		else versuche = 11;
 		
-		for(int i=1;i<11;i++){
+		for(int i=1;i<versuche;i++){
 			System.out.print("Versuch " + i + "  ");
-			System.out.print("Eingagbe: ");
-			String answer = checkInput(in.nextLine());
+			String answer = "";
+			if(automode){
+				System.out.println("Eingagbe: " + solver.getNext());
+				answer = checkInput(solver.getNext());
+				solver.addAnswer(answer);
+			}else{
+				System.out.print("Eingagbe: ");
+				answer = checkInput(in.nextLine());
+			}			
 			if(!answer.isEmpty()){
 				System.out.println("Antwort: " + answer);
 				if(answer.contentEquals("ssss")){
