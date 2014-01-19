@@ -13,10 +13,11 @@ public class MasterMindGameLogic {
 	}
 	
 	public void startGame(){
-		masterCode = gen.gen();
+		//masterCode = gen.gen();
+		masterCode = gen.easyGen();
 		won = false;
 
-		System.out.println("MasterCode generated");
+		System.out.println("MasterCode generated " + masterCode.toString());
 		System.out.println("Available Colors: "+gen.getAvailableColors());
 		
 		Scanner in = new Scanner(System.in);
