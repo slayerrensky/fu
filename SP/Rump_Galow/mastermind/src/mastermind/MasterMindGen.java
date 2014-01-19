@@ -42,6 +42,19 @@ public class MasterMindGen {
 		return farbCode;
 	}
 	
+	public LinkedList<Integer> easyGenINT(){
+		LinkedList<Integer> farbCode = new LinkedList<Integer>();
+		LinkedList<String> restFarben = new LinkedList<String>(givenColors);
+		
+		for(int i=0;i<4;i++){
+			int k = randGen.nextInt(restFarben.size());
+			farbCode.add(Integer.parseInt(restFarben.get(k)));
+			restFarben.remove(k);
+		}
+		
+		return farbCode;
+	}
+	
 	public LinkedList<String> getAvailableColors(){
 		return givenColors;
 	} 
